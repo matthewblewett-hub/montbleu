@@ -10,6 +10,7 @@ import Experiences from './pages/Experiences';
 import Gallery from './pages/Gallery';
 import Contact from './pages/Contact';
 import Booking from './pages/Booking';
+import Maintenance from './pages/Maintenance';
 import { useEffect } from 'react';
 
 // Scroll to top on route change
@@ -21,7 +22,25 @@ const ScrollToTop = () => {
   return null;
 };
 
+// Toggle this variable to true to put the site in maintenance mode
+const IS_MAINTENANCE_MODE = true;
+
 function App() {
+  if (IS_MAINTENANCE_MODE) {
+    return (
+      <Router>
+        <ScrollToTop />
+        <div className="flex flex-col min-h-screen font-sans text-sanctuary-blue bg-sanctuary-sand">
+          <Navbar />
+          <main className="flex flex-col items-center justify-center flex-grow py-20 px-6">
+            <Maintenance />
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    );
+  }
+
   return (
     <Router>
       <ScrollToTop />
