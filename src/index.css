@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Montserrat:wght@100;200;300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-sanctuary-blue: #0A1C2B;
+  /* Deeper, richer midnight blue */
+  --color-sanctuary-sand: #EBE7df;
+  /* Warmer, organic stone/paper feel */
+  --color-sanctuary-stone: #E5E4E2;
+  --color-sanctuary-gold: #C5A059;
+  /* Muted, elegant gold */
+
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Montserrat", sans-serif;
+}
+
+:root {
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  font-weight: 300;
+  /* Lighter default weight */
+
+  color-scheme: light;
+  color: var(--color-sanctuary-blue);
+  background-color: var(--color-sanctuary-sand);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Base styles for premium feel */
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 300;
+}
