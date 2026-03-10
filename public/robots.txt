@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://montbleu.co.za/sitemap.xml
