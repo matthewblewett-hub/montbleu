@@ -71,11 +71,6 @@ const Relax: React.FC = () => {
                                             alt={feature.title}
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                         />
-                                        {feature.isComingSoon && (
-                                            <div className="absolute top-4 right-4 bg-sanctuary-gold text-white px-3 py-1 text-[10px] uppercase tracking-widest rounded-full z-20">
-                                                Coming Soon
-                                            </div>
-                                        )}
                                     </div>
                                     <div className="flex items-center gap-4 mb-4">
                                         <feature.icon strokeWidth={1} className="text-sanctuary-gold w-6 h-6" />
