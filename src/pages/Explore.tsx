@@ -9,20 +9,21 @@ const Explore: React.FC = () => {
     const locations = [
         {
             title: "The Farm",
-            image: "/assets/gallery/1d7f6c86-649d-4a4d-9bd2-bfa13080d62a.jpg",
+            image: "/assets/newimages/GH 1.jpg",
             desc: (
                 <div className="space-y-4">
-                    <p>Mont Bleu is set within the living landscape of Mont Bleu Farm, a mountain estate slowly and thoughtfully being restored as an exclusive eco retreat.</p>
+                    <p>Mont Bleu is set within the living landscape of Le Sanctuaire Farm, a mountain estate slowly and thoughtfully being restored as an exclusive eco retreat. Le Sanctuaire Farm is perched high on the Wemmershoek mountains offering some of the finest interaction with pristine Fynbos, the pride of the Cape Floral Kingdom.</p>
+                    <p>The lifestyle farm is dedicated to restoring the natural ecosystem of this precious part of creation. Small-scale fruit, olive, honey and wild buchu is farmed on the property. The highlight is the ever-changing array of blossoms that are on display throughout the year.</p>
                 </div>
             )
         },
         {
             title: "Walking Trails",
-            image: "/assets/gallery/4b7a33db-63e2-4ade-8bc8-a1275608887f.jpg",
+            image: "/assets/newimages/Trails.jpg",
             desc: (
                 <div className="space-y-4">
                     <p>The farm celebrates the natural beauty of the Franschhoek Valley and the remarkable Cape Fynbos Floral Kingdom that surrounds and shapes the property.</p>
-                    <p>Guests are encouraged to explore the land at their own pace - through walking trails, river paths, and quiet encounters with water, stone, and indigenous vegetation.</p>
+                    <p>Guests are encouraged to explore the land at their own pace - through walking trails, river paths, and quiet encounters with water, stone, and indigenous vegetation. We now offer short daily walking trails on the property on a booking basis.</p>
                 </div>
             )
         },
@@ -33,13 +34,12 @@ const Explore: React.FC = () => {
                 <div className="space-y-4">
                     <p>For those who enjoy walking, nature, and spiritual reflection, we invite you to experience Mont Bleu Way - a curated pilgrimage journey across the estate.</p>
                     <p>Mont Bleu Way is a guided walking route marked by 15 stations of reflection. Each station invites pause through scripture, symbolism, and silence. QR codes at each station provide guided meditations and reflections.</p>
-                    <p className="text-sm italic opacity-80">An optional audio commentary accompanies the journey for those who wish to walk more intentionally.</p>
                 </div>
             )
         },
         {
             title: "Franschhoek",
-            image: "/assets/gallery/6030eb1f-5ad7-43b5-87c2-04f74630b92b.jpg",
+            image: "/assets/newimages/Tram photo.jpg",
             desc: (
                 <div className="space-y-6 text-sm md:text-base pr-4">
                     <p>While Mont Bleu offers a sense of seclusion and quiet, the village of Franschhoek lies just 2 km away, placing some of South Africa’s finest food, wine, and cultural experiences within easy reach.</p>
@@ -58,15 +58,6 @@ const Explore: React.FC = () => {
                     <div>
                         <h4 className="font-serif text-sanctuary-blue mb-2 text-lg">Wine Estates</h4>
                         <p>The Franschhoek Valley and neighbouring regions are dotted with some of South Africa’s most beautiful wine estates, offering tastings, cellar tours, and estate dining.</p>
-                    </div>
-
-                    <div>
-                        <h4 className="font-serif text-sanctuary-blue mb-2 text-lg">Day Trips & Coastal Towns</h4>
-                        <ul className="space-y-1 opacity-80">
-                            <li><strong>Stellenbosch</strong> – historic streets and oak-lined avenues</li>
-                            <li><strong>Cape Town</strong> – beaches, Table Mountain, and city life</li>
-                            <li><strong>Hermanus</strong> – coastal walks and whale watching</li>
-                        </ul>
                     </div>
                 </div>
             )

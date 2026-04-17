@@ -89,8 +89,8 @@ const RoomShowcase: React.FC<RoomShowcaseProps> = ({ name, description, images, 
     return (
         <div className="flex flex-col md:flex-row min-h-screen border-t border-sanctuary-blue/10">
             {/* Sticky Content - Details */}
-            <div className="md:w-1/2 p-6 md:p-16 lg:p-24 flex flex-col justify-center bg-sanctuary-sand md:sticky md:top-0 md:h-screen z-10">
-                <span className="text-xs font-serif uppercase tracking-widest text-sanctuary-gold mb-6">Suite 0{index + 1}</span>
+            <div className="md:w-1/2 p-6 md:p-16 lg:p-24 flex flex-col justify-center bg-sanctuary-sand md:sticky md:top-0 md:h-screen z-10 overflow-y-auto custom-scrollbar">
+                <span className="text-xs font-serif uppercase tracking-widest text-sanctuary-gold mb-6 mt-8 md:mt-0">Suite 0{index + 1}</span>
                 <h2 className="text-5xl md:text-7xl font-serif text-sanctuary-blue mb-8">{name}</h2>
                 <p className="text-lg text-sanctuary-blue/70 font-light leading-relaxed mb-12 max-w-md">
                     {description}
@@ -121,7 +121,7 @@ const RoomShowcase: React.FC<RoomShowcaseProps> = ({ name, description, images, 
 
                 {/* InnStyle Booking Engine Embed */}
                 {innStyleDomain && (
-                    <div className="mt-8 w-full max-w-2xl bg-white p-4 rounded-sm border border-sanctuary-blue/10 shadow-sm min-h-[400px]">
+                    <div className="mt-8 mb-16 md:mb-0 w-full max-w-2xl bg-white p-4 rounded-sm border border-sanctuary-blue/10 shadow-sm min-h-[400px] max-h-[500px] overflow-y-auto custom-scrollbar">
                         <div id={calendarContainerId}></div>
                     </div>
                 )}

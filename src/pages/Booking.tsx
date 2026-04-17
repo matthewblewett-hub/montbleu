@@ -35,13 +35,23 @@ const Booking: React.FC = () => {
     }, []);
 
     return (
-        <div className="pt-20 min-h-screen bg-sanctuary-sand">
-            <section className="py-16 md:py-24">
-                <div className="container mx-auto px-6 text-center max-w-5xl">
+        <div className="pt-20 min-h-screen">
+            <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-16 md:py-24">
+                {/* Background Image */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src="/assets/newimages/Pool 1.jpg"
+                        alt="Booking Background"
+                        className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/50" />
+                </div>
+
+                <div className="container mx-auto px-6 text-center max-w-5xl relative z-10 p-4 pt-12">
                     <SectionObserver>
-                        <span className="text-xs font-serif uppercase tracking-widest text-sanctuary-gold mb-6 block">Reservations</span>
-                        <h1 className="text-5xl md:text-7xl font-serif text-sanctuary-blue mb-8">Book Your Stay</h1>
-                        <p className="text-xl font-light text-sanctuary-blue/70 mb-12">
+                        <span className="text-xs font-serif uppercase tracking-widest text-sanctuary-stone mb-6 block">Reservations</span>
+                        <h1 className="text-5xl md:text-7xl font-serif text-white mb-8">Book Your Stay</h1>
+                        <p className="text-xl font-light text-white/80 mb-12">
                             Select your dates and choose from our unique suites. We look forward to welcoming you to Mont Bleu.
                         </p>
                     </SectionObserver>
@@ -50,12 +60,12 @@ const Booking: React.FC = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="bg-white p-4 md:p-8 rounded-sm shadow-xl border border-sanctuary-blue/5 min-h-[600px]"
+                        className="bg-white p-4 md:p-8 rounded-sm shadow-xl border border-sanctuary-blue/5 min-h-[600px] text-sanctuary-blue text-left"
                     >
                         <div id={calendarContainerId}>
                             <div className="flex flex-col items-center justify-center py-20 text-sanctuary-blue/40">
                                 <div className="w-12 h-12 border-2 border-sanctuary-gold border-t-transparent rounded-full animate-spin mb-4"></div>
-                                <p className="font-serif italic">Loading booking engine...</p>
+                                <p className="font-serif italic text-center">Loading booking engine...</p>
                             </div>
                         </div>
                     </motion.div>

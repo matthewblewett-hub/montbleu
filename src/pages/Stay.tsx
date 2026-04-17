@@ -93,7 +93,7 @@ const Stay: React.FC = () => {
             description: "The Fynbos Room combines modern simplicity with soulful character, featuring an outdoor shower beneath the stars and views across the valley. The glass reading and relaxation space is a favourite with guests. Ideal for guests seeking quiet reflection and connection to nature.",
             images: [
                 "/assets/newimages/Fynbos 1.jpg",
-                "/assets/newimages/Fynbos 2.jpg",
+                "/assets/newimages/Fynbos new 2.jpg",
                 "/assets/newimages/Fynbos 3.jpg"
             ],
             features: ["Outdoor Shower", "Valley Views", "Glass Reading Space", "Modern Simplicity"],
@@ -234,24 +234,19 @@ const Stay: React.FC = () => {
                                 image: "/assets/newimages/Dining 1.jpg"
                             },
                             {
-                                title: "Main Deck",
-                                description: "Our main deck enjoys some of the finest views in the Franschhoek Valley. Ideal for unwinding as the sun sets.",
+                                title: "Sunset Deck",
+                                description: "Enjoy our Sunset Deck with the best views in the valley – either for an early morning Yoga stretch (mats available on request) or a traditional sundowners experience.",
                                 image: "/assets/newimages/Deck.jpg"
                             },
                             {
                                 title: "The Labyrinth",
                                 description: "The labyrinth invites a different kind of walking - slow, intentional, and inward. Offers a space to quiet the mind.",
-                                image: "/assets/gallery/ecea571c-05e9-46c9-9b62-cb3f919c3cca.jpg"
-                            },
-                            {
-                                title: "Mountain Hot Tub",
-                                description: "Gas-fired mountain hot tub overlooking the nearby stream. Best enjoyed slowly in the cool mountain air.",
-                                image: "/assets/gallery/4b7a33db-63e2-4ade-8bc8-a1275608887f.jpg"
+                                image: "/assets/newimages/Labyrinth.jpg"
                             },
                             {
                                 title: "The Sauna",
                                 description: "Private couples sauna perched on a riverbank with steps leading into a natural river pool.",
-                                image: "/assets/gallery/947f3989-4317-4543-b0f3-915689dffeb3.jpg"
+                                image: "/assets/newimages/Sauna.jpg"
                             },
                             {
                                 title: "The Lounge",
@@ -261,7 +256,7 @@ const Stay: React.FC = () => {
                             {
                                 title: "Mezzanine Library",
                                 description: "Tucked above the main living space, offering a quiet retreat with views toward the Wemmershoek Mountains.",
-                                image: "/assets/stay/olive/20962dbc-f98e-47ce-a145-0004bf3a11a2.jpg"
+                                image: "/assets/newimages/Mezzanine.jpg"
                             },
                             {
                                 title: "The Dining Room",
@@ -269,35 +264,14 @@ const Stay: React.FC = () => {
                                 image: "/assets/newimages/Dining 2.jpg"
                             },
                             {
-                                title: "Dining Deck",
+                                title: "Main Deck",
                                 description: "Enjoy al fresco dining with sweeping views of the valley.",
-                                image: "/assets/newimages/Deck 2.jpg"
-                            },
-
-                            {
-                                title: "Honesty Bar",
-                                description: "Thoughtfully curated selection of wines and refreshments. Unhurried and unpretentious.",
-                                image: "/assets/newimages/Lounge 2.jpg"
-                            },
-                            {
-                                title: "Yoga & Sunset Deck",
-                                description: "Not far up the hill enjoy the views from the highest deck in all of the Franschhoek Valley with unrivalled views",
-                                image: "/assets/gallery/3a568286-90e9-464a-939e-d308076df308.jpg" // Reusing appropriate image
-                            },
-                            {
-                                title: "Parking & Wi-Fi",
-                                description: "Secure parking on the estate and high-speed fibre internet throughout the guest home.",
-                                image: "/assets/stay/protea/2890fb6a-a792-45b4-bed4-e8fccc8c1d43.jpg"
+                                image: "/assets/newimages/GH Deck.jpg"
                             },
                             {
                                 title: "Daily Housekeeping",
                                 description: "Discreet daily service to keep your space fresh and inviting.",
                                 image: "/assets/stay/olive/7369cd4b-4425-46b7-9c47-47313d0e9ecc.jpg"
-                            },
-                            {
-                                title: "Trails",
-                                description: "Short trails through the property with a weekly guided walk",
-                                image: "/assets/gallery/3a568286-90e9-464a-939e-d308076df308.jpg"
                             }
                         ].map((facility, index) => (
                             <SectionObserver key={index} delay={index * 0.05} className="group cursor-default">

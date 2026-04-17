@@ -19,6 +19,7 @@ const Footer: React.FC = () => {
                     <Link to="/explore" className="text-sm hover:text-sanctuary-gold transition-colors">Explore</Link>
                     <Link to="/connect" className="text-sm hover:text-sanctuary-gold transition-colors">Connect</Link>
                     <Link to="/book" className="text-sm hover:text-sanctuary-gold transition-colors text-sanctuary-gold font-medium">Book Now</Link>
+                    <Link to="/booking-terms" className="text-sm hover:text-sanctuary-stone transition-colors mt-4 pt-4 border-t border-white/5 opacity-60">Booking Terms</Link>
                 </div>
 
                 <div>

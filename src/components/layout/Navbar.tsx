@@ -25,12 +25,13 @@ const Navbar: React.FC = () => {
     const navLinks = [
         { name: 'Home', path: '/' },
         { name: 'Stay', path: '/stay' },
+        { name: 'Relax', path: '/relax' },
         { name: 'Explore', path: '/explore' },
-        { name: 'Connect', path: '/connect' },
-        { name: 'Experiences', path: '/experiences' },
+        { name: 'Connect & Experience', path: '/connect-experience' },
+        { name: 'Dining & Food', path: '/dining' },
         { name: 'Gallery', path: '/gallery' },
+        { name: 'FAQ', path: '/faq' },
         { name: 'Contact', path: '/contact' },
-        { name: 'Book', path: '/book' },
     ];
 
     const toggleMenu = () => setIsOpen(!isOpen);
@@ -47,7 +48,7 @@ const Navbar: React.FC = () => {
                         <Button
                             to="/book"
                             variant="white"
-                            className="px-8 py-3 text-sm"
+                            className="px-10 py-4 text-base"
                         >
                             Book Now
                         </Button>
