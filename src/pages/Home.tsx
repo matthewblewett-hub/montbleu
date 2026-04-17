@@ -85,72 +85,7 @@ const Home: React.FC = () => {
                 </div>
             </section>
 
-            {/* Our Story / The Journey */}
-            <section className="py-24 md:py-32 bg-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-1/3 h-full bg-sanctuary-sand/50 -skew-x-12 translate-x-1/2" />
-                <div className="container mx-auto px-6 relative z-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-                        <SectionObserver>
-                            <span className="text-xs font-serif uppercase tracking-[0.3em] text-sanctuary-gold mb-6 block font-medium">Our Story</span>
-                            <h2 className="text-4xl md:text-6xl font-serif text-sanctuary-blue mb-10 leading-tight">The Le Sanctuaire Journey</h2>
-                            <div className="space-y-6 text-lg font-light text-sanctuary-blue/70 leading-relaxed">
-                                <p>
-                                    Le Sanctuaire was born from a simple yet profound vision: to create a mountain sanctuary that restores the soul through a deep connection with nature.
-                                </p>
-                                <p>
-                                    Set on the slopes of the Franschhoek mountains, this is more than a farm—it is a working landscape of buchu, olives, and fynbos, designed as a "Guest Home" where the boundaries between hospitality and family living dissolve.
-                                </p>
-                                <p>
-                                    From the hand-carved stone labyrinth to the silent mountain trails, every detail has been shaped with intention, guided by the belief that nature is our most powerful teacher in the art of being present.
-                                </p>
-                            </div>
-                        </SectionObserver>
-                        <SectionObserver delay={0.2}>
-                            <div className="relative">
-                                <div className="aspect-[4/5] overflow-hidden rounded-sm shadow-2xl">
-                                    <img src="/assets/newimages/GH Deck.jpg" alt="Le Sanctuaire Estate" className="w-full h-full object-cover" />
-                                </div>
-                                <div className="absolute -bottom-10 -left-10 w-64 h-80 hidden lg:block border-8 border-white shadow-xl overflow-hidden">
-                                    <img src="/assets/newimages/Labyrinth.jpg" alt="The Labyrinth" className="w-full h-full object-cover" />
-                                </div>
-                            </div>
-                        </SectionObserver>
-                    </div>
-                </div>
-            </section>
 
-            {/* A Day in the Life */}
-            <section className="py-24 md:py-32 bg-sanctuary-blue text-white">
-                <div className="container mx-auto px-6">
-                    <div className="text-center mb-24">
-                        <SectionObserver>
-                            <span className="text-xs font-serif uppercase tracking-[0.3em] text-sanctuary-gold mb-6 block font-medium">The Experience</span>
-                            <h2 className="text-4xl md:text-5xl font-serif mb-6">A Day at the Sanctuary</h2>
-                            <p className="text-xl font-light opacity-60 max-w-2xl mx-auto">From the first light on the Wemmershoek to the starlit mountain air.</p>
-                        </SectionObserver>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-                        {[
-                            { time: "07:00", title: "Sunrise Stillness", desc: "A gentle walk to the Yoga Deck as the first light spills over the Franschhoek valley." },
-                            { time: "09:00", title: "Farm Breakfast", desc: "Sourdough, local cheeses, and our own Le Sanctuaire honey on the mountain-view deck." },
-                            { time: "11:00", title: "The Pilgrim's Trail", desc: "A guided hike through the fynbos to our hidden waterfall and swimming pools." },
-                            { time: "16:00", title: "Heat & Water", desc: "A restorative session in the mountain-view sauna followed by a river plunge." },
-                            { time: "18:30", title: "Sundowers", desc: "A glass of local Chenin from the honesty bar as the mountains turn to fire." },
-                            { time: "20:00", title: "Starlit Rest", desc: "Unwinding by the indoor fireplace or soaking in the gas-fired mountain hot tub." }
-                        ].map((step, idx) => (
-                            <SectionObserver key={idx} delay={idx * 0.1}>
-                                <div className="border-l border-white/10 pl-8 pb-12 relative last:pb-0 h-full">
-                                    <div className="absolute top-0 left-[-5px] w-[9px] h-[9px] bg-sanctuary-gold rounded-full" />
-                                    <span className="text-sanctuary-gold font-serif text-2xl mb-4 block">{step.time}</span>
-                                    <h4 className="text-xl font-serif mb-4">{step.title}</h4>
-                                    <p className="text-sm font-light opacity-60 leading-relaxed">{step.desc}</p>
-                                </div>
-                            </SectionObserver>
-                        ))}
-                    </div>
-                </div>
-            </section>
 
             {/* Horizontal Scroll Pillars */}
             <ScrollSection>
@@ -269,6 +204,73 @@ const Home: React.FC = () => {
 
             {/* Guest Reviews Section */}
             <ReviewsCarousel />
+
+            {/* Our Story / The Journey */}
+            <section className="py-24 md:py-32 bg-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-1/3 h-full bg-sanctuary-sand/50 -skew-x-12 translate-x-1/2" />
+                <div className="container mx-auto px-6 relative z-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+                        <SectionObserver>
+                            <span className="text-xs font-serif uppercase tracking-[0.3em] text-sanctuary-gold mb-6 block font-medium">Our Story</span>
+                            <h2 className="text-4xl md:text-6xl font-serif text-sanctuary-blue mb-10 leading-tight">The Le Sanctuaire Journey</h2>
+                            <div className="space-y-6 text-lg font-light text-sanctuary-blue/70 leading-relaxed">
+                                <p>
+                                    Le Sanctuaire was born from a simple yet profound vision: to create a mountain sanctuary that restores the soul through a deep connection with nature.
+                                </p>
+                                <p>
+                                    Set on the slopes of the Franschhoek mountains, this is more than a farm—it is a working landscape of buchu, olives, and fynbos, designed as a "Guest Home" where the boundaries between hospitality and family living dissolve.
+                                </p>
+                                <p>
+                                    From the hand-carved stone labyrinth to the silent mountain trails, every detail has been shaped with intention, guided by the belief that nature is our most powerful teacher in the art of being present.
+                                </p>
+                            </div>
+                        </SectionObserver>
+                        <SectionObserver delay={0.2}>
+                            <div className="relative">
+                                <div className="aspect-[4/5] overflow-hidden rounded-sm shadow-2xl">
+                                    <img src="/assets/newimages/GH Deck.jpg" alt="Le Sanctuaire Estate" className="w-full h-full object-cover" />
+                                </div>
+                                <div className="absolute -bottom-10 -left-10 w-64 h-80 hidden lg:block border-8 border-white shadow-xl overflow-hidden">
+                                    <img src="/assets/newimages/Labyrinth.jpg" alt="The Labyrinth" className="w-full h-full object-cover" />
+                                </div>
+                            </div>
+                        </SectionObserver>
+                    </div>
+                </div>
+            </section>
+
+            {/* A Day in the Life */}
+            <section className="py-24 md:py-32 bg-sanctuary-blue text-white">
+                <div className="container mx-auto px-6">
+                    <div className="text-center mb-24">
+                        <SectionObserver>
+                            <span className="text-xs font-serif uppercase tracking-[0.3em] text-sanctuary-gold mb-6 block font-medium">The Experience</span>
+                            <h2 className="text-4xl md:text-5xl font-serif mb-6">A Day at the Sanctuary</h2>
+                            <p className="text-xl font-light opacity-60 max-w-2xl mx-auto">From the first light on the Wemmershoek to the starlit mountain air.</p>
+                        </SectionObserver>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                        {[
+                            { time: "07:00", title: "Sunrise Stillness", desc: "A gentle walk to the Yoga Deck as the first light spills over the Franschhoek valley." },
+                            { time: "09:00", title: "Farm Breakfast", desc: "Sourdough, local cheeses, and locally sourced honey on the mountain-view deck." },
+                            { time: "11:00", title: "The Pilgrim's Trail", desc: "A guided hike through the fynbos to our hidden waterfall and swimming pools." },
+                            { time: "16:00", title: "Heat & Water", desc: "A restorative session in the mountain-view sauna followed by a river plunge." },
+                            { time: "18:30", title: "Sundowers", desc: "A glass of local Chenin from the honesty bar as the mountains turn to fire." },
+                            { time: "20:00", title: "Starlit Rest", desc: "Unwinding by the indoor fireplace or soaking in the gas-fired mountain hot tub." }
+                        ].map((step, idx) => (
+                            <SectionObserver key={idx} delay={idx * 0.1}>
+                                <div className="border-l border-white/10 pl-8 pb-12 relative last:pb-0 h-full">
+                                    <div className="absolute top-0 left-[-5px] w-[9px] h-[9px] bg-sanctuary-gold rounded-full" />
+                                    <span className="text-sanctuary-gold font-serif text-2xl mb-4 block">{step.time}</span>
+                                    <h4 className="text-xl font-serif mb-4">{step.title}</h4>
+                                    <p className="text-sm font-light opacity-60 leading-relaxed">{step.desc}</p>
+                                </div>
+                            </SectionObserver>
+                        ))}
+                    </div>
+                </div>
+            </section>
         </div>
     );
 };
