@@ -44,20 +44,20 @@ const Navbar: React.FC = () => {
             >
                 <div className="container mx-auto px-6 flex justify-between md:grid md:grid-cols-3 items-center">
                     {/* Left - Empty for balance or Language/Book */}
-                    <div className="hidden md:block">
+                    <div className="block">
                         <Button
                             to="/book"
                             variant="white"
-                            className="px-10 py-4 text-base"
+                            className="px-4 py-2 text-xs md:px-10 md:py-4 md:text-base"
                         >
                             Book Now
                         </Button>
                     </div>
 
                     {/* Center - Logo */}
-                    <div className="md:flex md:justify-center">
+                    <div className="flex justify-center md:flex md:justify-center">
                         <Link to="/" className="relative z-50 group">
-                            <span className={`font-serif text-lg md:text-3xl tracking-[0.2em] uppercase transition-colors duration-500 whitespace-nowrap ${(location.pathname === '/' && !scrolled && !isOpen) ? 'text-white' : 'text-sanctuary-blue'
+                            <span className={`font-serif text-sm md:text-3xl tracking-[0.2em] uppercase transition-colors duration-500 whitespace-nowrap ${(location.pathname === '/' && !scrolled && !isOpen) ? 'text-white' : 'text-sanctuary-blue'
                                 }`}>
                                 Mont Bleu
                             </span>
@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
                         <Button
                             onClick={toggleMenu}
                             variant="white"
-                            className="px-8 py-3 text-sm z-50 relative"
+                            className="px-4 py-2 text-xs md:px-8 md:py-3 md:text-sm z-50 relative"
                         >
                             {isOpen ? 'Close' : 'Menu'}
                         </Button>
