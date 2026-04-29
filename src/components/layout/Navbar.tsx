@@ -39,25 +39,25 @@ const Navbar: React.FC = () => {
     return (
         <>
             <nav
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled && !isOpen ? 'py-4 bg-sanctuary-sand/80 backdrop-blur-md' : 'py-8'
+                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled && !isOpen ? 'py-3 bg-sanctuary-sand/80 backdrop-blur-md' : 'py-6'
                     }`}
             >
-                <div className="container mx-auto px-4 grid grid-cols-3 items-center gap-2">
+                <div className="container mx-auto px-4 grid items-center" style={{ gridTemplateColumns: 'auto 1fr auto' }}>
                     {/* Left - Book Now */}
                     <div className="flex justify-start">
                         <Button
                             to="/book"
                             variant="white"
-                            className="px-4 py-2 text-xs md:px-10 md:py-4 md:text-base whitespace-nowrap"
+                            className="px-3 py-2 text-[10px] md:px-10 md:py-4 md:text-base whitespace-nowrap"
                         >
                             Book Now
                         </Button>
                     </div>
 
-                    {/* Center - Logo */}
-                    <div className="flex justify-center">
+                    {/* Center - Logo — gets all leftover space */}
+                    <div className="flex justify-center px-2">
                         <Link to="/" className="relative z-50 group">
-                            <span className={`font-serif text-base md:text-3xl tracking-[0.15em] md:tracking-[0.2em] uppercase transition-colors duration-500 whitespace-nowrap ${(location.pathname === '/' && !scrolled && !isOpen) ? 'text-white' : 'text-sanctuary-blue'
+                            <span className={`font-serif text-sm md:text-3xl tracking-[0.15em] md:tracking-[0.2em] uppercase transition-colors duration-500 whitespace-nowrap ${(location.pathname === '/' && !scrolled && !isOpen) ? 'text-white' : 'text-sanctuary-blue'
                                 }`}>
                                 Mont Bleu
                             </span>
@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
                         <Button
                             onClick={toggleMenu}
                             variant="white"
-                            className="px-4 py-2 text-xs md:px-8 md:py-3 md:text-sm z-50 relative whitespace-nowrap"
+                            className="px-3 py-2 text-[10px] md:px-8 md:py-3 md:text-sm z-50 relative whitespace-nowrap"
                         >
                             {isOpen ? 'Close' : 'Menu'}
                         </Button>
