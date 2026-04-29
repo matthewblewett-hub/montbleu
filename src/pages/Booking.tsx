@@ -2,9 +2,21 @@ import React, { useEffect } from 'react';
 import SectionObserver from '../components/ui/SectionObserver';
 import { motion } from 'framer-motion';
 
+// Declare gtag as a global function (loaded via index.html)
+declare function gtag(...args: unknown[]): void;
+
 const Booking: React.FC = () => {
     const calendarContainerId = 'innstyle-booking-calendar';
     const innStyleDomain = 'montbleuguesthouse';
+
+    // Fire Google Ads conversion when visitor reaches the booking page
+    useEffect(() => {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'conversion', {
+                send_to: 'AW-18098847270/ajQYCNTw950cEKb8mbZD',
+            });
+        }
+    }, []);
 
     useEffect(() => {
         const loadInnStyle = () => {
