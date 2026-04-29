@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
                     <h4 className="text-lg font-serif mb-4 text-sanctuary-gold">Contact</h4>
                     <p className="text-sm text-sanctuary-stone mb-2">Franschhoek, South Africa</p>
                     <p className="text-sm text-sanctuary-stone hover:text-white cursor-pointer transition-colors">
-                        booking@lesanctuaire.co.za
+                        montbleu.bookings@gmail.com
                     </p>
                 </div>
             </div>

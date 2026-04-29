@@ -34,7 +34,7 @@ const Contact: React.FC = () => {
                             </div>
                             <div>
                                 <h3 className="text-lg font-serif text-sanctuary-blue mb-2">Email</h3>
-                                <a href="mailto:booking@lesanctuaire.co.za" className="text-sanctuary-blue/60 font-light hover:text-sanctuary-blue transition-colors">booking@lesanctuaire.co.za</a>
+                                <a href="mailto:montbleu.bookings@gmail.com" className="text-sanctuary-blue/60 font-light hover:text-sanctuary-blue transition-colors">montbleu.bookings@gmail.com</a>
                             </div>
                             <div className="pt-8">
                                 <Button href="https://www.airbnb.co.za/users/profile/about?context=host" target="_blank" rel="noopener noreferrer">Book via Airbnb</Button>

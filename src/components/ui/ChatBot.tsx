@@ -156,7 +156,7 @@ const ChatBot: React.FC = () => {
             return "It is truly a beautiful place. The Franschhoek mountains wrap around the farm, offering panoramic views from every terrace. It’s designed to be a visual and soulful sanctuary.";
         }
 
-        return "I'm still learning some of the finer details of the farm, but I can tell you all about our 5 unique suites, the walking trails, the river sauna, or our philosophy of rest. You can also email us at booking@lesanctuaire.co.za.";
+        return "I'm still learning some of the finer details of the farm, but I can tell you all about our 5 unique suites, the walking trails, the river sauna, or our philosophy of rest. You can also email us at montbleu.bookings@gmail.com.";
     };
 
     return (

@@ -94,7 +94,7 @@ const Navbar: React.FC = () => {
                                 </p>
                                 <div className="space-y-1">
                                     <p className="text-sm text-sanctuary-blue">Franschhoek, South Africa</p>
-                                    <a href="mailto:booking@lesanctuaire.co.za" className="text-sm text-sanctuary-blue hover:text-sanctuary-gold transition-colors">booking@lesanctuaire.co.za</a>
+                                    <a href="mailto:montbleu.bookings@gmail.com" className="text-sm text-sanctuary-blue hover:text-sanctuary-gold transition-colors">montbleu.bookings@gmail.com</a>
                                 </div>
                             </div>
 
