@@ -15,6 +15,7 @@ import FAQ from './pages/FAQ';
 import Relax from './pages/Relax';
 import Dining from './pages/Dining';
 import Maintenance from './pages/Maintenance';
+import WinterPackage from './pages/WinterPackage';
 import { useEffect } from 'react';
 
 // Scroll to top on route change
@@ -70,6 +71,7 @@ function App() {
             <Route path="/booking-terms" element={<Terms />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/relax" element={<Relax />} />
+            <Route path="/winter-package" element={<WinterPackage />} />
           </Routes>
         </main>
         <Footer />
