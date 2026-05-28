@@ -36,6 +36,23 @@ const Home: React.FC = () => {
                     style={{ opacity: textOpacity }}
                     className="container mx-auto px-6 relative z-10 text-center text-white flex flex-col items-center"
                 >
+                    {/* Prominent Winter Package Block */}
+                    <motion.div
+                         initial={{ opacity: 0, y: -20 }}
+                         animate={{ opacity: 1, y: 0 }}
+                         transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
+                         className="w-full max-w-2xl mb-12"
+                    >
+                        <a href="/winter-package" className="block bg-sanctuary-gold text-sanctuary-blue p-6 md:p-8 rounded-sm shadow-2xl hover:bg-white transition-all duration-500 group border border-transparent hover:border-sanctuary-gold cursor-pointer">
+                            <span className="block text-xl md:text-3xl font-serif mb-3 uppercase tracking-widest font-bold group-hover:scale-105 transition-transform duration-500">
+                                ❄️ Winter Package Special
+                            </span>
+                            <span className="block text-sm md:text-base font-medium opacity-90 tracking-wide">
+                                Discover our exclusive seasonal rates and warming experiences. Click to view.
+                            </span>
+                        </a>
+                    </motion.div>
+
                     <motion.h1
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -48,27 +65,10 @@ const Home: React.FC = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-                        className="text-lg md:text-2xl font-light tracking-[0.3em] uppercase opacity-80 mb-12"
+                        className="text-lg md:text-2xl font-light tracking-[0.3em] uppercase opacity-80"
                     >
                         Le Sanctuaire Farm - Franschhoek, South Africa
                     </motion.p>
-
-                    {/* Prominent Winter Package Block */}
-                    <motion.div
-                         initial={{ opacity: 0, y: 20 }}
-                         animate={{ opacity: 1, y: 0 }}
-                         transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-                         className="w-full max-w-2xl"
-                    >
-                        <a href="/winter-package" className="block bg-sanctuary-gold text-sanctuary-blue p-6 md:p-8 rounded-sm shadow-2xl hover:bg-white transition-all duration-500 group border border-transparent hover:border-sanctuary-gold cursor-pointer">
-                            <span className="block text-xl md:text-3xl font-serif mb-3 uppercase tracking-widest font-bold group-hover:scale-105 transition-transform duration-500">
-                                ❄️ Winter Package Special
-                            </span>
-                            <span className="block text-sm md:text-base font-medium opacity-90 tracking-wide">
-                                Discover our exclusive seasonal rates and warming experiences. Click to view.
-                            </span>
-                        </a>
-                    </motion.div>
                 </motion.div>
 
                 {/* Scroll Indicator */}
