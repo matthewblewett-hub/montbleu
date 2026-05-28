@@ -32,6 +32,20 @@ const Home: React.FC = () => {
                     <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
                 </motion.div>
 
+                {/* Top Banner inside Hero */}
+                <motion.div 
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 0.5 }}
+                    className="absolute top-28 left-0 right-0 z-20 flex justify-center px-6"
+                >
+                    <a href="/winter-package" className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 px-6 py-3 flex items-center gap-4 transition-all duration-300 group rounded-sm">
+                        <span className="w-2 h-2 rounded-full bg-sanctuary-gold animate-pulse"></span>
+                        <span className="text-white text-xs md:text-sm font-light tracking-widest uppercase">New: Winter Package</span>
+                        <span className="text-white/60 text-xs hidden md:inline group-hover:text-white transition-colors">- Discover our seasonal special</span>
+                    </a>
+                </motion.div>
+
                 <motion.div
                     style={{ opacity: textOpacity }}
                     className="container mx-auto px-6 relative z-10 text-center text-white"
