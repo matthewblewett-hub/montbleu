@@ -83,34 +83,7 @@ const Home: React.FC = () => {
                 </motion.div>
             </section>
 
-            {/* Winter Package Promotion */}
-            <section className="py-24 bg-white">
-                <div className="container mx-auto px-6 max-w-6xl">
-                    <div className="flex flex-col md:flex-row items-center gap-16">
-                        <div className="md:w-1/2">
-                            <SectionObserver>
-                                <a href="/winter-package" className="block overflow-hidden shadow-2xl rounded-sm group">
-                                    <img 
-                                        src="/assets/winter-special/Winter special 1.jpeg" 
-                                        alt="Winter Special Promotion" 
-                                        className="w-full h-auto transform group-hover:scale-105 transition-transform duration-700" 
-                                    />
-                                </a>
-                            </SectionObserver>
-                        </div>
-                        <div className="md:w-1/2 text-center md:text-left">
-                            <SectionObserver delay={0.2}>
-                                <span className="text-xs font-serif uppercase tracking-[0.3em] text-sanctuary-gold mb-4 block font-medium">Special Offer</span>
-                                <h2 className="text-4xl md:text-5xl font-serif text-sanctuary-blue mb-6">Winter Package</h2>
-                                <p className="text-lg font-light text-sanctuary-blue/80 mb-8 leading-relaxed">
-                                    Embrace the serenity of a Franschhoek winter. Discover our exclusive winter package with special rates and warming experiences designed for the perfect retreat.
-                                </p>
-                                <Button to="/winter-package" variant="primary">View Package Details</Button>
-                            </SectionObserver>
-                        </div>
-                    </div>
-                </div>
-            </section>
+
 
             {/* Editorial Intro */}
             <section className="py-24 md:py-32 bg-sanctuary-sand">
