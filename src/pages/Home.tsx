@@ -54,7 +54,7 @@ const Home: React.FC = () => {
                                 <li>• Wine and chocolate pairing for 2</li>
                                 <li>• Bottle of wine in room</li>
                             </ul>
-                            <a href="mailto:info@lesanctuaire.co.za?subject=Spring%20Midweek%20Special%20Enquiry" className="inline-block border-2 border-sanctuary-blue px-8 py-3 uppercase tracking-widest text-xs font-bold hover:bg-sanctuary-blue hover:text-white transition-colors duration-300">
+                            <a href="/book" className="inline-block border-2 border-sanctuary-blue px-8 py-3 uppercase tracking-widest text-xs font-bold hover:bg-sanctuary-blue hover:text-white transition-colors duration-300">
                                 Enquire Now
                             </a>
                         </div>
