@@ -36,7 +36,29 @@ const Home: React.FC = () => {
                     style={{ opacity: textOpacity }}
                     className="container mx-auto px-6 relative z-10 text-center text-white flex flex-col items-center"
                 >
-
+                    {/* Prominent Spring Package Block */}
+                    <motion.div
+                         initial={{ opacity: 0, y: -20 }}
+                         animate={{ opacity: 1, y: 0 }}
+                         transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
+                         className="w-full max-w-2xl mb-12"
+                    >
+                        <div className="block bg-sanctuary-gold text-sanctuary-blue p-6 md:p-8 rounded-sm shadow-2xl transition-all duration-500 border border-transparent">
+                            <span className="block text-xl md:text-3xl font-serif mb-4 uppercase tracking-widest font-bold">
+                                🌸 Spring Midweek Special <br/>
+                                <span className="text-lg md:text-xl font-sans font-medium tracking-normal mt-2 block opacity-90">R5,000 per couple</span>
+                            </span>
+                            <ul className="text-sm md:text-base font-medium opacity-90 tracking-wide list-none space-y-2 mb-6">
+                                <li>• 2 Nights accommodation</li>
+                                <li>• Continental breakfast</li>
+                                <li>• Wine and chocolate pairing for 2</li>
+                                <li>• Bottle of wine in room</li>
+                            </ul>
+                            <a href="mailto:info@lesanctuaire.co.za?subject=Spring%20Midweek%20Special%20Enquiry" className="inline-block border-2 border-sanctuary-blue px-8 py-3 uppercase tracking-widest text-xs font-bold hover:bg-sanctuary-blue hover:text-white transition-colors duration-300">
+                                Enquire Now
+                            </a>
+                        </div>
+                    </motion.div>
 
                     <motion.h1
                         initial={{ opacity: 0, y: 30 }}
