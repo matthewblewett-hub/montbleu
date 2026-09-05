@@ -1,15 +1,14 @@
 import { GoogleGenAI } from '@google/genai';
 
-// Initialize the Google Gen AI SDK
-// It automatically picks up the GEMINI_API_KEY environment variable.
-const ai = new GoogleGenAI({});
-
 export default async function handler(req: any, res: any) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
     try {
+        // Initialize the Google Gen AI SDK inside the handler 
+        // to prevent build-time crashes if the environment variable is missing
+        const ai = new GoogleGenAI({});
         const { messages } = req.body;
 
         if (!messages || !Array.isArray(messages)) {
