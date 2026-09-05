@@ -21,7 +21,10 @@ const ChatBot: React.FC = () => {
         if (!input.trim()) return;
 
         const userMessage = input.trim();
-        const newMessages = [...messages, { role: 'user' as const, content: userMessage }];
+        const newMessages: { role: 'bot' | 'user', content: string }[] = [
+            ...messages,
+            { role: 'user', content: userMessage }
+        ];
         setMessages(newMessages);
         setInput('');
         setIsTyping(true);
