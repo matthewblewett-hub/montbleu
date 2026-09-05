@@ -60,7 +60,7 @@ Answer the user's questions based ONLY on this information. If you don't know th
         }));
 
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-2.0-flash',
             contents: formattedContents,
             config: {
                 systemInstruction: systemInstruction,
