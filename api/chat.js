@@ -7,8 +7,11 @@ export default async function handler(req, res) {
 
     try {
         // Initialize the Google Gen AI SDK inside the handler 
-        // to prevent build-time crashes if the environment variable is missing
-        const ai = new GoogleGenAI({});
+        // Explicitly pass the API key from process.env to ensure it's picked up
+        if (!process.env.GEMINI_API_KEY) {
+            return res.status(500).json({ error: "Missing GEMINI_API_KEY environment variable in Vercel." });
+        }
+        const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
         const { messages } = req.body;
 
         if (!messages || !Array.isArray(messages)) {
@@ -74,6 +77,6 @@ Answer the user's questions based ONLY on this information. If you don't know th
 
     } catch (error) {
         console.error('Error generating AI response:', error);
-        return res.status(500).json({ error: 'Failed to generate response' });
+        return res.status(500).json({ error: error.message || 'Failed to generate response' });
     }
 }

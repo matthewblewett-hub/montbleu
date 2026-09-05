@@ -39,14 +39,15 @@ const ChatBot: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || `Server error: ${response.status}`);
             }
 
             const data = await response.json();
             setMessages(prev => [...prev, { role: 'bot', content: data.reply }]);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error fetching chat response:', error);
-            setMessages(prev => [...prev, { role: 'bot', content: "I'm sorry, I'm having trouble connecting right now. Please email us at montbleu.bookings@gmail.com." }]);
+            setMessages(prev => [...prev, { role: 'bot', content: `DEBUG ERROR: ${error.message || 'Unknown error'}` }]);
         } finally {
             setIsTyping(false);
         }
