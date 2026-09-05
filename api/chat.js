@@ -65,7 +65,7 @@ Answer the user's questions based ONLY on this information. If you don't know th
 
         // Format history for Gemini API
         // Gemini expects role to be 'user' or 'model'
-        const formattedContents = messages.map((msg: any) => ({
+        const formattedContents = messages.map((msg) => ({
             role: msg.role === 'bot' ? 'model' : 'user',
             parts: [{ text: msg.content }]
         }));
