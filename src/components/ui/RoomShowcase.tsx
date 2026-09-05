@@ -13,6 +13,7 @@ interface RoomShowcaseProps {
     secondaryBookingLink?: string;
     innStyleDomain?: string;
     bookableId?: number;
+    policyText?: string;
 }
 
 const ParallaxImage = ({ src, alt, onClick }: { src: string; alt: string; onClick: () => void }) => {
@@ -46,7 +47,7 @@ const ParallaxImage = ({ src, alt, onClick }: { src: string; alt: string; onClic
     );
 };
 
-const RoomShowcase: React.FC<RoomShowcaseProps> = ({ name, description, images, features, index, onOpenDetails, bookingLink, secondaryBookingLink, innStyleDomain, bookableId }) => {
+const RoomShowcase: React.FC<RoomShowcaseProps> = ({ name, description, images, features, index, onOpenDetails, bookingLink, secondaryBookingLink, innStyleDomain, bookableId, policyText }) => {
     const calendarContainerId = `innstyle-calendar-container-${index}`;
 
     useEffect(() => {
@@ -106,7 +107,7 @@ const RoomShowcase: React.FC<RoomShowcaseProps> = ({ name, description, images, 
                     ))}
                 </div>
 
-                <div className="flex flex-wrap gap-4 mb-8">
+                <div className="flex flex-wrap gap-4 mb-6">
                     <Button variant="outline" onClick={onOpenDetails}>View Details</Button>
                     {bookingLink && (
                         <Button variant="white" className="px-10 py-4 text-base" href={bookingLink} target="_blank" rel="noopener noreferrer">Book Now</Button>
@@ -118,6 +119,15 @@ const RoomShowcase: React.FC<RoomShowcaseProps> = ({ name, description, images, 
                         <Button variant="white" className="px-10 py-4 text-base" to="/contact">Book Now</Button>
                     )}
                 </div>
+
+                {/* Age Policy Notice */}
+                {policyText && (
+                    <div className="mb-8">
+                        <span className="inline-block px-4 py-2 bg-sanctuary-gold/10 border border-sanctuary-gold/20 text-sanctuary-gold text-xs uppercase tracking-widest rounded-sm font-medium">
+                            {policyText}
+                        </span>
+                    </div>
+                )}
 
                 {/* InnStyle Booking Engine Embed */}
                 {innStyleDomain && (

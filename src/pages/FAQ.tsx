@@ -118,7 +118,7 @@ const faqData: FAQItem[] = [
     {
         category: "Practical Questions",
         question: "Is the property child-friendly?",
-        answer: "The property is not suitable for children under 12 years as the swimming pool is unfenced and some of the trails are unfenced. Infants can be accommodated by arrangement."
+        answer: "Our guesthouse is primarily for guests aged 12 years and older. Infants under 2 years may be accommodated in the Fynbos and Oak Rooms by prior arrangement. The Mountain, Olive, and Protea Rooms are strictly for guests 12 years and older. Please note that the swimming pool and some trails are unfenced."
     },
     {
         category: "Practical Questions",

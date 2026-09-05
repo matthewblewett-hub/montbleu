@@ -51,7 +51,7 @@ const Terms: React.FC = () => {
                                     <li><strong>Occupancy:</strong> Maximum 2 guests per room. No persons, other than those quoted at the time of booking, are permitted to share the accommodation. No unregistered visitors are allowed on the property.</li>
                                     <li><strong>Events:</strong> No parties, events, or commercial photography are permitted without prior written consent from management.</li>
                                     <li><strong>Pets:</strong> Regrettably, no pets are allowed on the premises.</li>
-                                    <li><strong>Children:</strong> We operate as an "Adults Preferred" guesthouse; no children under the age of 12 are permitted.</li>
+                                    <li><strong>Children & Age Policy:</strong> Our guesthouse is primarily for guests aged 12 years and older. However, infants under 2 years may be accommodated in the Fynbos and Oak Rooms by prior arrangement. The Mountain, Olive, and Protea Rooms are strictly for guests 12 years and older.</li>
                                 </ul>
                             </section>
 

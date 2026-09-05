@@ -9,15 +9,6 @@ const Booking: React.FC = () => {
     const calendarContainerId = 'innstyle-booking-calendar';
     const innStyleDomain = 'montbleuguesthouse';
 
-    // Fire Google Ads conversion when visitor reaches the booking page
-    useEffect(() => {
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'conversion', {
-                send_to: 'AW-18098847270/ajQYCNTw950cEKb8mbZD',
-            });
-        }
-    }, []);
-
     useEffect(() => {
         const loadInnStyle = () => {
             if ((window as any).InnStyle) {
@@ -63,9 +54,15 @@ const Booking: React.FC = () => {
                     <SectionObserver>
                         <span className="text-xs font-serif uppercase tracking-widest text-sanctuary-stone mb-6 block">Reservations</span>
                         <h1 className="text-5xl md:text-7xl font-serif text-white mb-8">Book Your Stay</h1>
-                        <p className="text-xl font-light text-white/80 mb-12">
+                        <p className="text-xl font-light text-white/80 mb-6">
                             Select your dates and choose from our unique suites. We look forward to welcoming you to Mont Bleu.
                         </p>
+                        <div className="bg-white/10 backdrop-blur-sm border border-white/20 p-6 rounded-sm inline-block mb-12">
+                            <h3 className="text-sanctuary-gold font-serif text-xl mb-2">Guest Age Policy</h3>
+                            <p className="text-white/90 font-light max-w-2xl mx-auto">
+                                Our guesthouse is primarily for guests 12 years and older. Infants under 2 years may be accommodated in the Fynbos and Oak Rooms by prior arrangement.
+                            </p>
+                        </div>
                     </SectionObserver>
 
                     <motion.div

@@ -26,7 +26,8 @@ const Stay: React.FC = () => {
                 bed: "King (Extra Length)",
                 view: "Simonsberg Mountain & Valley",
                 amenities: ["Smart TV", "Nespresso", "Daily Housecleaning", "Air Conditioning", "Luxury Linen", "Rain Shower", "Organic Toiletries"]
-            }
+            },
+            policyText: "Guests must be 12 years or older."
         },
         {
             name: "Olive Suite",
@@ -46,7 +47,8 @@ const Stay: React.FC = () => {
                 bed: "Queen",
                 view: "Olive Grove & Garden",
                 amenities: ["Smart TV", "Nespresso", "Daily Housecleaning", "Private Patio", "Freestanding Bath", "Minibar", "Writing Desk", "High-speed Wi-Fi"]
-            }
+            },
+            policyText: "Guests must be 12 years or older."
         },
         {
             name: "Protea Suite",
@@ -66,7 +68,8 @@ const Stay: React.FC = () => {
                 bed: "King",
                 view: "Panoramic Mountain & Fynbos",
                 amenities: ["Smart TV", "Nespresso", "Daily Housecleaning", "Outdoor Shower", "Indoor Fireplace", "Private Entrance"]
-            }
+            },
+            policyText: "Guests must be 12 years or older."
         },
         {
             name: "Oak Room",
@@ -86,7 +89,8 @@ const Stay: React.FC = () => {
                 bed: "King (Extra Length)",
                 view: "Valley & Mountains",
                 amenities: ["Smart TV", "Nespresso", "Daily Housecleaning", "Private Balcony", "Air Conditioning", "Luxury Linen", "En-suite Bathroom"]
-            }
+            },
+            policyText: "Infants under 2 years welcome."
         },
         {
             name: "Fynbos Room",
@@ -106,7 +110,8 @@ const Stay: React.FC = () => {
                 bed: "Queen",
                 view: "Valley",
                 amenities: ["Smart TV", "Nespresso", "Daily Housecleaning", "Outdoor Shower", "Reading Corner", "Private Patio", "High-speed Wi-Fi"]
-            }
+            },
+            policyText: "Infants under 2 years welcome."
         }
     ];
 
@@ -143,6 +148,23 @@ const Stay: React.FC = () => {
                         onOpenDetails={() => setSelectedRoom(room)}
                     />
                 ))}
+            </div>
+
+            {/* Children & Age Policy */}
+            <div className="bg-sanctuary-blue text-white py-24">
+                <div className="container mx-auto px-6 max-w-4xl text-center">
+                    <SectionObserver>
+                        <span className="text-xs font-serif uppercase tracking-[0.3em] text-sanctuary-gold mb-6 block font-medium">Guest Policy</span>
+                        <h2 className="text-4xl md:text-5xl font-serif mb-8">Children & Age Policy</h2>
+                        <div className="w-16 h-px bg-sanctuary-gold mx-auto mb-10"></div>
+                        <p className="text-lg md:text-xl font-light text-white/80 leading-relaxed mb-8">
+                            Our guesthouse is primarily for guests aged 12 years and older to preserve the peaceful sanctuary atmosphere.
+                        </p>
+                        <p className="text-base md:text-lg font-light text-white/60 leading-relaxed max-w-3xl mx-auto">
+                            The <strong>Fynbos</strong> and <strong>Oak</strong> rooms can accommodate infants under 2 years by prior arrangement. However, the <strong>Mountain</strong>, <strong>Olive</strong>, and <strong>Protea</strong> rooms are strictly for guests 12 years or older.
+                        </p>
+                    </SectionObserver>
+                </div>
             </div>
 
             {/* Room Detail Modal */}
@@ -192,6 +214,11 @@ const Stay: React.FC = () => {
                                 <span className="block text-xs uppercase text-sanctuary-gold tracking-widest mb-1">View</span>
                                 <span className="font-serif text-lg">{selectedRoom.details.view}</span>
                             </div>
+                        </div>
+
+                        {/* Room Policy */}
+                        <div className="mt-8 bg-sanctuary-gold/5 border border-sanctuary-gold/20 p-4 rounded-sm text-center">
+                            <span className="text-sm font-serif text-sanctuary-blue tracking-wide">{selectedRoom.policyText}</span>
                         </div>
 
                         {/* Shared Facilities */}
