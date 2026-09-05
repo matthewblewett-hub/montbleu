@@ -1,4 +1,4 @@
-import { GoogleGenAI } from '@google/genai';
+
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -11,6 +11,14 @@ export default async function handler(req, res) {
         if (!process.env.GEMINI_API_KEY) {
             return res.status(500).json({ error: "Missing GEMINI_API_KEY environment variable in Vercel." });
         }
+        let genai;
+        try {
+            genai = await import('@google/genai');
+        } catch (err) {
+            return res.status(500).json({ error: "Failed to load @google/genai module: " + err.message });
+        }
+        const GoogleGenAI = genai.GoogleGenAI || (genai.default && genai.default.GoogleGenAI) || genai.default;
+        
         const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
         const { messages } = req.body;
 
