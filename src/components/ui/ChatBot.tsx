@@ -2,107 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HelpCircle, X, Send, Sparkles } from 'lucide-react';
 
-interface FAQData {
-    question: string;
-    answer: string;
-    category: string;
-    keywords: string[];
-}
-
-const KNOWLEDGE_BASE: FAQData[] = [
-    // THE PHILOSOPHY & VIBE
-    {
-        category: "Vibe",
-        question: "Is the place pretty?",
-        answer: "It's breathtaking. Mont Bleu is a mountain sanctuary where 'heaven and earth meet'. You'll experience panoramic mountain views, fynbos-clad slopes, and a peaceful atmosphere designed to help you slow down and reconnect with nature.",
-        keywords: ["pretty", "beautiful", "nice", "look", "view", "vibe", "style", "scenery"]
-    },
-    {
-        category: "Philosophy",
-        question: "What is the concept of Le Sanctuaire?",
-        answer: "Mont Bleu is a 'Guest Home', not a formal hotel. It's designed to feel lived-in, warm, and unhurried. It's a place for rest, reflection, and renewal, where guests help themselves and share spaces with care.",
-        keywords: ["philosophy", "concept", "what is", "about", "guest home"]
-    },
-
-    // ROOM DETAILS
-    {
-        category: "Rooms",
-        question: "Tell me about the Mountain Suite",
-        answer: "The Mountain Suite is calm and spacious (45m²), featuring a private balcony with valley views, a King Size bed, and a walk-in rain shower.",
-        keywords: ["mountain suite", "mountain room"]
-    },
-    {
-        category: "Rooms",
-        question: "Tell me about the Olive Suite",
-        answer: "The Olive Suite (40m²) is on the ground floor with a private patio overlooking our olive grove. It features a freestanding bath and natural finishes for deep relaxation.",
-        keywords: ["olive suite", "olive room"]
-    },
-    {
-        category: "Rooms",
-        question: "Tell me about the Protea Suite",
-        answer: "The Protea Suite (50m²) offers panoramic fynbos views, an indoor fireplace, a freestanding bathtub with a view, and a signature outdoor shower.",
-        keywords: ["protea suite", "protea room"]
-    },
-    {
-        category: "Rooms",
-        question: "Tell me about the Oak Room",
-        answer: "The Oak Room is our most elevated space, filled with light from sunrise to sunset. It offers panoramic valley views from its private balcony.",
-        keywords: ["oak room", "oak suite"]
-    },
-    {
-        category: "Rooms",
-        question: "Tell me about the Fynbos Room",
-        answer: "The Fynbos Room (40m²) features a unique glass reading and relaxation space, an outdoor shower beneath the stars, and beautiful valley views.",
-        keywords: ["fynbos room", "fynbos suite"]
-    },
-
-    // FACILITIES & EXPERIENCES
-    {
-        category: "Facilities",
-        question: "What facilities do you have?",
-        answer: "We offer a sparkling swimming pool, natural river pools, a gas-fired mountain hot tub, a private riverfront sauna, and a mezzanine library with mountain views.",
-        keywords: ["facilities", "amenities", "what to do", "pool", "hot tub", "sauna"]
-    },
-    {
-        category: "Experiences",
-        question: "What is the Pilgrim's Journey?",
-        answer: "The Pilgrim's Journey is a curated walking route with 15 stations of reflection across the estate, using scripture, symbolism, and silence. It includes QR codes for guided meditations.",
-        keywords: ["pilgrim", "journey", "walk", "stations", "meditation", "spiritual"]
-    },
-    {
-        category: "Facilities",
-        question: "Is there a bar?",
-        answer: "We offer an honesty bar with a curated wine selection. We also host a Saturday Sunset experience at our 'Uitkyk Bar'—the highest deck in the Franschhoek Valley!",
-        keywords: ["bar", "drinks", "wine", "honesty", "uitkyk", "sunset"]
-    },
-
-    // PRACTICAL
-    {
-        category: "Booking",
-        question: "How do I book?",
-        answer: "You can book directly on our website or via Airbnb. A 50% deposit is required to secure your reservation.",
-        keywords: ["book", "reservation", "deposit", "payment", "price", "cost"]
-    },
-    {
-        category: "Timing",
-        question: "Check-in and Check-out",
-        answer: "Check-in is from 3:00 PM and check-out is by 10:00 AM. This is strictly enforced to ensure the home is ready for all guests.",
-        keywords: ["check-in", "check-out", "arrival", "departure", "times"]
-    },
-    {
-        category: "Location",
-        question: "How far is the village?",
-        answer: "We are just 2km from Franschhoek village centre. It's a lovely walk in the day, but we recommend an Uber at night as the final stretch is not lit.",
-        keywords: ["village", "town", "distance", "location", "uber", "walk"]
-    },
-    {
-        category: "Facilities",
-        question: "Do you have WiFi?",
-        answer: "Yes, we have high-speed fibre WiFi throughout the guest home. Please note that being in the mountains, it can very occasionally be unstable.",
-        keywords: ["wifi", "internet", "connectivity", "work", "fiber"]
-    }
-];
-
 const ChatBot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<{ role: 'bot' | 'user', content: string }[]>([
@@ -118,45 +17,36 @@ const ChatBot: React.FC = () => {
         }
     }, [messages, isTyping]);
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (!input.trim()) return;
 
         const userMessage = input.trim();
-        setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+        const newMessages = [...messages, { role: 'user' as const, content: userMessage }];
+        setMessages(newMessages);
         setInput('');
         setIsTyping(true);
 
-        setTimeout(() => {
-            const response = findBestResponse(userMessage);
-            setMessages(prev => [...prev, { role: 'bot', content: response }]);
-            setIsTyping(false);
-        }, 800);
-    };
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ messages: newMessages })
+            });
 
-    const findBestResponse = (text: string) => {
-        const query = text.toLowerCase();
-
-        // Search by keywords and semantic relevance
-        let bestMatch = null;
-        let maxMatches = 0;
-
-        for (const item of KNOWLEDGE_BASE) {
-            const matchCount = item.keywords.filter(kw => query.includes(kw)).length;
-            if (matchCount > maxMatches) {
-                maxMatches = matchCount;
-                bestMatch = item;
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
+
+            const data = await response.json();
+            setMessages(prev => [...prev, { role: 'bot', content: data.reply }]);
+        } catch (error) {
+            console.error('Error fetching chat response:', error);
+            setMessages(prev => [...prev, { role: 'bot', content: "I'm sorry, I'm having trouble connecting right now. Please email us at montbleu.bookings@gmail.com." }]);
+        } finally {
+            setIsTyping(false);
         }
-
-        if (bestMatch && maxMatches > 0) return bestMatch.answer;
-
-        // Small talk / General
-        if (query.includes('hello') || query.includes('hi ')) return "Hello! I'm the Sanctuary Assistant. I know quite a lot about Mont Bleu and the Le Sanctuaire estate. What would you like to know?";
-        if (query.includes('pretty') || query.includes('beautiful') || query.includes('view')) {
-            return "It is truly a beautiful place. The Franschhoek mountains wrap around the farm, offering panoramic views from every terrace. It’s designed to be a visual and soulful sanctuary.";
-        }
-
-        return "I'm still learning some of the finer details of the farm, but I can tell you all about our 5 unique suites, the walking trails, the river sauna, or our philosophy of rest. You can also email us at montbleu.bookings@gmail.com.";
     };
 
     return (
@@ -176,7 +66,7 @@ const ChatBot: React.FC = () => {
                                     <Sparkles className="w-5 h-5 text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="font-serif text-sm uppercase tracking-widest">Sanctuary Assistant</h3>
+                                    <h3 className="font-serif text-sm uppercase tracking-widest">Mont Bleu Assistant</h3>
                                 </div>
                             </div>
                             <button onClick={() => setIsOpen(false)} className="hover:bg-white/10 p-1.5 rounded-full transition-colors">
