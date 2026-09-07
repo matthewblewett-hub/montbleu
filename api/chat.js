@@ -60,7 +60,7 @@ You are the "Mont Bleu Assistant", a helpful, warm, and highly knowledgeable AI 
 4. **Oak Room** (45m²): Most elevated space, panoramic valley views from private balcony, King bed. (Infants under 2 welcome)
 5. **Fynbos Room** (40m²): Glass reading space, outdoor shower beneath the stars, Queen bed. (Infants under 2 welcome)
 
-Answer the user's questions based ONLY on this information. If you don't know the answer, politely say you don't have that specific detail but they can email montbleu.bookings@gmail.com.
+Answer the user's questions based ONLY on this information. If you don't know the answer, politely say you don't have that specific detail but they can email bookings@montbleu.co.za.
 `;
 
         // Format history for Gemini API
