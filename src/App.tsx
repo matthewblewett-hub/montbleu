@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ChatBot from './components/ui/ChatBot';
@@ -18,11 +18,13 @@ import Maintenance from './pages/Maintenance';
 import WinterPackage from './pages/WinterPackage';
 import { useEffect } from 'react';
 
-// Scroll to top on route change
+// Scroll to top on route change (client-side only)
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+    }
   }, [pathname]);
   return null;
 };
@@ -30,10 +32,12 @@ const ScrollToTop = () => {
 // Toggle this variable to true to put the site in maintenance mode
 const IS_MAINTENANCE_MODE = false;
 
+// App renders routes only — the Router wrapper is provided by main.tsx (BrowserRouter)
+// or prerender.tsx (StaticRouter) so it works both client-side and during build-time pre-rendering.
 function App() {
   if (IS_MAINTENANCE_MODE) {
     return (
-      <Router>
+      <>
         <ScrollToTop />
         <div className="flex flex-col min-h-screen font-sans text-sanctuary-blue bg-sanctuary-sand">
           <Navbar />
@@ -48,12 +52,12 @@ function App() {
           <Footer />
           <ChatBot />
         </div>
-      </Router>
+      </>
     );
   }
 
   return (
-    <Router>
+    <>
       <ScrollToTop />
 
       <div className="flex flex-col min-h-screen font-sans text-sanctuary-blue bg-sanctuary-sand">
@@ -77,8 +81,9 @@ function App() {
         <Footer />
         <ChatBot />
       </div>
-    </Router>
+    </>
   );
 }
 
 export default App;
+

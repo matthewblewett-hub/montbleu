@@ -1,10 +1,20 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import SectionObserver from '../components/ui/SectionObserver';
 import { motion } from 'framer-motion';
 
 const Terms: React.FC = () => {
     return (
         <div className="pt-20 min-h-screen bg-sanctuary-sand">
+            <Helmet>
+                <title>Booking Terms &amp; Conditions | Mont Bleu Guesthouse</title>
+                <meta name="description" content="Read the booking terms and conditions for Mont Bleu Guesthouse in Franschhoek, including cancellation policy, check-in/out times, and house rules." />
+                <link rel="canonical" href="https://www.montbleu.co.za/booking-terms" />
+                <meta property="og:url" content="https://www.montbleu.co.za/booking-terms" />
+                <meta property="og:title" content="Booking Terms &amp; Conditions | Mont Bleu Guesthouse" />
+                <meta property="og:description" content="Cancellation policy, check-in times and house rules for Mont Bleu boutique guesthouse in Franschhoek." />
+                <meta property="og:image" content="https://www.montbleu.co.za/assets/home-hero.jpg" />
+            </Helmet>
             <section className="py-16 md:py-24">
                 <div className="container mx-auto px-6 max-w-4xl">
                     <SectionObserver>

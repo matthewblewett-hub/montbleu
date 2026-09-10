@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import SectionObserver from '../components/ui/SectionObserver';
 import Button from '../components/ui/Button';
 
@@ -13,6 +14,15 @@ const WinterPackage: React.FC = () => {
 
     return (
         <div className="pt-20 min-h-screen bg-sanctuary-sand">
+            <Helmet>
+                <title>Winter Special Package | Mont Bleu Guesthouse Franschhoek</title>
+                <meta name="description" content="Enjoy Mont Bleu's winter special in Franschhoek — cosy fireplace rooms, wine pairing and valley views at a special midweek rate. Limited availability." />
+                <link rel="canonical" href="https://www.montbleu.co.za/winter-package" />
+                <meta property="og:url" content="https://www.montbleu.co.za/winter-package" />
+                <meta property="og:title" content="Winter Special Package | Mont Bleu Guesthouse Franschhoek" />
+                <meta property="og:description" content="Cosy fireplace rooms, wine pairing and valley views. Mont Bleu's winter special package in the Franschhoek wine valley." />
+                <meta property="og:image" content="https://www.montbleu.co.za/assets/home-hero.jpg" />
+            </Helmet>
             {/* Header */}
             <section className="py-24 text-center px-6">
                 <SectionObserver>

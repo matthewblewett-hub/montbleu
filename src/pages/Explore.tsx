@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import SectionObserver from '../components/ui/SectionObserver';
 import Accordion from '../components/ui/Accordion';
@@ -75,6 +76,15 @@ const Explore: React.FC = () => {
 
     return (
         <div className="pt-20">
+            <Helmet>
+                <title>Explore Franschhoek | Activities &amp; Wine Country | Mont Bleu</title>
+                <meta name="description" content="Discover Franschhoek from Mont Bleu Guesthouse. Explore world-class wine estates, fine dining, the iconic Wine Tram, and activities on Le Sanctuaire Farm." />
+                <link rel="canonical" href="https://www.montbleu.co.za/explore" />
+                <meta property="og:url" content="https://www.montbleu.co.za/explore" />
+                <meta property="og:title" content="Explore Franschhoek | Activities &amp; Wine Country | Mont Bleu" />
+                <meta property="og:description" content="Wine estates, fine dining, hiking trails, and the Wine Tram. Discover the best of the Franschhoek valley from our boutique guesthouse." />
+                <meta property="og:image" content="https://www.montbleu.co.za/assets/newimages/GH 1.jpg" />
+            </Helmet>
             {/* Interactive Map/Legend Section */}
             <section className="min-h-screen md:h-screen flex flex-col md:flex-row border-b border-sanctuary-blue/10">
                 {/* Left: Legend List */}

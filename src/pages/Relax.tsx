@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import SectionObserver from '../components/ui/SectionObserver';
 import Modal from '../components/ui/Modal';
 import { Waves, Flame, Droplets, Dumbbell } from 'lucide-react';
@@ -35,6 +36,15 @@ const Relax: React.FC = () => {
 
     return (
         <div className="pt-20 bg-sanctuary-sand min-h-screen">
+            <Helmet>
+                <title>Relax & Wellness | Pool, Hot Tub & Sauna | Mont Bleu Franschhoek</title>
+                <meta name="description" content="Unwind at Mont Bleu with our mountain hot tub, outdoor pool, riverside sauna, plunge pool and yoga deck. Wellness facilities set in the Franschhoek mountains." />
+                <link rel="canonical" href="https://www.montbleu.co.za/relax" />
+                <meta property="og:url" content="https://www.montbleu.co.za/relax" />
+                <meta property="og:title" content="Relax & Wellness at Mont Bleu Guesthouse" />
+                <meta property="og:description" content="Mountain hot tub, outdoor pool, riverside sauna and yoga deck. Disconnect and recharge in the peaceful Franschhoek mountains." />
+                <meta property="og:image" content="https://www.montbleu.co.za/assets/newimages/Pool 2.jpg" />
+            </Helmet>
             <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img

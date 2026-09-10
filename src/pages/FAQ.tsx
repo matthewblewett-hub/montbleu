@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import SectionObserver from '../components/ui/SectionObserver';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Search } from 'lucide-react';
@@ -191,6 +192,15 @@ const FAQ: React.FC = () => {
 
     return (
         <div className="pt-20 min-h-screen bg-sanctuary-sand">
+            <Helmet>
+                <title>Frequently Asked Questions | Mont Bleu Guesthouse Franschhoek</title>
+                <meta name="description" content="Answers to common questions about staying at Mont Bleu boutique guesthouse in Franschhoek — check-in times, breakfast, pet policy, children, booking and cancellation." />
+                <link rel="canonical" href="https://www.montbleu.co.za/faq" />
+                <meta property="og:url" content="https://www.montbleu.co.za/faq" />
+                <meta property="og:title" content="Frequently Asked Questions | Mont Bleu Guesthouse" />
+                <meta property="og:description" content="Everything you need to know before your stay at Mont Bleu in Franschhoek — check-in, breakfast, policies and booking information." />
+                <meta property="og:image" content="https://www.montbleu.co.za/assets/home-hero.jpg" />
+            </Helmet>
             <section className="py-16 md:py-24">
                 <div className="container mx-auto px-6 max-w-4xl">
                     <SectionObserver>

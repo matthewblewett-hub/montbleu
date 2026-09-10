@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import SectionObserver from '../components/ui/SectionObserver';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
@@ -21,6 +22,15 @@ const Gallery: React.FC = () => {
 
     return (
         <div className="pt-24 pb-20">
+            <Helmet>
+                <title>Photo Gallery | Mont Bleu Guesthouse Franschhoek</title>
+                <meta name="description" content="Browse photos of Mont Bleu boutique guesthouse in Franschhoek — rooms, mountain views, the pool, sauna, dining deck and the beautiful Le Sanctuaire Farm estate." />
+                <link rel="canonical" href="https://www.montbleu.co.za/gallery" />
+                <meta property="og:url" content="https://www.montbleu.co.za/gallery" />
+                <meta property="og:title" content="Photo Gallery | Mont Bleu Guesthouse Franschhoek" />
+                <meta property="og:description" content="Rooms, mountain views, pool, sauna, and the Le Sanctuaire Farm estate. See what awaits you at Mont Bleu boutique guesthouse in Franschhoek." />
+                <meta property="og:image" content="https://www.montbleu.co.za/assets/newimages/GH 1.jpg" />
+            </Helmet>
             <SectionObserver className="container mx-auto px-6 mb-16 text-center">
                 <h1 className="text-5xl md:text-6xl font-serif text-sanctuary-blue mb-6">Gallery</h1>
                 <p className="text-sanctuary-blue/60 font-light">Glimpses of life at Mont Bleu</p>

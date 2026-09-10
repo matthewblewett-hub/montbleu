@@ -1,10 +1,20 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import SectionObserver from '../components/ui/SectionObserver';
 import { motion } from 'framer-motion';
 
 const Dining: React.FC = () => {
     return (
         <div className="pt-20 bg-sanctuary-sand">
+            <Helmet>
+                <title>Dining & Breakfast | Farm-to-Table Food | Mont Bleu Franschhoek</title>
+                <meta name="description" content="Enjoy a fresh continental breakfast at Mont Bleu including local sourdough, artisan cheeses, seasonal fruit and Nespresso coffee — served daily overlooking the Franschhoek mountains." />
+                <link rel="canonical" href="https://www.montbleu.co.za/dining" />
+                <meta property="og:url" content="https://www.montbleu.co.za/dining" />
+                <meta property="og:title" content="Dining & Breakfast at Mont Bleu Guesthouse" />
+                <meta property="og:description" content="Fresh continental breakfast daily, honesty bar and dining on the deck. Farm-to-table food in the heart of the Franschhoek wine valley." />
+                <meta property="og:image" content="https://www.montbleu.co.za/assets/newimages/Dining 1.jpg" />
+            </Helmet>
             {/* Hero Section */}
             <section className="relative h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 z-0">

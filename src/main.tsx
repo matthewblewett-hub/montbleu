@@ -1,10 +1,27 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import './index.css'
 import App from './App.tsx'
 
-createRoot(document.getElementById('root')!).render(
+const root = createRoot(document.getElementById('root')!)
+root.render(
   <StrictMode>
-    <App />
+    <HelmetProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </HelmetProvider>
   </StrictMode>,
 )
+
+// Signal to vite-plugin-prerender that the app has rendered
+// (used during build-time pre-rendering only)
+if (typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.dispatchEvent(new Event('render-event'))
+  })
+}
+
+

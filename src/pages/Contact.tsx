@@ -1,10 +1,20 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import SectionObserver from '../components/ui/SectionObserver';
 import Button from '../components/ui/Button';
 
 const Contact: React.FC = () => {
     return (
         <div className="pt-24 pb-20 min-h-screen flex flex-col justify-center">
+            <Helmet>
+                <title>Contact & Book | Mont Bleu Guesthouse Franschhoek</title>
+                <meta name="description" content="Contact Mont Bleu Guesthouse to book your stay in Franschhoek. Email bookings@montbleu.co.za or call us. Located on Le Sanctuaire Farm in the Franschhoek wine valley." />
+                <link rel="canonical" href="https://www.montbleu.co.za/contact" />
+                <meta property="og:url" content="https://www.montbleu.co.za/contact" />
+                <meta property="og:title" content="Contact & Book | Mont Bleu Guesthouse Franschhoek" />
+                <meta property="og:description" content="Book your stay at Mont Bleu boutique guesthouse in Franschhoek. Get in touch with our team to check availability and reserve your suite." />
+                <meta property="og:image" content="https://www.montbleu.co.za/assets/home-hero.jpg" />
+            </Helmet>
             <div className="container mx-auto px-6">
                 <div className="grid md:grid-cols-2 gap-16 lg:gap-24">
                     {/* Contact Info */}

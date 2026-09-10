@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import SectionObserver from '../components/ui/SectionObserver';
 import Button from '../components/ui/Button';
@@ -19,15 +18,6 @@ const Home: React.FC = () => {
 
     return (
         <div className="flex flex-col">
-            <Helmet>
-                <title>Mont Bleu Guesthouse | Boutique Accommodation Franschhoek</title>
-                <meta name="description" content="Mont Bleu is a boutique guesthouse on Le Sanctuaire Farm in Franschhoek. Five unique suites, mountain views, pool, sauna, and daily farm breakfasts. Book direct for the best rates." />
-                <link rel="canonical" href="https://www.montbleu.co.za/" />
-                <meta property="og:url" content="https://www.montbleu.co.za/" />
-                <meta property="og:title" content="Mont Bleu Guesthouse | Boutique Accommodation Franschhoek" />
-                <meta property="og:description" content="Boutique guesthouse on Le Sanctuaire Farm in Franschhoek. Five unique suites with mountain views, pool, sauna and daily farm breakfasts." />
-                <meta property="og:image" content="https://www.montbleu.co.za/assets/home-hero.jpg" />
-            </Helmet>
             {/* Parallax Hero */}
             <section ref={heroRef} className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden">
                 <motion.div

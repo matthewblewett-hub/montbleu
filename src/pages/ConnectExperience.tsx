@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import SectionObserver from '../components/ui/SectionObserver';
 import { motion } from 'framer-motion';
 
@@ -32,6 +33,15 @@ const ConnectExperience: React.FC = () => {
 
     return (
         <div className="pt-20">
+            <Helmet>
+                <title>The Connect Experience | Retreats & Immersive Stays | Mont Bleu</title>
+                <meta name="description" content="The Mont Bleu Connect Experience — curated retreats blending nature, silence, and guided discovery on Le Sanctuaire Farm in Franschhoek." />
+                <link rel="canonical" href="https://www.montbleu.co.za/connect-experience" />
+                <meta property="og:url" content="https://www.montbleu.co.za/connect-experience" />
+                <meta property="og:title" content="The Connect Experience | Mont Bleu Franschhoek" />
+                <meta property="og:description" content="Immersive retreats and curated experiences at Mont Bleu on Le Sanctuaire Farm. Nature, silence, and guided discovery in the Franschhoek mountains." />
+                <meta property="og:image" content="https://www.montbleu.co.za/assets/newimages/GH 1.jpg" />
+            </Helmet>
             {/* Hero Section with Philospohy Quote */}
             <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 z-0">

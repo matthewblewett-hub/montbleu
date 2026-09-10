@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import SectionObserver from '../components/ui/SectionObserver';
 import { motion } from 'framer-motion';
 
@@ -39,6 +40,15 @@ const Booking: React.FC = () => {
 
     return (
         <div className="pt-20 min-h-screen">
+            <Helmet>
+                <title>Book Now | Mont Bleu Guesthouse Franschhoek</title>
+                <meta name="description" content="Book your stay at Mont Bleu boutique guesthouse in Franschhoek. Check availability and reserve your suite directly online for the best rates." />
+                <link rel="canonical" href="https://www.montbleu.co.za/book" />
+                <meta property="og:url" content="https://www.montbleu.co.za/book" />
+                <meta property="og:title" content="Book Now | Mont Bleu Guesthouse Franschhoek" />
+                <meta property="og:description" content="Reserve your room at Mont Bleu boutique guesthouse in Franschhoek. Five unique suites, mountain views, pool and farm breakfasts." />
+                <meta property="og:image" content="https://www.montbleu.co.za/assets/home-hero.jpg" />
+            </Helmet>
             <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-16 md:py-24">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">

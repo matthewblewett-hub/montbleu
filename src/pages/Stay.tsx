@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import SectionObserver from '../components/ui/SectionObserver';
 import RoomShowcase from '../components/ui/RoomShowcase';
 import Modal from '../components/ui/Modal';
@@ -6,6 +7,7 @@ import { Waves, Coffee, BookOpen, Flame, Droplets, Wine, Sun } from 'lucide-reac
 
 const Stay: React.FC = () => {
     const [selectedRoom, setSelectedRoom] = React.useState<any>(null);
+
 
     const rooms = [
         {
@@ -129,7 +131,17 @@ const Stay: React.FC = () => {
 
     return (
         <div className="pt-20 bg-sanctuary-sand">
+            <Helmet>
+                <title>Boutique Rooms & Accommodation | Mont Bleu Guesthouse Franschhoek</title>
+                <meta name="description" content="Book one of five unique suites at Mont Bleu Guesthouse in Franschhoek. Mountain Suite, Olive Suite, Protea Suite, Oak Room and Fynbos Room — each with private views, luxury linen and farm-fresh breakfasts." />
+                <link rel="canonical" href="https://www.montbleu.co.za/stay" />
+                <meta property="og:url" content="https://www.montbleu.co.za/stay" />
+                <meta property="og:title" content="Boutique Rooms & Accommodation | Mont Bleu Guesthouse Franschhoek" />
+                <meta property="og:description" content="Five unique suites set on Le Sanctuaire Farm in Franschhoek. Mountain and valley views, private balconies, outdoor showers and a sparkling pool." />
+                <meta property="og:image" content="https://www.montbleu.co.za/assets/newimages/Mountain 1.jpg" />
+            </Helmet>
             <SectionObserver className="container mx-auto px-6 py-32 text-center max-w-4xl relative z-20">
+
                 <span className="text-3xl tracking-[0.2em] uppercase text-sanctuary-gold mb-6 block">The Guest Home</span>
                 <h1 className="text-6xl md:text-8xl font-serif text-sanctuary-blue mb-12">Mont Bleu</h1>
                 <p className="text-xl md:text-2xl font-light leading-relaxed text-sanctuary-blue/80">
