@@ -4,63 +4,55 @@ import SectionObserver from '../components/ui/SectionObserver';
 import Button from '../components/ui/Button';
 
 const WinterPackage: React.FC = () => {
-    const images = [
-        "/assets/winter-special/Winter special 1.jpeg",
-        "/assets/winter-special/Winter special 2.jpeg",
-        "/assets/winter-special/Winter special 3.jpeg",
-        "/assets/winter-special/Winter special 4.jpeg",
-        "/assets/winter-special/Winter special 5.jpeg"
-    ];
-
     return (
-        <div className="pt-20 min-h-screen bg-sanctuary-sand">
+        <div className="pt-20 min-h-screen bg-sanctuary-sand flex flex-col justify-between">
             <Helmet>
-                <title>Winter Special Package | Mont Bleu Guesthouse Franschhoek</title>
-                <meta name="description" content="Enjoy Mont Bleu's winter special in Franschhoek — cosy fireplace rooms, wine pairing and valley views at a special midweek rate. Limited availability." />
+                <title>Winter Packages | Mont Bleu Guesthouse Franschhoek</title>
+                <meta name="description" content="Winter Packages for 2027 coming soon at Mont Bleu Guesthouse in Franschhoek." />
+                <meta name="robots" content="noindex, follow" />
                 <link rel="canonical" href="https://www.montbleu.co.za/winter-package" />
                 <meta property="og:url" content="https://www.montbleu.co.za/winter-package" />
-                <meta property="og:title" content="Winter Special Package | Mont Bleu Guesthouse Franschhoek" />
-                <meta property="og:description" content="Cosy fireplace rooms, wine pairing and valley views. Mont Bleu's winter special package in the Franschhoek wine valley." />
-                <meta property="og:image" content="https://www.montbleu.co.za/assets/home-hero.jpg" />
+                <meta property="og:title" content="Winter Packages | Mont Bleu Guesthouse Franschhoek" />
+                <meta property="og:description" content="Winter Packages for 2027 coming soon at Mont Bleu Guesthouse in Franschhoek." />
             </Helmet>
-            {/* Header */}
-            <section className="py-24 text-center px-6">
+
+            {/* Header / Main Placeholder Section */}
+            <section className="py-28 md:py-36 text-center px-6 my-auto">
                 <SectionObserver>
-                    <span className="text-xs font-serif uppercase tracking-[0.3em] text-sanctuary-gold mb-6 block font-medium">Seasonal Offer</span>
-                    <h1 className="text-4xl md:text-6xl font-serif text-sanctuary-blue mb-8">Winter Package</h1>
-                    <div className="w-px h-12 bg-sanctuary-blue/20 mx-auto mb-8"></div>
-                    <p className="text-xl font-light text-sanctuary-blue/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-                        Experience the quiet beauty of a Franschhoek winter at Mont Bleu. Discover the details of our exclusive seasonal offer below.
+                    <span className="text-xs font-serif uppercase tracking-[0.3em] text-sanctuary-gold mb-6 block font-medium">
+                        Seasonal Offers
+                    </span>
+                    <h1 className="text-4xl md:text-6xl font-serif text-sanctuary-blue mb-4">
+                        Winter Packages
+                    </h1>
+                    <p className="text-lg md:text-xl font-serif italic text-sanctuary-gold mb-8">
+                        Winter Packages for 2027 Coming Soon
                     </p>
-                    <Button to="/book" variant="primary">Book Now</Button>
+                    <div className="w-px h-12 bg-sanctuary-blue/20 mx-auto mb-8"></div>
+                    <p className="text-lg font-light text-sanctuary-blue/80 max-w-xl mx-auto mb-10 leading-relaxed">
+                        Our 2026 seasonal winter offers have concluded. We are currently preparing exclusive new curated packages and seasonal rates for Winter 2027.
+                    </p>
+                    
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+                        <Button to="/stay" variant="primary" className="w-full sm:w-auto">
+                            Explore Our Suites
+                        </Button>
+                        <Button to="/contact" variant="secondary" className="w-full sm:w-auto">
+                            Contact Us
+                        </Button>
+                    </div>
                 </SectionObserver>
             </section>
 
-            {/* Images Grid */}
-            <section className="pb-32 px-6">
-                <div className="container mx-auto max-w-5xl">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {images.map((src, index) => (
-                            <SectionObserver key={index} delay={index * 0.1}>
-                                <div className={`overflow-hidden shadow-xl rounded-sm ${index === 0 ? 'md:col-span-2' : ''}`}>
-                                    <img 
-                                        src={src} 
-                                        alt={`Winter Special Details ${index + 1}`} 
-                                        className="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
-                                    />
-                                </div>
-                            </SectionObserver>
-                        ))}
-                    </div>
-                </div>
-            </section>
-            
-            {/* Call to Action */}
-            <section className="py-24 bg-sanctuary-blue text-white text-center px-6">
+            {/* Notice Footer Section */}
+            <section className="py-16 bg-sanctuary-blue text-white text-center px-6">
                 <SectionObserver>
-                    <h2 className="text-3xl md:text-5xl font-serif mb-8">Ready for your winter escape?</h2>
+                    <h2 className="text-2xl md:text-3xl font-serif mb-4">Planning a stay in Franschhoek?</h2>
+                    <p className="text-white/80 max-w-lg mx-auto mb-8 text-sm md:text-base font-light">
+                        Our luxury suites, mountain hot tub, riverside sauna, and daily breakfasts are available year-round.
+                    </p>
                     <Button to="/book" variant="secondary" className="border-white text-sanctuary-blue bg-white hover:bg-transparent hover:text-white hover:border-white">
-                        Check Availability
+                        Book Direct
                     </Button>
                 </SectionObserver>
             </section>

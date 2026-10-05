@@ -71,10 +71,10 @@ const pageMeta: Record<string, { title: string; description: string; h1: string;
     body: 'Booking terms and conditions for Mont Bleu Guesthouse in Franschhoek. Includes cancellation policy, check-in and check-out times, house rules, payment terms, and guest age policy. Please read carefully before confirming your reservation.',
   },
   '/winter-package': {
-    title: 'Winter Special Package | Mont Bleu Guesthouse Franschhoek',
-    description: 'Enjoy Mont Bleu\'s winter special in Franschhoek — cosy fireplace rooms, wine pairing and valley views at a special midweek rate.',
-    h1: 'Winter Special Package',
-    body: 'Mont Bleu winter special package in Franschhoek. Cosy fireplace rooms, wine pairing, and sweeping valley views at a special midweek rate. Limited availability. Book direct to secure your winter retreat in the Wemmershoek mountains.',
+    title: 'Winter Packages | Mont Bleu Guesthouse Franschhoek',
+    description: 'Winter Packages for 2027 coming soon at Mont Bleu Guesthouse in Franschhoek.',
+    h1: 'Winter Packages for 2027 Coming Soon',
+    body: 'Our 2026 seasonal winter offers have concluded. Winter Packages for 2027 are coming soon. Explore our luxury rooms and suites at Mont Bleu Guesthouse in Franschhoek.',
   },
 };
 
@@ -89,20 +89,26 @@ export async function prerender(data: { url: string }) {
     </main>
   `;
 
+  const headElements: Array<{ type: string; props: Record<string, string> }> = [
+    { type: 'meta', props: { name: 'description', content: meta.description } },
+    { type: 'link', props: { rel: 'canonical', href: canonicalUrl } },
+    { type: 'meta', props: { property: 'og:url', content: canonicalUrl } },
+    { type: 'meta', props: { property: 'og:title', content: meta.title } },
+    { type: 'meta', props: { property: 'og:description', content: meta.description } },
+    { type: 'meta', props: { property: 'og:type', content: 'website' } },
+  ];
+
+  if (data.url === '/winter-package') {
+    headElements.push({ type: 'meta', props: { name: 'robots', content: 'noindex, follow' } });
+  }
+
   return {
     html,
     links: new Set<string>(),
     head: {
       lang: 'en',
       title: meta.title,
-      elements: new Set([
-        { type: 'meta', props: { name: 'description', content: meta.description } },
-        { type: 'link', props: { rel: 'canonical', href: canonicalUrl } },
-        { type: 'meta', props: { property: 'og:url', content: canonicalUrl } },
-        { type: 'meta', props: { property: 'og:title', content: meta.title } },
-        { type: 'meta', props: { property: 'og:description', content: meta.description } },
-        { type: 'meta', props: { property: 'og:type', content: 'website' } },
-      ]),
+      elements: new Set(headElements),
     },
   };
 }
