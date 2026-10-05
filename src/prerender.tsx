@@ -90,6 +90,7 @@ export async function prerender(data: { url: string }) {
   `;
 
   const headElements: Array<{ type: string; props: Record<string, string> }> = [
+    { type: 'meta', props: { name: 'google-site-verification', content: 'UqU1iaYtCyueHz8ceICu1x2WIrOSOzHWtJ1ek6_-VXg' } },
     { type: 'meta', props: { name: 'description', content: meta.description } },
     { type: 'link', props: { rel: 'canonical', href: canonicalUrl } },
     { type: 'meta', props: { property: 'og:url', content: canonicalUrl } },
