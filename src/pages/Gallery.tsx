@@ -47,6 +47,8 @@ const Gallery: React.FC = () => {
                                 <img
                                     src={src}
                                     alt={`Gallery ${index + 1}`}
+                                    loading="lazy"
+                                    decoding="async"
                                     className="w-full h-auto hover:scale-105 transition-transform duration-700"
                                 />
                             </div>

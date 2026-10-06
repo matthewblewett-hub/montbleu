@@ -35,6 +35,8 @@ const ParallaxImage = ({ src, alt, onClick }: { src: string; alt: string; onClic
                 <img
                     src={src}
                     alt={alt}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
             </motion.div>
