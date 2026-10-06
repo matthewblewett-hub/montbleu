@@ -18,6 +18,9 @@ import Maintenance from './pages/Maintenance';
 import WinterPackage from './pages/WinterPackage';
 import { useEffect } from 'react';
 
+import AnalyticsTracker from './components/ui/AnalyticsTracker';
+import CookieBanner from './components/ui/CookieBanner';
+
 // Scroll to top on route change (client-side only)
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -39,6 +42,7 @@ function App() {
     return (
       <>
         <ScrollToTop />
+        <AnalyticsTracker />
         <div className="flex flex-col min-h-screen font-sans text-sanctuary-blue bg-sanctuary-sand">
           <Navbar />
           <main className="flex flex-col items-center justify-center flex-grow py-20 px-6">
@@ -51,6 +55,7 @@ function App() {
           </main>
           <Footer />
           <ChatBot />
+          <CookieBanner />
         </div>
       </>
     );
@@ -59,6 +64,7 @@ function App() {
   return (
     <>
       <ScrollToTop />
+      <AnalyticsTracker />
 
       <div className="flex flex-col min-h-screen font-sans text-sanctuary-blue bg-sanctuary-sand">
         <Navbar />
@@ -80,6 +86,7 @@ function App() {
         </main>
         <Footer />
         <ChatBot />
+        <CookieBanner />
       </div>
     </>
   );

@@ -42,12 +42,35 @@
     }
   </script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18098847270"></script>
+  <!-- Google Consent Mode v2 Default Settings (must execute before Google Tag loads) -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    
+    var savedConsent = localStorage.getItem('cookie_consent');
+    if (savedConsent === 'granted') {
+      gtag('consent', 'default', {
+        'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
+        'analytics_storage': 'granted'
+      });
+    } else {
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied',
+        'wait_for_update': 500
+      });
+    }
+  </script>
+
+  <!-- Google tag (gtag.js) GA4: G-X18ZL4D7TM & Ads: AW-18098847270 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X18ZL4D7TM"></script>
+  <script>
     gtag('js', new Date());
+    gtag('config', 'G-X18ZL4D7TM');
     gtag('config', 'AW-18098847270');
   </script>
 </head>
