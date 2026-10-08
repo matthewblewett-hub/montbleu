@@ -29,6 +29,49 @@ function isBookingConflict(b1, b2) {
     return (b1Start < b2End && b1End > b2Start);
 }
 
+// Send automatic behind-the-scenes WhatsApp notification to designated host/housekeeper phone
+async function sendServerSideWhatsAppNotification(booking) {
+    try {
+        const targetPhone = process.env.WELLNESS_HOST_WHATSAPP || process.env.HOST_WHATSAPP; // e.g. "+27821234567"
+        const callMeBotApiKey = process.env.CALLMEBOT_API_KEY; // Free CallMeBot API key
+        const webhookUrl = process.env.WHATSAPP_WEBHOOK_URL; // Custom Webhook / Zapier / Make
+
+        const facilityName = booking.facility === 'combo'
+            ? 'Sauna & Hot Tub Combo (1 Hr)'
+            : booking.facility === 'sauna' ? 'Riverside Sauna' : 'Mountain Hot Tub';
+
+        const msgText = `🔔 *New Wellness Booking!*\n\n` +
+            `• *Facility:* ${facilityName}\n` +
+            `• *Date:* ${booking.date}\n` +
+            `• *Time:* ${booking.slot}\n` +
+            `• *Suite:* ${booking.suite}\n` +
+            `• *Guest:* ${booking.guestName}` +
+            (booking.phone ? ` (${booking.phone})` : '');
+
+        // Option A: CallMeBot Free API
+        if (targetPhone && callMeBotApiKey) {
+            const cleanPhone = targetPhone.replace(/[^0-9+]/g, '');
+            const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(cleanPhone)}&text=${encodeURIComponent(msgText)}&apikey=${encodeURIComponent(callMeBotApiKey)}`;
+            await fetch(url);
+            console.log('Automated CallMeBot WhatsApp dispatched to:', cleanPhone);
+            return;
+        }
+
+        // Option B: Custom Webhook (Zapier / Make / Evolution API)
+        if (webhookUrl) {
+            await fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ booking, message: msgText, targetPhone })
+            });
+            console.log('Automated WhatsApp Webhook triggered');
+            return;
+        }
+    } catch (err) {
+        console.error('Error sending background WhatsApp notification:', err);
+    }
+}
+
 export default async function handler(req, res) {
     // CORS Headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -93,6 +136,9 @@ export default async function handler(req, res) {
 
             globalBookingsStore[date].push(newBooking);
 
+            // Fire background WhatsApp dispatch (non-blocking)
+            sendServerSideWhatsAppNotification(newBooking);
+
             return res.status(200).json({
                 success: true,
                 message: 'Booking confirmed successfully!',
@@ -122,4 +168,5 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+
 
