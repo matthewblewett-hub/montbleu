@@ -16,6 +16,7 @@ import Relax from './pages/Relax';
 import Dining from './pages/Dining';
 import Maintenance from './pages/Maintenance';
 import WinterPackage from './pages/WinterPackage';
+import WellnessBooking from './pages/WellnessBooking';
 import { useEffect } from 'react';
 
 import AnalyticsTracker from './components/ui/AnalyticsTracker';
@@ -81,6 +82,9 @@ function App() {
             <Route path="/booking-terms" element={<Terms />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/relax" element={<Relax />} />
+            <Route path="/relax-booking" element={<WellnessBooking />} />
+            <Route path="/sauna" element={<WellnessBooking />} />
+            <Route path="/hottub" element={<WellnessBooking />} />
             <Route path="/winter-package" element={<WinterPackage />} />
           </Routes>
         </main>

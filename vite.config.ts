@@ -27,6 +27,7 @@ export default defineConfig({
         '/booking-terms',
         '/faq',
         '/relax',
+        '/relax-booking',
         '/winter-package',
       ],
     }),

@@ -34,6 +34,12 @@ const pageMeta: Record<string, { title: string; description: string; h1: string;
     h1: 'Relax at Mont Bleu',
     body: 'Wellness facilities at Mont Bleu: sparkling outdoor swimming pool with panoramic mountain views, gas-fired mountain hot tub overlooking the stream, private couples sauna on the riverbank with natural plunge pool, yoga and sunset deck, and meditation labyrinth. Perfect for rest, renewal and reconnection with nature.',
   },
+  '/relax-booking': {
+    title: 'Sauna & Hot Tub Reservations | Mont Bleu Guesthouse Franschhoek',
+    description: 'Reserve your private 45-minute session at Mont Bleu Guesthouse Riverside Sauna and Mountain Hot Tub.',
+    h1: 'Sauna & Hot Tub Reservations',
+    body: 'Reserve your private 45-minute session at Mont Bleu Guesthouse Riverside Sauna and Mountain Hot Tub. Select your date and available time slot online.',
+  },
   '/connect-experience': {
     title: 'The Connect Experience | Retreats & Immersive Stays | Mont Bleu',
     description: 'Curated retreats blending nature, silence, and guided discovery on Le Sanctuaire Farm in Franschhoek.',

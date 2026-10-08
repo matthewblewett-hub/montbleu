@@ -4,6 +4,8 @@ import SectionObserver from '../components/ui/SectionObserver';
 import Modal from '../components/ui/Modal';
 import { Waves, Flame, Droplets, Dumbbell } from 'lucide-react';
 
+import Button from '../components/ui/Button';
+
 const Relax: React.FC = () => {
     const [selectedFeature, setSelectedFeature] = useState<any>(null);
 
@@ -58,9 +60,12 @@ const Relax: React.FC = () => {
                     <SectionObserver>
                         <span className="text-xs uppercase tracking-[0.4em] mb-6 block text-sanctuary-stone">The Sanctuary</span>
                         <h1 className="text-5xl md:text-7xl font-serif mb-8">Relax & Restore</h1>
-                        <p className="text-lg md:text-xl font-light leading-relaxed opacity-90">
+                        <p className="text-lg md:text-xl font-light leading-relaxed opacity-90 mb-8">
                             Relax in a quiet mountain sanctuary surrounded by mountains and epic Fynbos flora. Enjoy a swim in our sparkling pool, a sauna in our mountain sauna, a gas-fired hot-tub or a workout in our outdoor gym. Do as much or as little as you want.
                         </p>
+                        <Button to="/relax-booking" variant="secondary">
+                            Reserve Sauna or Hot Tub
+                        </Button>
                     </SectionObserver>
                 </div>
             </section>
