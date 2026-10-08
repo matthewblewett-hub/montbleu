@@ -3,6 +3,32 @@
 
 let globalBookingsStore = {};
 
+// Convert "HH:MM" to minutes from midnight
+function timeToMinutes(timeStr) {
+    if (!timeStr) return 0;
+    const [h, m] = timeStr.trim().split(':').map(Number);
+    return (h || 0) * 60 + (m || 0);
+}
+
+// Check time overlap and facility conflict
+function isBookingConflict(b1, b2) {
+    // Facility check: 'combo' conflicts with both 'sauna' and 'hottub'
+    const facilityConflict = (b1.facility === 'combo' || b2.facility === 'combo' || b1.facility === b2.facility);
+    if (!facilityConflict) return false;
+
+    // Time range check
+    const [b1StartStr, b1EndStr] = b1.slot.split(' - ');
+    const [b2StartStr, b2EndStr] = b2.slot.split(' - ');
+
+    const b1Start = timeToMinutes(b1StartStr);
+    const b1End = timeToMinutes(b1EndStr);
+    const b2Start = timeToMinutes(b2StartStr);
+    const b2End = timeToMinutes(b2EndStr);
+
+    // Overlap condition: start of one < end of other AND end of one > start of other
+    return (b1Start < b2End && b1End > b2Start);
+}
+
 export default async function handler(req, res) {
     // CORS Headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -37,24 +63,28 @@ export default async function handler(req, res) {
                 globalBookingsStore[date] = [];
             }
 
-            // Check double-booking
-            const existing = globalBookingsStore[date].find(
-                b => b.facility === facility && b.slot === slot
-            );
+            const newCandidate = { facility, slot };
 
-            if (existing) {
+            // Check double-booking / conflict
+            const conflict = globalBookingsStore[date].find(existing => isBookingConflict(existing, newCandidate));
+
+            if (conflict) {
+                const confName = conflict.facility === 'combo' 
+                    ? 'Sauna & Hot Tub Combo' 
+                    : conflict.facility === 'sauna' ? 'Riverside Sauna' : 'Mountain Hot Tub';
+
                 return res.status(409).json({
-                    error: `This slot (${slot}) is already booked for ${facility === 'sauna' ? 'Riverside Sauna' : 'Mountain Hot Tub'}.`,
-                    existingBooking: existing
+                    error: `This time slot overlaps with an existing booking for ${confName} (${conflict.slot}).`,
+                    existingBooking: conflict
                 });
             }
 
             const newBooking = {
                 id: 'wb_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
                 date,
-                facility, // 'sauna' | 'hottub'
-                slot, // '08:00 - 08:45'
-                suite, // 'Mountain Suite', etc.
+                facility, // 'sauna' | 'hottub' | 'combo'
+                slot, // '08:00 - 08:30' or '08:00 - 09:00'
+                suite,
                 guestName: guestName || 'Guest',
                 phone: phone || '',
                 notes: notes || '',
@@ -92,3 +122,4 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+

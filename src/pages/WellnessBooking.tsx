@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, CheckCircle2, ShieldAlert, Sparkles, User, Phone, X, Smartphone, Plus, Lock, Unlock, Download } from 'lucide-react';
+import { Calendar, Clock, CheckCircle2, ShieldAlert, Sparkles, User, Phone, X, Smartphone, Plus, Lock, Unlock, Download, Send } from 'lucide-react';
 import SectionObserver from '../components/ui/SectionObserver';
 import Button from '../components/ui/Button';
 
@@ -15,27 +15,31 @@ const SUITES = [
     'Staff / Housekeeper Booking'
 ];
 
-// Fixed 45-minute slots with 15-min buffer
-const TIME_SLOTS = [
-    '08:00 - 08:45',
-    '09:00 - 09:45',
-    '10:00 - 10:45',
-    '11:00 - 11:45',
-    '12:00 - 12:45',
-    '13:00 - 13:45',
-    '14:00 - 14:45',
-    '15:00 - 15:45',
-    '16:00 - 16:45',
-    '17:00 - 17:45',
-    '18:00 - 18:45',
-    '19:00 - 19:45',
-    '20:00 - 20:45'
+// 30-minute session slots with 15-min cleaning buffers (45-min interval cycles)
+const TIME_SLOTS_30 = [
+    { start: '08:00', end30: '08:30', end60: '09:00', label30: '08:00 - 08:30', label60: '08:00 - 09:00' },
+    { start: '08:45', end30: '09:15', end60: '09:45', label30: '08:45 - 09:15', label60: '08:45 - 09:45' },
+    { start: '09:30', end30: '10:00', end60: '10:30', label30: '09:30 - 10:00', label60: '09:30 - 10:30' },
+    { start: '10:15', end30: '10:45', end60: '11:15', label30: '10:15 - 10:45', label60: '10:15 - 11:15' },
+    { start: '11:00', end30: '11:30', end60: '12:00', label30: '11:00 - 11:30', label60: '11:00 - 12:00' },
+    { start: '11:45', end30: '12:15', end60: '12:45', label30: '11:45 - 12:15', label60: '11:45 - 12:45' },
+    { start: '12:30', end30: '13:00', end60: '13:30', label30: '12:30 - 13:00', label60: '12:30 - 13:30' },
+    { start: '13:15', end30: '13:45', end60: '14:15', label30: '13:15 - 13:45', label60: '13:15 - 14:15' },
+    { start: '14:00', end30: '14:30', end60: '15:00', label30: '14:00 - 14:30', label60: '14:00 - 15:00' },
+    { start: '14:45', end30: '15:15', end60: '15:45', label30: '14:45 - 15:15', label60: '14:45 - 15:45' },
+    { start: '15:30', end30: '16:00', end60: '16:30', label30: '15:30 - 16:00', label60: '15:30 - 16:30' },
+    { start: '16:15', end30: '16:45', end60: '17:15', label30: '16:15 - 16:45', label60: '16:15 - 17:15' },
+    { start: '17:00', end30: '17:30', end60: '18:00', label30: '17:00 - 17:30', label60: '17:00 - 18:00' },
+    { start: '17:45', end30: '18:15', end60: '18:45', label30: '17:45 - 18:15', label60: '17:45 - 18:45' },
+    { start: '18:30', end30: '19:00', end60: '19:30', label30: '18:30 - 19:00', label60: '18:30 - 19:30' },
+    { start: '19:15', end30: '19:45', end60: '20:15', label30: '19:15 - 19:45', label60: '19:15 - 20:15' },
+    { start: '20:00', end30: '20:30', end60: '21:00', label30: '20:00 - 20:30', label60: '20:00 - 21:00' }
 ];
 
 interface Booking {
     id: string;
     date: string;
-    facility: 'sauna' | 'hottub';
+    facility: 'sauna' | 'hottub' | 'combo';
     slot: string;
     suite: string;
     guestName: string;
@@ -44,9 +48,32 @@ interface Booking {
     createdAt?: string;
 }
 
+// Convert "HH:MM" to minutes from midnight
+const timeToMinutes = (timeStr: string) => {
+    if (!timeStr) return 0;
+    const [h, m] = timeStr.trim().split(':').map(Number);
+    return (h || 0) * 60 + (m || 0);
+};
+
+// Check if two bookings conflict
+const isConflict = (b1Facility: string, b1Slot: string, b2Facility: string, b2Slot: string) => {
+    const facConflict = (b1Facility === 'combo' || b2Facility === 'combo' || b1Facility === b2Facility);
+    if (!facConflict) return false;
+
+    const [b1StartStr, b1EndStr] = b1Slot.split(' - ');
+    const [b2StartStr, b2EndStr] = b2Slot.split(' - ');
+
+    const b1Start = timeToMinutes(b1StartStr);
+    const b1End = timeToMinutes(b1EndStr);
+    const b2Start = timeToMinutes(b2StartStr);
+    const b2End = timeToMinutes(b2EndStr);
+
+    return (b1Start < b2End && b1End > b2Start);
+};
+
 const WellnessBooking: React.FC = () => {
     // Current State
-    const [activeFacility, setActiveFacility] = useState<'sauna' | 'hottub'>('sauna');
+    const [activeFacility, setActiveFacility] = useState<'sauna' | 'hottub' | 'combo'>('sauna');
     const [selectedDate, setSelectedDate] = useState<string>(() => {
         const today = new Date();
         return today.toISOString().split('T')[0];
@@ -57,7 +84,10 @@ const WellnessBooking: React.FC = () => {
     const [loading, setLoading] = useState(false);
 
     // Selected Slot for Booking Modal
-    const [activeSlot, setActiveSlot] = useState<string | null>(null);
+    const [activeSlotObj, setActiveSlotObj] = useState<typeof TIME_SLOTS_30[0] | null>(null);
+
+    // Modal Specific Options
+    const [isComboUpgrade, setIsComboUpgrade] = useState(false);
 
     // Form Fields
     const [selectedSuite, setSelectedSuite] = useState(SUITES[0]);
@@ -68,6 +98,7 @@ const WellnessBooking: React.FC = () => {
 
     // Confirmation State
     const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null);
+    const [customWaRecipient, setCustomWaRecipient] = useState('');
 
     // Staff Mode State
     const [isStaffMode, setIsStaffMode] = useState(false);
@@ -92,18 +123,17 @@ const WellnessBooking: React.FC = () => {
     const fetchBookings = async (dateStr: string) => {
         setLoading(true);
         try {
-            // 1. Try fetching from serverless API
             const res = await fetch(`/api/wellness-booking?date=${dateStr}`);
             if (res.ok) {
                 const data = await res.json();
-                const remoteBookings = data.bookings || [];
-                // Merge with local storage backup
+                const remoteBookings: Booking[] = data.bookings || [];
+                
                 const localStr = localStorage.getItem(`montbleu_wellness_${dateStr}`);
                 const localBookings: Booking[] = localStr ? JSON.parse(localStr) : [];
                 
                 const combined = [...remoteBookings];
                 localBookings.forEach(lb => {
-                    if (!combined.some(cb => cb.id === lb.id || (cb.facility === lb.facility && cb.slot === lb.slot))) {
+                    if (!combined.some(cb => cb.id === lb.id || isConflict(cb.facility, cb.slot, lb.facility, lb.slot))) {
                         combined.push(lb);
                     }
                 });
@@ -116,7 +146,6 @@ const WellnessBooking: React.FC = () => {
             console.log('Using local bookings fallback:', err);
         }
 
-        // Fallback to localStorage
         const localStr = localStorage.getItem(`montbleu_wellness_${dateStr}`);
         setBookings(localStr ? JSON.parse(localStr) : []);
         setLoading(false);
@@ -125,7 +154,6 @@ const WellnessBooking: React.FC = () => {
     useEffect(() => {
         fetchBookings(selectedDate);
 
-        // Auto refresh every 10 seconds for real-time live sync
         const interval = setInterval(() => {
             fetchBookings(selectedDate);
         }, 10000);
@@ -133,38 +161,69 @@ const WellnessBooking: React.FC = () => {
         return () => clearInterval(interval);
     }, [selectedDate]);
 
+    // Check if slot is blocked by lead time (min 1 hr advance notice required for today)
+    const getSlotLeadTimeStatus = (slotStartStr: string) => {
+        const todayIso = new Date().toISOString().split('T')[0];
+        if (selectedDate < todayIso) return { isBlocked: true, reason: 'Past Date' };
+        if (selectedDate > todayIso) return { isBlocked: false };
+
+        // For today's date
+        const now = new Date();
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+        const cutoffMinutes = currentMinutes + 60; // 1 hr (60 mins) lead time required
+        const slotMinutes = timeToMinutes(slotStartStr);
+
+        if (slotMinutes < currentMinutes) {
+            return { isBlocked: true, reason: 'Past Time' };
+        }
+        if (slotMinutes < cutoffMinutes) {
+            return { isBlocked: true, reason: 'Min 1 hr notice required' };
+        }
+
+        return { isBlocked: false };
+    };
+
     // Handle Slot Click
-    const handleSlotClick = (slot: string, existingBooking?: Booking) => {
+    const handleSlotClick = (slotObj: typeof TIME_SLOTS_30[0], existingBooking?: Booking, leadStatus?: { isBlocked: boolean; reason?: string }) => {
+        if (leadStatus?.isBlocked && !isStaffMode) {
+            alert(`This slot cannot be reserved (${leadStatus.reason}). Reservations require at least 1 hour advance notice.`);
+            return;
+        }
+
         if (existingBooking) {
             if (isStaffMode) {
-                if (window.confirm(`Cancel booking for ${existingBooking.suite} (${existingBooking.guestName}) at ${slot}?`)) {
+                if (window.confirm(`Cancel booking for ${existingBooking.suite} (${existingBooking.guestName}) at ${existingBooking.slot}?`)) {
                     cancelBooking(existingBooking);
                 }
             } else {
-                alert(`This slot (${slot}) is reserved by ${existingBooking.suite}. Please select an available slot.`);
+                alert(`This time slot is reserved. Please select another available time.`);
             }
             return;
         }
 
-        setActiveSlot(slot);
+        setActiveSlotObj(slotObj);
+        setIsComboUpgrade(activeFacility === 'combo');
         setBookingError(null);
     };
 
     // Confirm Booking Submission
     const handleConfirmBooking = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!activeSlot) return;
+        if (!activeSlotObj) return;
 
         if (!guestName.trim()) {
-            setBookingError('Please enter your name.');
+            setBookingError('Please enter guest name.');
             return;
         }
+
+        const facilityToBook: 'sauna' | 'hottub' | 'combo' = (activeFacility === 'combo' || isComboUpgrade) ? 'combo' : activeFacility;
+        const slotToBook = (facilityToBook === 'combo') ? activeSlotObj.label60 : activeSlotObj.label30;
 
         const newBooking: Booking = {
             id: 'wb_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
             date: selectedDate,
-            facility: activeFacility,
-            slot: activeSlot,
+            facility: facilityToBook,
+            slot: slotToBook,
             suite: selectedSuite,
             guestName: guestName.trim(),
             phone: phone.trim(),
@@ -210,11 +269,14 @@ const WellnessBooking: React.FC = () => {
         // Update state
         setBookings(prev => [...prev.filter(b => b.id !== newBooking.id), newBooking]);
         setConfirmedBooking(newBooking);
-        setActiveSlot(null);
+        setActiveSlotObj(null);
         setGuestName('');
         setPhone('');
         setNotes('');
         setLoading(false);
+
+        // Auto trigger WhatsApp message helper
+        triggerWhatsAppNotification(newBooking);
     };
 
     // Cancel Booking (Staff Mode)
@@ -252,12 +314,42 @@ const WellnessBooking: React.FC = () => {
         }
     };
 
+    // Build WhatsApp Notification Link
+    const getWhatsAppUrl = (booking: Booking, customNumber?: string) => {
+        const facilityLabel = booking.facility === 'combo'
+            ? 'Sauna & Hot Tub Combined Experience (1 Hour)'
+            : booking.facility === 'sauna' ? 'Riverside Sauna' : 'Mountain Hot Tub';
+
+        const text = `Hi Mont Bleu Team, reservation confirmed:\n\n` +
+            `• Facility: ${facilityLabel}\n` +
+            `• Date: ${booking.date}\n` +
+            `• Time: ${booking.slot}\n` +
+            `• Suite: ${booking.suite}\n` +
+            `• Guest: ${booking.guestName}` +
+            (booking.phone ? ` (${booking.phone})` : '');
+
+        if (customNumber && customNumber.trim()) {
+            const cleanNum = customNumber.replace(/[^0-9]/g, '');
+            return `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
+        }
+
+        return `https://wa.me/?text=${encodeURIComponent(text)}`;
+    };
+
+    const triggerWhatsAppNotification = (booking: Booking) => {
+        const url = getWhatsAppUrl(booking);
+        // Open WhatsApp automatically in a new tab if supported
+        window.open(url, '_blank');
+    };
+
     // Download iCal (.ics) Calendar File
     const downloadICS = (booking: Booking) => {
         const [startStr, endStr] = booking.slot.split(' - ');
         const startDateStr = `${booking.date.replace(/-/g, '')}T${startStr.replace(':', '')}00`;
         const endDateStr = `${booking.date.replace(/-/g, '')}T${endStr.replace(':', '')}00`;
-        const facilityName = booking.facility === 'sauna' ? 'Riverside Sauna & Plunge Pool' : 'Mountain Hot Tub';
+        const facilityName = booking.facility === 'combo'
+            ? 'Sauna & Hot Tub Combo Experience'
+            : booking.facility === 'sauna' ? 'Riverside Sauna & Plunge Pool' : 'Mountain Hot Tub';
 
         const icsData = [
             'BEGIN:VCALENDAR',
@@ -302,7 +394,7 @@ const WellnessBooking: React.FC = () => {
                         Sauna & Hot Tub Reservations
                     </h1>
                     <p className="text-sm md:text-base text-sanctuary-blue/70 max-w-xl mx-auto font-light leading-relaxed">
-                        Enjoy complimentary private access to our wellness facilities. Reserve your 45-minute private session below.
+                        Enjoy complimentary private access to our wellness facilities. Select your facility and preferred time slot below.
                     </p>
 
                     {/* Staff Mode Bar */}
@@ -342,20 +434,27 @@ const WellnessBooking: React.FC = () => {
 
                 {/* Facility Selector Tabs */}
                 <div className="flex justify-center mb-8">
-                    <div className="bg-white/80 backdrop-blur-md p-1.5 rounded-full border border-sanctuary-blue/10 shadow-sm flex max-w-md w-full">
+                    <div className="bg-white/80 backdrop-blur-md p-1.5 rounded-full border border-sanctuary-blue/10 shadow-sm flex max-w-lg w-full">
                         <button
                             onClick={() => setActiveFacility('sauna')}
-                            className={`flex-1 py-3 px-4 rounded-full text-xs md:text-sm font-serif transition-all duration-300 flex items-center justify-center space-x-2 ${activeFacility === 'sauna' ? 'bg-sanctuary-blue text-white shadow-md' : 'text-sanctuary-blue/70 hover:text-sanctuary-blue'}`}
+                            className={`flex-1 py-3 px-3 rounded-full text-xs md:text-sm font-serif transition-all duration-300 flex items-center justify-center space-x-1.5 ${activeFacility === 'sauna' ? 'bg-sanctuary-blue text-white shadow-md' : 'text-sanctuary-blue/70 hover:text-sanctuary-blue'}`}
                         >
-                            <Sparkles className="w-4 h-4 text-sanctuary-gold" />
-                            <span>Riverside Sauna</span>
+                            <Sparkles className="w-3.5 h-3.5 text-sanctuary-gold" />
+                            <span>Sauna (30m)</span>
                         </button>
                         <button
                             onClick={() => setActiveFacility('hottub')}
-                            className={`flex-1 py-3 px-4 rounded-full text-xs md:text-sm font-serif transition-all duration-300 flex items-center justify-center space-x-2 ${activeFacility === 'hottub' ? 'bg-sanctuary-blue text-white shadow-md' : 'text-sanctuary-blue/70 hover:text-sanctuary-blue'}`}
+                            className={`flex-1 py-3 px-3 rounded-full text-xs md:text-sm font-serif transition-all duration-300 flex items-center justify-center space-x-1.5 ${activeFacility === 'hottub' ? 'bg-sanctuary-blue text-white shadow-md' : 'text-sanctuary-blue/70 hover:text-sanctuary-blue'}`}
                         >
-                            <Calendar className="w-4 h-4 text-sanctuary-gold" />
-                            <span>Mountain Hot Tub</span>
+                            <Calendar className="w-3.5 h-3.5 text-sanctuary-gold" />
+                            <span>Hot Tub (30m)</span>
+                        </button>
+                        <button
+                            onClick={() => setActiveFacility('combo')}
+                            className={`flex-1 py-3 px-3 rounded-full text-xs md:text-sm font-serif transition-all duration-300 flex items-center justify-center space-x-1.5 ${activeFacility === 'combo' ? 'bg-sanctuary-blue text-white shadow-md' : 'text-sanctuary-blue/70 hover:text-sanctuary-blue'}`}
+                        >
+                            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                            <span>Combo (60m)</span>
                         </button>
                     </div>
                 </div>
@@ -386,9 +485,13 @@ const WellnessBooking: React.FC = () => {
                     <div className="flex items-center justify-between mb-6 pb-4 border-b border-sanctuary-blue/10">
                         <div>
                             <h2 className="text-xl md:text-2xl font-serif text-sanctuary-blue capitalize">
-                                {activeFacility === 'sauna' ? 'Riverside Sauna & Plunge Pool' : 'Mountain Hot Tub'}
+                                {activeFacility === 'combo' ? 'Sauna & Hot Tub Combo' : activeFacility === 'sauna' ? 'Riverside Sauna & Plunge Pool' : 'Mountain Hot Tub'}
                             </h2>
-                            <p className="text-xs text-sanctuary-blue/60 mt-1">45-minute private sessions • 15 min buffer between guests</p>
+                            <p className="text-xs text-sanctuary-blue/60 mt-1">
+                                {activeFacility === 'combo'
+                                    ? '60-minute combined private session for both facilities'
+                                    : '30-minute private sessions • 15 min cleaning buffer'}
+                            </p>
                         </div>
                         {loading && (
                             <span className="text-xs text-sanctuary-gold animate-pulse font-serif">Syncing live availability...</span>
@@ -396,30 +499,41 @@ const WellnessBooking: React.FC = () => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {TIME_SLOTS.map((slot) => {
-                            const existingBooking = bookings.find(
-                                b => b.facility === activeFacility && b.slot === slot
-                            );
+                        {TIME_SLOTS_30.map((slotObj) => {
+                            const candidateSlotLabel = (activeFacility === 'combo') ? slotObj.label60 : slotObj.label30;
+
+                            // Check lead time (min 1 hr advance notice required for today)
+                            const leadStatus = getSlotLeadTimeStatus(slotObj.start);
+
+                            // Find conflicting booking
+                            const existingBooking = bookings.find(b => isConflict(b.facility, b.slot, activeFacility, candidateSlotLabel));
                             const isBooked = !!existingBooking;
 
                             return (
                                 <button
-                                    key={slot}
-                                    onClick={() => handleSlotClick(slot, existingBooking)}
-                                    className={`p-4 rounded-xl border text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[95px] ${isBooked
-                                        ? 'bg-sanctuary-blue/5 border-sanctuary-blue/20 text-sanctuary-blue cursor-pointer hover:border-sanctuary-blue/40'
-                                        : 'bg-emerald-50/60 border-emerald-200/80 text-emerald-900 hover:bg-emerald-100/80 hover:border-emerald-400 hover:shadow-md'
+                                    key={slotObj.start}
+                                    onClick={() => handleSlotClick(slotObj, existingBooking, leadStatus)}
+                                    className={`p-4 rounded-xl border text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[95px] ${
+                                        isBooked
+                                            ? 'bg-sanctuary-blue/5 border-sanctuary-blue/20 text-sanctuary-blue cursor-pointer hover:border-sanctuary-blue/40'
+                                            : leadStatus.isBlocked
+                                                ? 'bg-gray-50 border-gray-200 text-gray-400 opacity-60 cursor-not-allowed'
+                                                : 'bg-emerald-50/60 border-emerald-200/80 text-emerald-900 hover:bg-emerald-100/80 hover:border-emerald-400 hover:shadow-md'
                                     }`}
                                 >
                                     <div className="flex items-center justify-between w-full mb-2">
                                         <div className="flex items-center space-x-2">
-                                            <Clock className={`w-4 h-4 ${isBooked ? 'text-sanctuary-blue/50' : 'text-emerald-600'}`} />
-                                            <span className="font-serif font-medium text-sm md:text-base">{slot}</span>
+                                            <Clock className={`w-4 h-4 ${isBooked ? 'text-sanctuary-blue/50' : leadStatus.isBlocked ? 'text-gray-400' : 'text-emerald-600'}`} />
+                                            <span className="font-serif font-medium text-sm md:text-base">{candidateSlotLabel}</span>
                                         </div>
 
                                         {isBooked ? (
                                             <span className="text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full bg-sanctuary-blue/10 text-sanctuary-blue border border-sanctuary-blue/20">
                                                 Reserved
+                                            </span>
+                                        ) : leadStatus.isBlocked ? (
+                                            <span className="text-[9px] uppercase tracking-wider font-medium px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">
+                                                {leadStatus.reason}
                                             </span>
                                         ) : (
                                             <span className="text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300">
@@ -430,10 +544,21 @@ const WellnessBooking: React.FC = () => {
 
                                     {isBooked ? (
                                         <div className="text-xs text-sanctuary-blue/80 font-medium truncate pt-1 border-t border-sanctuary-blue/10">
-                                            <span>{existingBooking.suite}</span>
-                                            {isStaffMode && (
-                                                <span className="block text-[10px] text-red-600 font-normal">Click to cancel</span>
+                                            {isStaffMode ? (
+                                                <div>
+                                                    <span className="font-semibold">{existingBooking.suite}</span>
+                                                    <span className="block text-[11px] text-sanctuary-blue/70 font-normal">
+                                                        {existingBooking.guestName} {existingBooking.phone ? `• ${existingBooking.phone}` : ''}
+                                                    </span>
+                                                    <span className="block text-[10px] text-red-600 font-medium mt-0.5">Click to cancel</span>
+                                                </div>
+                                            ) : (
+                                                <span className="italic text-sanctuary-blue/60 text-[11px]">Private Guest Reservation</span>
                                             )}
+                                        </div>
+                                    ) : leadStatus.isBlocked ? (
+                                        <div className="text-[11px] text-gray-400 italic pt-1 border-t border-gray-200">
+                                            Reservations require min 1 hr notice
                                         </div>
                                     ) : (
                                         <div className="text-xs text-emerald-700 font-light flex items-center space-x-1 pt-1 border-t border-emerald-200/60">
@@ -451,14 +576,14 @@ const WellnessBooking: React.FC = () => {
                 <div className="mt-10 p-6 bg-sanctuary-sand/60 rounded-xl border border-sanctuary-blue/10 text-center">
                     <h3 className="text-sm font-serif text-sanctuary-blue uppercase tracking-wider mb-2">Guest Etiquette & Safety</h3>
                     <p className="text-xs text-sanctuary-blue/70 leading-relaxed max-w-2xl mx-auto font-light">
-                        Please arrive on time and finish promptly at the end of your 45-minute slot so the housekeeper can refresh the area for the next guests. Always shower before entering the hot tub or sauna. Use facilities at your own risk.
+                        Please arrive on time and finish promptly at the end of your session so our team can refresh the area for the next guests. Always shower before entering the hot tub or sauna. Reservations require at least 1 hour advance notice. Use facilities at your own risk.
                     </p>
                 </div>
             </div>
 
             {/* Booking Modal */}
             <AnimatePresence>
-                {activeSlot && (
+                {activeSlotObj && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -472,7 +597,7 @@ const WellnessBooking: React.FC = () => {
                             className="bg-white rounded-2xl max-w-lg w-full p-6 md:p-8 shadow-2xl border border-sanctuary-blue/10 relative overflow-hidden"
                         >
                             <button
-                                onClick={() => setActiveSlot(null)}
+                                onClick={() => setActiveSlotObj(null)}
                                 className="absolute top-4 right-4 text-sanctuary-blue/40 hover:text-sanctuary-blue p-2 rounded-full transition-colors"
                             >
                                 <X className="w-5 h-5" />
@@ -483,13 +608,36 @@ const WellnessBooking: React.FC = () => {
                                     Reserve Private Session
                                 </span>
                                 <h3 className="text-2xl font-serif text-sanctuary-blue">
-                                    {activeFacility === 'sauna' ? 'Riverside Sauna' : 'Mountain Hot Tub'}
+                                    {(activeFacility === 'combo' || isComboUpgrade) 
+                                        ? 'Sauna & Hot Tub Combo' 
+                                        : activeFacility === 'sauna' ? 'Riverside Sauna' : 'Mountain Hot Tub'}
                                 </h3>
                                 <div className="mt-2 inline-flex items-center space-x-2 text-xs font-medium text-sanctuary-blue bg-sanctuary-sand/60 px-3 py-1.5 rounded-lg border border-sanctuary-blue/10">
                                     <Clock className="w-3.5 h-3.5 text-sanctuary-gold" />
-                                    <span>{activeSlot} ({currentFormattedDate})</span>
+                                    <span>
+                                        {(activeFacility === 'combo' || isComboUpgrade) ? activeSlotObj.label60 : activeSlotObj.label30} ({currentFormattedDate})
+                                    </span>
                                 </div>
                             </div>
+
+                            {/* Option to Upgrade to Combo */}
+                            {activeFacility !== 'combo' && (
+                                <div className="mb-6 p-3.5 bg-amber-50/80 border border-amber-200 rounded-xl flex items-center justify-between">
+                                    <div>
+                                        <span className="block text-xs font-semibold text-amber-900">Include Both Facilities?</span>
+                                        <span className="block text-[11px] text-amber-800/80">Reserve Sauna & Hot Tub together for a 1-Hour Session</span>
+                                    </div>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={isComboUpgrade}
+                                            onChange={(e) => setIsComboUpgrade(e.target.checked)}
+                                            className="sr-only peer"
+                                        />
+                                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sanctuary-blue"></div>
+                                    </label>
+                                </div>
+                            )}
 
                             {bookingError && (
                                 <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-center space-x-2">
@@ -551,7 +699,7 @@ const WellnessBooking: React.FC = () => {
                                 <div className="pt-4 flex items-center justify-end space-x-3">
                                     <button
                                         type="button"
-                                        onClick={() => setActiveSlot(null)}
+                                        onClick={() => setActiveSlotObj(null)}
                                         className="px-5 py-3 text-xs uppercase tracking-wider font-medium text-sanctuary-blue/70 hover:text-sanctuary-blue transition-colors"
                                     >
                                         Cancel
@@ -595,29 +743,54 @@ const WellnessBooking: React.FC = () => {
                                 Your Session is Reserved!
                             </h3>
 
-                            <div className="my-6 p-4 bg-sanctuary-sand/40 rounded-xl border border-sanctuary-blue/10 text-left space-y-2 text-xs md:text-sm text-sanctuary-blue">
-                                <div><strong>Facility:</strong> {confirmedBooking.facility === 'sauna' ? 'Riverside Sauna & Plunge Pool' : 'Mountain Hot Tub'}</div>
+                            <div className="my-5 p-4 bg-sanctuary-sand/40 rounded-xl border border-sanctuary-blue/10 text-left space-y-2 text-xs md:text-sm text-sanctuary-blue">
+                                <div><strong>Facility:</strong> {confirmedBooking.facility === 'combo' ? 'Sauna & Hot Tub Combo (1 Hour)' : confirmedBooking.facility === 'sauna' ? 'Riverside Sauna & Plunge Pool' : 'Mountain Hot Tub'}</div>
                                 <div><strong>Date:</strong> {confirmedBooking.date}</div>
                                 <div><strong>Slot Time:</strong> {confirmedBooking.slot}</div>
                                 <div><strong>Reserved For:</strong> {confirmedBooking.suite} ({confirmedBooking.guestName})</div>
                             </div>
 
-                            <div className="space-y-3 pt-2">
-                                {/* WhatsApp Notify Button */}
+                            <div className="space-y-3 pt-1">
+                                {/* Send WhatsApp to Mont Bleu Team */}
                                 <a
-                                    href={`https://wa.me/?text=${encodeURIComponent(`Hi Mont Bleu Housekeeper, I have reserved the ${confirmedBooking.facility === 'sauna' ? 'Riverside Sauna' : 'Mountain Hot Tub'} for ${confirmedBooking.suite} (${confirmedBooking.guestName}) on ${confirmedBooking.date} at ${confirmedBooking.slot}.`)}`}
+                                    href={getWhatsAppUrl(confirmedBooking)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="w-full inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-full bg-emerald-600 text-white text-xs uppercase tracking-widest font-medium hover:bg-emerald-700 transition-colors shadow-md"
                                 >
-                                    <Phone className="w-4 h-4" />
-                                    <span>Send WhatsApp to Housekeeper</span>
+                                    <Send className="w-4 h-4" />
+                                    <span>Send WhatsApp to Mont Bleu Team</span>
                                 </a>
+
+                                {/* Send to Custom Number Input */}
+                                <div className="pt-2 border-t border-sanctuary-blue/10">
+                                    <label className="block text-[11px] text-sanctuary-blue/70 mb-1 font-medium">
+                                        Or send confirmation via WhatsApp to a specific phone number:
+                                    </label>
+                                    <div className="flex space-x-2">
+                                        <input
+                                            type="tel"
+                                            placeholder="+27 82 000 0000"
+                                            value={customWaRecipient}
+                                            onChange={(e) => setCustomWaRecipient(e.target.value)}
+                                            className="flex-1 bg-sanctuary-sand/30 border border-sanctuary-blue/20 rounded-xl px-3 py-2 text-xs text-sanctuary-blue focus:outline-none focus:border-sanctuary-blue"
+                                        />
+                                        <a
+                                            href={getWhatsAppUrl(confirmedBooking, customWaRecipient)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="px-4 py-2 bg-sanctuary-blue text-white rounded-xl text-xs font-medium hover:bg-sanctuary-blue/90 flex items-center space-x-1"
+                                        >
+                                            <Send className="w-3.5 h-3.5" />
+                                            <span>Send</span>
+                                        </a>
+                                    </div>
+                                </div>
 
                                 {/* Add to iCal / Calendar */}
                                 <button
                                     onClick={() => downloadICS(confirmedBooking)}
-                                    className="w-full inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-full border border-sanctuary-blue/30 text-sanctuary-blue text-xs uppercase tracking-widest font-medium hover:bg-sanctuary-sand transition-colors"
+                                    className="w-full inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-full border border-sanctuary-blue/30 text-sanctuary-blue text-xs uppercase tracking-widest font-medium hover:bg-sanctuary-sand transition-colors mt-2"
                                 >
                                     <Download className="w-4 h-4 text-sanctuary-gold" />
                                     <span>Add to My Calendar (.ics)</span>
@@ -659,7 +832,7 @@ const WellnessBooking: React.FC = () => {
 
                             <Lock className="w-8 h-8 text-sanctuary-gold mx-auto mb-3" />
                             <h3 className="text-lg font-serif text-sanctuary-blue mb-1">Staff Access</h3>
-                            <p className="text-xs text-sanctuary-blue/60 mb-4">Enter Staff PIN to manage & cancel reservations.</p>
+                            <p className="text-xs text-sanctuary-blue/60 mb-4">Enter Staff PIN to view guest names, phone numbers & manage bookings.</p>
 
                             <form onSubmit={handleStaffUnlock} className="space-y-4">
                                 <input
@@ -712,7 +885,6 @@ const WellnessBooking: React.FC = () => {
                                 </h3>
 
                                 <div className="my-6 p-4 bg-sanctuary-sand/40 rounded-xl border border-sanctuary-blue/10 flex justify-center">
-                                    {/* QR Code SVG / API Generator */}
                                     <img
                                         src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://www.montbleu.co.za/relax-booking"
                                         alt="Scan to Book Sauna & Hot Tub"
@@ -725,7 +897,7 @@ const WellnessBooking: React.FC = () => {
                                 </p>
 
                                 <p className="text-[11px] text-sanctuary-blue/60 italic font-light">
-                                    Please finish on time so the next guests can enjoy their session.
+                                    Reservations require at least 1 hour advance notice. Please finish on time so the next guests can enjoy their session.
                                 </p>
                             </div>
 
@@ -744,3 +916,4 @@ const WellnessBooking: React.FC = () => {
 };
 
 export default WellnessBooking;
+
