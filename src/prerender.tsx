@@ -88,6 +88,12 @@ const pageMeta: Record<string, { title: string; description: string; h1: string;
     h1: 'Winter Packages for 2027 Coming Soon',
     body: 'Our 2026 seasonal winter offers have concluded. Winter Packages for 2027 are coming soon. Explore our luxury rooms and suites at Mont Bleu Guesthouse in Franschhoek.',
   },
+  '/guest-directory': {
+    title: 'Mont Bleu Guest Guide | Guest Directory',
+    description: 'Official guest information for Mont Bleu Guesthouse at Le Sanctuaire Farm: arrival, facilities, trails, housekeeping, safety and contact numbers.',
+    h1: 'Mont Bleu Guest Guide',
+    body: 'Official guest information for Mont Bleu Guesthouse at Le Sanctuaire Farm: arrival, facilities, trails, housekeeping, safety and contact numbers.',
+  },
 };
 
 export async function prerender(data: { url: string }) {

@@ -18,6 +18,7 @@ import Maintenance from './pages/Maintenance';
 import WinterPackage from './pages/WinterPackage';
 import WellnessBooking from './pages/WellnessBooking';
 import Pilgrimage from './pages/Pilgrimage';
+import GuestDirectory from './pages/GuestDirectory';
 import { useEffect } from 'react';
 
 import AnalyticsTracker from './components/ui/AnalyticsTracker';
@@ -89,6 +90,9 @@ function App() {
             <Route path="/pilgrimage" element={<Pilgrimage />} />
             <Route path="/pilgrimage-trail" element={<Pilgrimage />} />
             <Route path="/winter-package" element={<WinterPackage />} />
+            <Route path="/guest-directory" element={<GuestDirectory />} />
+            <Route path="/guest-guide" element={<GuestDirectory />} />
+            <Route path="/directory" element={<GuestDirectory />} />
           </Routes>
         </main>
         <Footer />
