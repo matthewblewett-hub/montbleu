@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
-import { MapPin, Compass, ChevronRight, ChevronLeft, Printer, Sparkles, BookOpen, Smartphone, X, Heart, Sun, Clock, Footprints, AlertTriangle, Map } from 'lucide-react';
+import { MapPin, Compass, ChevronRight, ChevronLeft, Printer, Sparkles, BookOpen, Smartphone, X, Heart, Sun, Clock, Footprints, AlertTriangle, Map, Play, Home, ArrowRight } from 'lucide-react';
 import SectionObserver from '../components/ui/SectionObserver';
 
 interface Space {
@@ -985,8 +985,13 @@ const Pilgrimage: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     // Get current space ID from query param (e.g. ?space=1 or ?station=1)
-    const initialParam = searchParams.get('space') || searchParams.get('station') || '1';
-    const initialSpaceId = parseInt(initialParam, 10);
+    const initialParam = searchParams.get('space') || searchParams.get('station');
+    const initialSpaceId = initialParam ? parseInt(initialParam, 10) : 0;
+
+    const [viewMode, setViewMode] = useState<'intro' | 'station'>(
+        initialSpaceId >= 1 && initialSpaceId <= 15 ? 'station' : 'intro'
+    );
+
     const [activeSpaceId, setActiveSpaceId] = useState<number>(
         initialSpaceId >= 1 && initialSpaceId <= 15 ? initialSpaceId : 1
     );
@@ -1000,17 +1005,39 @@ const Pilgrimage: React.FC = () => {
     const [showMapModal, setShowMapModal] = useState(false);
 
     useEffect(() => {
-        const paramStr = searchParams.get('space') || searchParams.get('station') || '1';
-        const paramId = parseInt(paramStr, 10);
-        if (paramId >= 1 && paramId <= 15 && paramId !== activeSpaceId) {
-            setActiveSpaceId(paramId);
+        const paramStr = searchParams.get('space') || searchParams.get('station');
+        if (!paramStr || paramStr === 'intro' || paramStr === '0') {
+            setViewMode('intro');
+        } else {
+            const paramId = parseInt(paramStr, 10);
+            if (paramId >= 1 && paramId <= 15) {
+                setActiveSpaceId(paramId);
+                setViewMode('station');
+            }
         }
     }, [searchParams]);
 
     const selectSpace = (id: number) => {
         setActiveSpaceId(id);
+        setViewMode('station');
         setSearchParams({ space: id.toString() });
-        window.scrollTo({ top: 450, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const goToStart = () => {
+        setViewMode('intro');
+        setSearchParams({ space: 'intro' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const goToNext = () => {
+        if (viewMode === 'intro') {
+            selectSpace(1);
+        } else if (activeSpaceId < 15) {
+            selectSpace(activeSpaceId + 1);
+        } else {
+            goToStart();
+        }
     };
 
     const activeSpace = SPACES.find(s => s.id === activeSpaceId) || SPACES[0];
@@ -1038,332 +1065,428 @@ const Pilgrimage: React.FC = () => {
             </Helmet>
 
             <div className="container mx-auto px-4 max-w-5xl">
-                {/* Hero Header */}
-                <SectionObserver className="text-center mb-10">
-                    <span className="text-sm md:text-base font-serif uppercase tracking-[0.3em] text-sanctuary-gold mb-3 block font-semibold">
-                        Mont Bleu • Le Sanctuaire Farm
-                    </span>
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif text-sanctuary-blue mb-3">
-                        The Le Sanctuaire Way
-                    </h1>
-                    <h2 className="text-xl md:text-3xl font-serif text-sanctuary-gold mb-8 font-medium">
-                        Introduction & Guided Pilgrimage
-                    </h2>
+                
+                {/* TOP NAVIGATION BUTTON BAR (Back to Start, Next, Map) */}
+                <div className="sticky top-20 z-30 mb-8 bg-white/95 backdrop-blur-md p-3 md:p-4 rounded-2xl border border-sanctuary-stone/60 shadow-lg flex items-center justify-between gap-2">
+                    <button
+                        onClick={goToStart}
+                        className={`inline-flex items-center space-x-1.5 md:space-x-2 px-3.5 md:px-5 py-2.5 rounded-xl text-xs md:text-sm uppercase tracking-wider font-semibold font-serif transition-all ${
+                            viewMode === 'intro'
+                                ? 'bg-sanctuary-blue text-white shadow-md'
+                                : 'bg-sanctuary-sand/60 text-sanctuary-blue hover:bg-sanctuary-sand border border-sanctuary-blue/15'
+                        }`}
+                    >
+                        <Home className="w-4 h-4 text-sanctuary-gold" />
+                        <span>Back to Start</span>
+                    </button>
 
-                    {/* Exact Google Sites Introduction Section */}
-                    <div className="bg-white p-8 md:p-12 rounded-3xl border border-sanctuary-stone/50 shadow-2xl text-left space-y-6 text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light mb-10">
-                        <div className="pb-4 border-b border-sanctuary-blue/10 flex items-center justify-between">
-                            <span className="text-sm md:text-base uppercase tracking-widest text-sanctuary-gold font-serif font-bold">
-                                Introduction
-                            </span>
-                            <span className="text-xs md:text-sm text-sanctuary-blue/60 font-serif">
-                                Where Heaven Meets Earth
-                            </span>
-                        </div>
+                    <div className="flex items-center space-x-2">
+                        <button
+                            onClick={() => setShowMapModal(true)}
+                            className="inline-flex items-center space-x-1.5 md:space-x-2 px-3.5 md:px-5 py-2.5 rounded-xl text-xs md:text-sm uppercase tracking-wider font-semibold font-serif bg-white text-sanctuary-blue hover:bg-sanctuary-sand border border-sanctuary-blue/20 shadow-sm transition-all"
+                        >
+                            <Map className="w-4 h-4 text-sanctuary-gold" />
+                            <span>Map</span>
+                        </button>
 
-                        <p className="text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light">
-                            Welcome to <strong>Le Sanctuaire Way</strong>, a guided pilgrimage through the landscapes of Le Sanctuaire. Each stop invites you to pause, breathe, and become aware of the sacred rhythm where heaven and earth meet. As you walk, may the land speak, the patterns reveal, and the stillness open you to deeper presence. Scan the QR codes at each station to explore reflections, scriptures, and insights for that station.
-                        </p>
+                        <button
+                            onClick={goToNext}
+                            className="inline-flex items-center space-x-1.5 md:space-x-2 px-4 md:px-6 py-2.5 rounded-xl text-xs md:text-sm uppercase tracking-wider font-bold font-serif bg-sanctuary-gold text-white hover:bg-sanctuary-gold/90 shadow-md transition-all"
+                        >
+                            <span>Next</span>
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                </div>
 
-                        <p className="text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light">
-                            Each station will give you some information about the station, some thoughts for personal reflection and a few relevant scriptures and an activity called <em>Pilgrim's Prompt</em> with questions to reflect on or even something to do. Take at least 5 minutes at each station to participate in these prompts - this is not a passive experience - it is intended to be active and experiential and you will get the most out of it if you follow the prompts! Why not even take a notebook along to jot down personal insights or even an inspirational picture. Take your time.
-                        </p>
+                {/* VIEW 1: INTRODUCTION SCREEN */}
+                {viewMode === 'intro' && (
+                    <SectionObserver className="text-center mb-10">
+                        <span className="text-sm md:text-base font-serif uppercase tracking-[0.3em] text-sanctuary-gold mb-3 block font-semibold">
+                            Mont Bleu • Le Sanctuaire Farm
+                        </span>
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif text-sanctuary-blue mb-3">
+                            The Le Sanctuaire Way
+                        </h1>
+                        <h2 className="text-xl md:text-3xl font-serif text-sanctuary-gold mb-8 font-medium">
+                            Introduction & Guided Pilgrimage
+                        </h2>
 
-                        <p className="text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light">
-                            Once you have completed a station simply click on the <strong>Where to Next</strong> button and follow the journey to the Next Station. You can start anywhere but for the full Pilgrimage experience take a leisurely walk to <strong>The Sign</strong> at the very bottom of the Access Road. When you are at the sign - click the Start Pilgrimage Button. Before starting, please read the helpful guidelines below.
-                        </p>
+                        {/* Exact Google Sites Introduction Section */}
+                        <div className="bg-white p-8 md:p-12 rounded-3xl border border-sanctuary-stone/50 shadow-2xl text-left space-y-6 text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light mb-10">
+                            <div className="pb-4 border-b border-sanctuary-blue/10 flex items-center justify-between">
+                                <span className="text-sm md:text-base uppercase tracking-widest text-sanctuary-gold font-serif font-bold">
+                                    Introduction
+                                </span>
+                                <span className="text-xs md:text-sm text-sanctuary-blue/60 font-serif">
+                                    Where Heaven Meets Earth
+                                </span>
+                            </div>
 
-                        {/* Guided Notes Box */}
-                        <div className="my-8 p-6 md:p-8 bg-sanctuary-sand/50 rounded-2xl border border-sanctuary-blue/15 space-y-6">
-                            <h4 className="text-base md:text-xl font-serif text-sanctuary-blue font-bold uppercase tracking-wider flex items-center space-x-2">
-                                <Footprints className="w-5 h-5 text-sanctuary-gold" />
-                                <span>Please read these important notes first</span>
-                            </h4>
+                            <p className="text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light">
+                                Welcome to <strong>Le Sanctuaire Way</strong>, a guided pilgrimage through the landscapes of Le Sanctuaire. Each stop invites you to pause, breathe, and become aware of the sacred rhythm where heaven and earth meet. As you walk, may the land speak, the patterns reveal, and the stillness open you to deeper presence. Scan the QR codes at each station to explore reflections, scriptures, and insights for that station.
+                            </p>
 
-                            <div className="space-y-4 text-base md:text-xl text-sanctuary-blue">
-                                <div>
-                                    <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">What is a Pilgrimage?</strong>
-                                    <p className="font-light">
-                                        A pilgrimage is a journey taken with intention. It blends physical movement with spiritual awareness, inviting you to slow down, pay attention, and encounter God in the ordinary beauty of creation. At Le Sanctuaire we call this "where heaven meets earth". This happens when we experience the natural earth with all our senses whilst at the same time joining these material elements with their deeper heavenly meaning. As you walk, each step becomes a prayer, and each pause becomes an opportunity to listen.
-                                    </p>
+                            <p className="text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light">
+                                Each station will give you some information about the station, some thoughts for personal reflection and a few relevant scriptures and an activity called <em>Pilgrim's Prompt</em> with questions to reflect on or even something to do. Take at least 5 minutes at each station to participate in these prompts - this is not a passive experience - it is intended to be active and experiential and you will get the most out of it if you follow the prompts! Why not even take a notebook along to jot down personal insights or even an inspirational picture. Take your time.
+                            </p>
+
+                            <p className="text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light">
+                                Once you have completed a station simply click on the <strong>Where to Next</strong> button and follow the journey to the Next Station. You can start anywhere but for the full Pilgrimage experience take a leisurely walk to <strong>The Sign</strong> at the very bottom of the Access Road. When you are at the sign - click the Start Pilgrimage Button. Before starting, please read the helpful guidelines below.
+                            </p>
+
+                            {/* Guided Notes Box */}
+                            <div className="my-8 p-6 md:p-8 bg-sanctuary-sand/50 rounded-2xl border border-sanctuary-blue/15 space-y-6">
+                                <h4 className="text-base md:text-xl font-serif text-sanctuary-blue font-bold uppercase tracking-wider flex items-center space-x-2">
+                                    <Footprints className="w-5 h-5 text-sanctuary-gold" />
+                                    <span>Please read these important notes first</span>
+                                </h4>
+
+                                <div className="space-y-4 text-base md:text-xl text-sanctuary-blue">
+                                    <div>
+                                        <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">What is a Pilgrimage?</strong>
+                                        <p className="font-light">
+                                            A pilgrimage is a journey taken with intention. It blends physical movement with spiritual awareness, inviting you to slow down, pay attention, and encounter God in the ordinary beauty of creation. At Le Sanctuaire we call this "where heaven meets earth". This happens when we experience the natural earth with all our senses whilst at the same time joining these material elements with their deeper heavenly meaning. As you walk, each step becomes a prayer, and each pause becomes an opportunity to listen.
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">How to Walk Slowly</strong>
+                                        <p className="font-light">
+                                            This path is not about speed. Walk with unhurried steps, breathe deeply, and allow the landscape to shape your pace. Notice the patterns, sounds, textures, and surprises along the way. The slower you go, the more you will receive from the journey.
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">Why These 15 Stops?</strong>
+                                        <p className="font-light">
+                                            The fifteen stations of Le Sanctuaire Way reflect the <strong>15 Steps of Ascent</strong> leading up to the Temple in Jerusalem. Worshippers climbed these steps singing the 15 Songs of Ascent (Psalms 120–134), moving physically and spiritually toward God’s presence. This pattern echoes the miracle in the days of Hezekiah, when God caused the shadow on the steps to move backward—symbolising renewal, mercy, and a fresh beginning. Our fifteen stops follow this ancient rhythm: a step-by-step ascent of heart, mind, and spirit.
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">A Pilgrimage in Progress</strong>
+                                        <p className="font-light">
+                                            We have just started. Many of our stations are not yet what they are intended to be. Please be patient with our progress and allow your imagination to fill in the missing pieces. That said, a pilgrimage is never complete and we will probably always be adding, removing, transforming as we learn and grow. To this end we welcome any constructive feedback.
+                                        </p>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">How to Walk Slowly</strong>
-                                    <p className="font-light">
-                                        This path is not about speed. Walk with unhurried steps, breathe deeply, and allow the landscape to shape your pace. Notice the patterns, sounds, textures, and surprises along the way. The slower you go, the more you will receive from the journey.
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">Why These 15 Stops?</strong>
-                                    <p className="font-light">
-                                        The fifteen stations of Le Sanctuaire Way reflect the <strong>15 Steps of Ascent</strong> leading up to the Temple in Jerusalem. Worshippers climbed these steps singing the 15 Songs of Ascent (Psalms 120–134), moving physically and spiritually toward God’s presence. This pattern echoes the miracle in the days of Hezekiah, when God caused the shadow on the steps to move backward—symbolising renewal, mercy, and a fresh beginning. Our fifteen stops follow this ancient rhythm: a step-by-step ascent of heart, mind, and spirit.
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">A Pilgrimage in Progress</strong>
-                                    <p className="font-light">
-                                        We have just started. Many of our stations are not yet what they are intended to be. Please be patient with our progress and allow your imagination to fill in the missing pieces. That said, a pilgrimage is never complete and we will probably always be adding, removing, transforming as we learn and grow. To this end we welcome any constructive feedback.
+                                {/* Safety Callout */}
+                                <div className="mt-6 p-5 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 space-y-2">
+                                    <span className="font-serif font-bold text-sm md:text-lg flex items-center space-x-2 text-amber-950">
+                                        <AlertTriangle className="w-5 h-5 text-amber-700" />
+                                        <span>Safety & Notes on the Trail</span>
+                                    </span>
+                                    <ul className="list-disc pl-5 space-y-1 text-sm md:text-lg font-light text-amber-900">
+                                        <li>Be aware that snakes may be present, especially during warmer months.</li>
+                                        <li>Stay hydrated, and consider carrying water along the route.</li>
+                                        <li>Protect yourself from the sun with a hat, sunscreen, and appropriate clothing.</li>
+                                        <li>Watch your footing on natural paths and take care on steeper or uneven sections.</li>
+                                    </ul>
+                                    <p className="text-sm md:text-base font-serif italic pt-1 text-amber-800">
+                                        Walk gently, stay mindful, and enjoy the beauty of the journey.
                                     </p>
                                 </div>
                             </div>
 
-                            {/* Safety Callout */}
-                            <div className="mt-6 p-5 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 space-y-2">
-                                <span className="font-serif font-bold text-sm md:text-lg flex items-center space-x-2 text-amber-950">
-                                    <AlertTriangle className="w-5 h-5 text-amber-700" />
-                                    <span>Safety & Notes on the Trail</span>
-                                </span>
-                                <ul className="list-disc pl-5 space-y-1 text-sm md:text-lg font-light text-amber-900">
-                                    <li>Be aware that snakes may be present, especially during warmer months.</li>
-                                    <li>Stay hydrated, and consider carrying water along the route.</li>
-                                    <li>Protect yourself from the sun with a hat, sunscreen, and appropriate clothing.</li>
-                                    <li>Watch your footing on natural paths and take care on steeper or uneven sections.</li>
-                                </ul>
-                                <p className="text-sm md:text-base font-serif italic pt-1 text-amber-800">
-                                    Walk gently, stay mindful, and enjoy the beauty of the journey.
+                            {/* Scriptural Anchors */}
+                            <div className="pt-4 border-t border-sanctuary-blue/10 space-y-3 text-base md:text-xl font-serif text-sanctuary-blue italic">
+                                <p className="text-sanctuary-gold font-bold uppercase tracking-wider text-xs md:text-sm">Where Heaven Meets Earth</p>
+                                <p>"In the Beginning God created the HEAVEN and the EARTH" — Genesis 1:1</p>
+                                <p>"...In the fullness of the times He might gather together in one all things in Christ, both which are in heaven and which are on earth—in Him." — Ephesians 1:10</p>
+                                <p>"Now I saw a new heaven and a new earth, for the first heaven and the first earth had passed away." — Revelation 21:1</p>
+                            </div>
+
+                            {/* START PILGRIMAGE BUTTON AT BOTTOM OF INTRODUCTION */}
+                            <div className="pt-8 text-center border-t border-sanctuary-blue/10">
+                                <button
+                                    onClick={() => selectSpace(1)}
+                                    className="inline-flex items-center space-x-3 bg-sanctuary-blue hover:bg-sanctuary-blue/90 text-white font-serif font-bold text-lg md:text-2xl px-10 py-5 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-105"
+                                >
+                                    <Play className="w-6 h-6 fill-sanctuary-gold text-sanctuary-gold" />
+                                    <span>Start Pilgrimage — Station 1: The Sign</span>
+                                    <ArrowRight className="w-6 h-6 text-sanctuary-gold" />
+                                </button>
+                                <p className="text-xs md:text-sm text-sanctuary-blue/70 mt-3 font-serif italic">
+                                    Walk down to the access road sign, or click above to begin Station 1.
                                 </p>
                             </div>
                         </div>
 
-                        {/* Scriptural Anchors */}
-                        <div className="pt-4 border-t border-sanctuary-blue/10 space-y-3 text-base md:text-xl font-serif text-sanctuary-blue italic">
-                            <p className="text-sanctuary-gold font-bold uppercase tracking-wider text-xs md:text-sm">Where Heaven Meets Earth</p>
-                            <p>"In the Beginning God created the HEAVEN and the EARTH" — Genesis 1:1</p>
-                            <p>"...In the fullness of the times He might gather together in one all things in Christ, both which are in heaven and which are on earth—in Him." — Ephesians 1:10</p>
-                            <p>"Now I saw a new heaven and a new earth, for the first heaven and the first earth had passed away." — Revelation 21:1</p>
-                        </div>
-                    </div>
-
-                    {/* Official Trail Map Card */}
-                    <div className="bg-white p-6 md:p-8 rounded-3xl border border-sanctuary-stone/50 shadow-2xl mb-10 text-center overflow-hidden">
-                        <div className="flex items-center justify-between mb-4">
-                            <span className="text-xs md:text-sm uppercase tracking-widest text-sanctuary-gold font-serif font-bold flex items-center space-x-2">
-                                <Map className="w-4 h-4 text-sanctuary-gold" />
-                                <span>Pilgrimage Trail Map</span>
-                            </span>
-                            <span className="text-xs text-sanctuary-blue/60 font-serif">
-                                Click to Expand Full Map
-                            </span>
-                        </div>
-                        <div
-                            onClick={() => setShowMapModal(true)}
-                            className="cursor-pointer group relative rounded-2xl overflow-hidden border border-sanctuary-blue/10 bg-sanctuary-sand/30 shadow-inner transition-all hover:shadow-xl"
-                        >
-                            <img
-                                src="/images/pilgrimage_map.jpg"
-                                alt="Le Sanctuaire Pilgrimage Trail Map"
-                                className="w-full max-h-[600px] object-contain mx-auto transition-transform duration-500 group-hover:scale-[1.02]"
-                            />
-                            <div className="absolute inset-0 bg-sanctuary-blue/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <span className="bg-white/95 text-sanctuary-blue px-5 py-2.5 rounded-full text-xs font-serif uppercase tracking-widest font-bold shadow-lg">
-                                    🔍 Click to Enlarge Map
+                        {/* Official Trail Map Card */}
+                        <div className="bg-white p-6 md:p-8 rounded-3xl border border-sanctuary-stone/50 shadow-2xl mb-10 text-center overflow-hidden">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-xs md:text-sm uppercase tracking-widest text-sanctuary-gold font-serif font-bold flex items-center space-x-2">
+                                    <Map className="w-4 h-4 text-sanctuary-gold" />
+                                    <span>Pilgrimage Trail Map</span>
+                                </span>
+                                <span className="text-xs text-sanctuary-blue/60 font-serif">
+                                    Click to Expand Full Map
                                 </span>
                             </div>
-                        </div>
-                        <p className="text-xs md:text-sm text-sanctuary-blue/70 font-serif italic mt-3">
-                            Illustrative map showing the 15 Pilgrim Stations, Fynbos Trail, River Walk, and Amenities across Le Sanctuaire.
-                        </p>
-                    </div>
-
-                    {/* Print & QR Action Bar */}
-                    <div className="flex flex-wrap items-center justify-center gap-4">
-                        <button
-                            onClick={() => setShowSingleQRModal(true)}
-                            className="inline-flex items-center space-x-2 text-xs md:text-sm font-medium uppercase tracking-wider px-6 py-3 rounded-full border border-sanctuary-blue/30 bg-white/80 text-sanctuary-blue hover:bg-white transition-all shadow-sm"
-                        >
-                            <Smartphone className="w-4 h-4 text-sanctuary-gold" />
-                            <span>Space {activeSpace.id} QR Sign</span>
-                        </button>
-
-                        <button
-                            onClick={() => setShowAllQRSheetModal(true)}
-                            className="inline-flex items-center space-x-2 text-xs md:text-sm font-medium uppercase tracking-wider px-6 py-3 rounded-full bg-sanctuary-blue text-white hover:bg-sanctuary-blue/90 transition-all shadow-md"
-                        >
-                            <Printer className="w-4 h-4 text-sanctuary-gold" />
-                            <span>Print All 15 Space QR Signs</span>
-                        </button>
-                    </div>
-                </SectionObserver>
-
-                {/* 15 Steps Horizontal Navigation Selector */}
-                <div className="mb-10 bg-white p-4 md:p-6 rounded-3xl border border-sanctuary-stone/50 shadow-md">
-                    <div className="flex items-center justify-between mb-4 px-2">
-                        <span className="text-xs md:text-sm uppercase tracking-widest text-sanctuary-gold font-serif flex items-center space-x-2 font-bold">
-                            <Compass className="w-4 h-4" />
-                            <span>The 15 Steps of Ascent</span>
-                        </span>
-                        <span className="text-xs md:text-sm text-sanctuary-blue/70 font-semibold">Space {activeSpace.id} of 15</span>
-                    </div>
-
-                    <div className="flex space-x-2.5 overflow-x-auto pb-2 scrollbar-none">
-                        {SPACES.map((s) => (
-                            <button
-                                key={s.id}
-                                onClick={() => selectSpace(s.id)}
-                                className={`flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-2xl border flex flex-col items-center justify-center transition-all duration-300 ${
-                                    activeSpaceId === s.id
-                                        ? 'bg-sanctuary-blue border-sanctuary-blue text-white shadow-xl scale-105'
-                                        : 'bg-sanctuary-sand/40 border-sanctuary-blue/10 text-sanctuary-blue/70 hover:bg-sanctuary-sand'
-                                }`}
+                            <div
+                                onClick={() => setShowMapModal(true)}
+                                className="cursor-pointer group relative rounded-2xl overflow-hidden border border-sanctuary-blue/10 bg-sanctuary-sand/30 shadow-inner transition-all hover:shadow-xl"
                             >
-                                <span className="text-sm md:text-lg font-serif font-bold">{s.id}</span>
-                                <span className="text-[9px] uppercase tracking-tighter opacity-70">Step</span>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Main Active Space Card */}
-                <div className="bg-white rounded-3xl border border-sanctuary-stone/40 shadow-2xl overflow-hidden mb-12">
-                    {/* Header Banner */}
-                    <div className="bg-sanctuary-blue p-8 md:p-12 text-white relative">
-                        <div className="flex items-center justify-between mb-4">
-                            <span className="text-xs md:text-sm font-serif uppercase tracking-[0.25em] text-sanctuary-gold bg-white/10 px-4 py-1.5 rounded-full border border-white/10 font-semibold">
-                                Step {activeSpace.id} of 15
-                            </span>
-                            <span className="text-xs md:text-sm font-serif text-white/70">
-                                Le Sanctuaire Way
-                            </span>
+                                <img
+                                    src="/images/pilgrimage_map.jpg"
+                                    alt="Le Sanctuaire Pilgrimage Trail Map"
+                                    className="w-full max-h-[600px] object-contain mx-auto transition-transform duration-500 group-hover:scale-[1.02]"
+                                />
+                                <div className="absolute inset-0 bg-sanctuary-blue/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <span className="bg-white/95 text-sanctuary-blue px-5 py-2.5 rounded-full text-xs font-serif uppercase tracking-widest font-bold shadow-lg">
+                                        🔍 Click to Enlarge Map
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
-                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif mb-3 leading-tight">
-                            {activeSpace.id}. {activeSpace.title}
-                        </h2>
-                        <p className="text-base md:text-xl text-white/80 font-light italic">
-                            {activeSpace.subtitle}
-                        </p>
-                    </div>
+                        {/* Print & QR Action Bar */}
+                        <div className="flex flex-wrap items-center justify-center gap-4">
+                            <button
+                                onClick={() => setShowAllQRSheetModal(true)}
+                                className="inline-flex items-center space-x-2 text-xs md:text-sm font-medium uppercase tracking-wider px-6 py-3 rounded-full bg-sanctuary-blue text-white hover:bg-sanctuary-blue/90 transition-all shadow-md"
+                            >
+                                <Printer className="w-4 h-4 text-sanctuary-gold" />
+                                <span>Print All 15 Space QR Signs</span>
+                            </button>
+                        </div>
+                    </SectionObserver>
+                )}
 
-                    {/* Main Text Content */}
-                    <div className="p-8 md:p-12 space-y-8">
-                        {/* Scripture Callout (if present) */}
-                        {activeSpace.scripture && (
-                            <div className="p-6 md:p-8 rounded-2xl bg-sanctuary-sand/50 border border-sanctuary-blue/10 relative">
-                                <BookOpen className="w-6 h-6 text-sanctuary-gold absolute top-6 left-6" />
-                                <div className="pl-8">
-                                    <p className="text-lg md:text-2xl text-sanctuary-blue font-serif italic leading-relaxed mb-3">
-                                        "{activeSpace.scripture}"
-                                    </p>
-                                    {activeSpace.scriptureRef && (
-                                        <span className="text-xs md:text-sm font-bold text-sanctuary-gold uppercase tracking-wider block">
-                                            — {activeSpace.scriptureRef}
-                                        </span>
+                {/* VIEW 2: STATION DISPLAY SCREEN */}
+                {viewMode === 'station' && (
+                    <>
+                        {/* 15 Steps Horizontal Navigation Selector */}
+                        <div className="mb-8 bg-white p-4 md:p-6 rounded-3xl border border-sanctuary-stone/50 shadow-md">
+                            <div className="flex items-center justify-between mb-4 px-2">
+                                <span className="text-xs md:text-sm uppercase tracking-widest text-sanctuary-gold font-serif flex items-center space-x-2 font-bold">
+                                    <Compass className="w-4 h-4" />
+                                    <span>The 15 Steps of Ascent</span>
+                                </span>
+                                <span className="text-xs md:text-sm text-sanctuary-blue/70 font-semibold">Step {activeSpace.id} of 15</span>
+                            </div>
+
+                            <div className="flex space-x-2.5 overflow-x-auto pb-2 scrollbar-none">
+                                {SPACES.map((s) => (
+                                    <button
+                                        key={s.id}
+                                        onClick={() => selectSpace(s.id)}
+                                        className={`flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-2xl border flex flex-col items-center justify-center transition-all duration-300 ${
+                                            activeSpaceId === s.id
+                                                ? 'bg-sanctuary-blue border-sanctuary-blue text-white shadow-xl scale-105'
+                                                : 'bg-sanctuary-sand/40 border-sanctuary-blue/10 text-sanctuary-blue/70 hover:bg-sanctuary-sand'
+                                        }`}
+                                    >
+                                        <span className="text-sm md:text-lg font-serif font-bold">{s.id}</span>
+                                        <span className="text-[9px] uppercase tracking-tighter opacity-70">Step</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Main Active Space Card */}
+                        <div className="bg-white rounded-3xl border border-sanctuary-stone/40 shadow-2xl overflow-hidden mb-12">
+                            {/* Header Banner */}
+                            <div className="bg-sanctuary-blue p-8 md:p-12 text-white relative">
+                                <div className="flex items-center justify-between mb-4">
+                                    <span className="text-xs md:text-sm font-serif uppercase tracking-[0.25em] text-sanctuary-gold bg-white/10 px-4 py-1.5 rounded-full border border-white/10 font-semibold">
+                                        Step {activeSpace.id} of 15
+                                    </span>
+                                    <button
+                                        onClick={() => setShowSingleQRModal(true)}
+                                        className="text-xs md:text-sm font-serif text-white/90 hover:text-sanctuary-gold transition-colors inline-flex items-center space-x-1.5 bg-white/10 px-3 py-1 rounded-full"
+                                    >
+                                        <Smartphone className="w-3.5 h-3.5 text-sanctuary-gold" />
+                                        <span>QR Sign</span>
+                                    </button>
+                                </div>
+
+                                <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif mb-3 leading-tight">
+                                    {activeSpace.id}. {activeSpace.title}
+                                </h2>
+                                <p className="text-base md:text-xl text-white/80 font-light italic">
+                                    {activeSpace.subtitle}
+                                </p>
+                            </div>
+
+                            {/* Main Text Content */}
+                            <div className="p-8 md:p-12 space-y-8">
+                                {/* Scripture Callout (if present) */}
+                                {activeSpace.scripture && (
+                                    <div className="p-6 md:p-8 rounded-2xl bg-sanctuary-sand/50 border border-sanctuary-blue/10 relative">
+                                        <BookOpen className="w-6 h-6 text-sanctuary-gold absolute top-6 left-6" />
+                                        <div className="pl-8">
+                                            <p className="text-lg md:text-2xl text-sanctuary-blue font-serif italic leading-relaxed mb-3">
+                                                "{activeSpace.scripture}"
+                                            </p>
+                                            {activeSpace.scriptureRef && (
+                                                <span className="text-xs md:text-sm font-bold text-sanctuary-gold uppercase tracking-wider block">
+                                                    — {activeSpace.scriptureRef}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Poetry Callout (if present) */}
+                                {activeSpace.poetry && (
+                                    <div className="p-6 md:p-8 rounded-2xl bg-amber-50/70 border border-amber-200 text-center">
+                                        <Sparkles className="w-6 h-6 text-amber-600 mx-auto mb-4" />
+                                        <div className="text-base md:text-xl text-sanctuary-blue font-serif italic whitespace-pre-line leading-relaxed">
+                                            {activeSpace.poetry}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Paragraphs of Exact Text (EXACT ORIGINAL GOOGLE SITES TEXT) */}
+                                <div className="space-y-6">
+                                    {activeSpace.meditationText.map((paragraph, pIdx) => {
+                                        const isWhereToNext = paragraph.includes('Where to Next');
+                                        return (
+                                            <div key={pIdx} className="space-y-4">
+                                                <p className="text-lg md:text-2xl text-sanctuary-blue/90 leading-relaxed font-light">
+                                                    {paragraph}
+                                                </p>
+
+                                                {/* NEXT STATION BUTTON DIRECTLY UNDER WHERE TO NEXT */}
+                                                {isWhereToNext && (
+                                                    <div className="my-6 p-6 rounded-2xl bg-sanctuary-gold/10 border border-sanctuary-gold/30 text-center space-y-3">
+                                                        <span className="text-xs md:text-sm font-serif uppercase tracking-widest text-sanctuary-gold font-bold block">
+                                                            Ready for the next station?
+                                                        </span>
+                                                        <button
+                                                            onClick={goToNext}
+                                                            className="inline-flex items-center space-x-3 bg-sanctuary-blue hover:bg-sanctuary-blue/90 text-white font-serif font-bold text-base md:text-xl px-8 py-4 rounded-full shadow-xl transition-all duration-300 transform hover:scale-105"
+                                                        >
+                                                            <span>
+                                                                {nextSpace ? `Next Station — Step ${nextSpace.id}: ${nextSpace.title}` : 'Complete Pilgrimage — Return to Start'}
+                                                            </span>
+                                                            <ArrowRight className="w-5 h-5 text-sanctuary-gold" />
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Practical Action / Concluding Note */}
+                                {activeSpace.actionPrompt && (
+                                    <div className="p-6 rounded-2xl bg-sanctuary-blue/5 border border-sanctuary-blue/10">
+                                        <h3 className="text-xs md:text-sm uppercase tracking-widest text-sanctuary-blue font-serif font-bold mb-2 flex items-center space-x-2">
+                                            <Heart className="w-5 h-5 text-sanctuary-gold" />
+                                            <span>Pilgrim's Prompt</span>
+                                        </h3>
+                                        <p className="text-base md:text-xl text-sanctuary-blue font-serif italic leading-relaxed">
+                                            {activeSpace.actionPrompt}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {/* Meditation Timer Button */}
+                                <div className="p-5 rounded-2xl border border-emerald-200 bg-emerald-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div className="flex items-center space-x-3">
+                                        <Sun className="w-6 h-6 text-emerald-600 flex-shrink-0" />
+                                        <div>
+                                            <span className="block text-xs md:text-sm font-semibold uppercase tracking-wider text-emerald-900">Pause & Reflect</span>
+                                            <p className="text-xs md:text-sm text-emerald-800">Take 5 minutes of quiet stillness at this space.</p>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        onClick={() => setMeditationTimer(meditationTimer ? null : 300)}
+                                        className="px-5 py-3 bg-emerald-700 text-white rounded-xl text-xs md:text-sm uppercase tracking-wider font-semibold hover:bg-emerald-800 transition-colors flex items-center justify-center space-x-2 flex-shrink-0 shadow-sm"
+                                    >
+                                        <Clock className="w-4 h-4" />
+                                        <span>{meditationTimer ? `Pause Timer (${Math.floor(meditationTimer / 60)}m ${meditationTimer % 60}s)` : '5-Min Pause Timer'}</span>
+                                    </button>
+                                </div>
+
+                                {/* Next Station Action Box at bottom of content */}
+                                <div className="p-6 rounded-2xl bg-sanctuary-blue/5 border border-sanctuary-blue/15 text-center space-y-3">
+                                    <span className="text-xs uppercase tracking-widest text-sanctuary-blue/60 font-serif font-bold">
+                                        Navigation
+                                    </span>
+                                    <div>
+                                        <button
+                                            onClick={goToNext}
+                                            className="inline-flex items-center space-x-3 bg-sanctuary-gold hover:bg-sanctuary-gold/90 text-white font-serif font-bold text-base md:text-xl px-8 py-4 rounded-full shadow-lg transition-all duration-300"
+                                        >
+                                            <span>
+                                                {nextSpace ? `Next Station (${nextSpace.title})` : 'Return to Start'}
+                                            </span>
+                                            <ArrowRight className="w-5 h-5 text-white" />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Space Navigation Footer */}
+                                <div className="pt-8 border-t border-sanctuary-blue/10 flex items-center justify-between">
+                                    {prevSpace ? (
+                                        <button
+                                            onClick={() => selectSpace(prevSpace.id)}
+                                            className="inline-flex items-center space-x-2 text-sm md:text-lg font-serif text-sanctuary-blue hover:text-sanctuary-gold transition-colors font-medium"
+                                        >
+                                            <ChevronLeft className="w-5 h-5" />
+                                            <span>Step {prevSpace.id}: {prevSpace.title}</span>
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={goToStart}
+                                            className="inline-flex items-center space-x-2 text-sm md:text-lg font-serif text-sanctuary-blue hover:text-sanctuary-gold transition-colors font-medium"
+                                        >
+                                            <Home className="w-4 h-4" />
+                                            <span>Introduction</span>
+                                        </button>
+                                    )}
+
+                                    {nextSpace ? (
+                                        <button
+                                            onClick={() => selectSpace(nextSpace.id)}
+                                            className="inline-flex items-center space-x-2 text-sm md:text-lg font-serif text-sanctuary-blue hover:text-sanctuary-gold transition-colors font-medium"
+                                        >
+                                            <span>Step {nextSpace.id}: {nextSpace.title}</span>
+                                            <ChevronRight className="w-5 h-5" />
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={goToStart}
+                                            className="inline-flex items-center space-x-2 text-sm md:text-lg font-serif text-sanctuary-gold font-medium"
+                                        >
+                                            <span>Finish Pilgrimage</span>
+                                            <Home className="w-4 h-4" />
+                                        </button>
                                     )}
                                 </div>
                             </div>
-                        )}
-
-                        {/* Poetry Callout (if present) */}
-                        {activeSpace.poetry && (
-                            <div className="p-6 md:p-8 rounded-2xl bg-amber-50/70 border border-amber-200 text-center">
-                                <Sparkles className="w-6 h-6 text-amber-600 mx-auto mb-4" />
-                                <div className="text-base md:text-xl text-sanctuary-blue font-serif italic whitespace-pre-line leading-relaxed">
-                                    {activeSpace.poetry}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Paragraphs of Exact Text (EXACT ORIGINAL GOOGLE SITES TEXT) */}
-                        <div className="space-y-6">
-                            {activeSpace.meditationText.map((paragraph, pIdx) => (
-                                <p key={pIdx} className="text-lg md:text-2xl text-sanctuary-blue/90 leading-relaxed font-light">
-                                    {paragraph}
-                                </p>
-                            ))}
                         </div>
+                    </>
+                )}
 
-                        {/* Practical Action / Concluding Note */}
-                        {activeSpace.actionPrompt && (
-                            <div className="p-6 rounded-2xl bg-sanctuary-blue/5 border border-sanctuary-blue/10">
-                                <h3 className="text-xs md:text-sm uppercase tracking-widest text-sanctuary-blue font-serif font-bold mb-2 flex items-center space-x-2">
-                                    <Heart className="w-5 h-5 text-sanctuary-gold" />
-                                    <span>Pilgrim's Prompt</span>
-                                </h3>
-                                <p className="text-base md:text-xl text-sanctuary-blue font-serif italic leading-relaxed">
-                                    {activeSpace.actionPrompt}
-                                </p>
-                            </div>
-                        )}
-
-                        {/* Meditation Timer Button */}
-                        <div className="p-5 rounded-2xl border border-emerald-200 bg-emerald-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <div className="flex items-center space-x-3">
-                                <Sun className="w-6 h-6 text-emerald-600 flex-shrink-0" />
-                                <div>
-                                    <span className="block text-xs md:text-sm font-semibold uppercase tracking-wider text-emerald-900">Pause & Reflect</span>
-                                    <p className="text-xs md:text-sm text-emerald-800">Take 5 minutes of quiet stillness at this space.</p>
-                                </div>
-                            </div>
-
-                            <button
-                                onClick={() => setMeditationTimer(meditationTimer ? null : 300)}
-                                className="px-5 py-3 bg-emerald-700 text-white rounded-xl text-xs md:text-sm uppercase tracking-wider font-semibold hover:bg-emerald-800 transition-colors flex items-center justify-center space-x-2 flex-shrink-0 shadow-sm"
-                            >
-                                <Clock className="w-4 h-4" />
-                                <span>{meditationTimer ? `Pause Timer (${Math.floor(meditationTimer / 60)}m ${meditationTimer % 60}s)` : '5-Min Pause Timer'}</span>
-                            </button>
-                        </div>
-
-                        {/* Space Navigation Footer */}
-                        <div className="pt-8 border-t border-sanctuary-blue/10 flex items-center justify-between">
-                            {prevSpace ? (
-                                <button
-                                    onClick={() => selectSpace(prevSpace.id)}
-                                    className="inline-flex items-center space-x-2 text-sm md:text-lg font-serif text-sanctuary-blue hover:text-sanctuary-gold transition-colors font-medium"
-                                >
-                                    <ChevronLeft className="w-5 h-5" />
-                                    <span>Step {prevSpace.id}: {prevSpace.title}</span>
-                                </button>
-                            ) : <div />}
-
-                            {nextSpace ? (
-                                <button
-                                    onClick={() => selectSpace(nextSpace.id)}
-                                    className="inline-flex items-center space-x-2 text-sm md:text-lg font-serif text-sanctuary-blue hover:text-sanctuary-gold transition-colors font-medium"
-                                >
-                                    <span>Step {nextSpace.id}: {nextSpace.title}</span>
-                                    <ChevronRight className="w-5 h-5" />
-                                </button>
-                            ) : <div />}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Trail Guidance Map Section */}
-                <div className="bg-white p-8 md:p-12 rounded-3xl border border-sanctuary-stone/40 shadow-xl text-center">
-                    <MapPin className="w-8 h-8 text-sanctuary-gold mx-auto mb-4" />
-                    <h3 className="text-2xl md:text-3xl font-serif text-sanctuary-blue mb-3">Trail Guidance & Map</h3>
+                {/* BOTTOM ALL 15 STATIONS QUICK SKIP GRID */}
+                <div className="bg-white p-8 md:p-12 rounded-3xl border border-sanctuary-stone/40 shadow-xl text-center mt-12">
+                    <MapPin className="w-8 h-8 text-sanctuary-gold mx-auto mb-3" />
+                    <h3 className="text-2xl md:text-3xl font-serif text-sanctuary-blue mb-2">All 15 Pilgrimage Stations</h3>
                     <p className="text-sm md:text-base text-sanctuary-blue/70 max-w-2xl mx-auto leading-relaxed font-light mb-6">
-                        Le Sanctuaire Way guides you through 15 Steps of Ascent across Mont Bleu estate—from the Highway entrance up to Pinnacle Cross.
+                        Tap any station below to quickly skip directly to its guided text & reflection.
                     </p>
 
-                    <div
-                        onClick={() => setShowMapModal(true)}
-                        className="cursor-pointer mb-8 rounded-2xl overflow-hidden border border-sanctuary-blue/10 bg-sanctuary-sand/30 shadow-md group relative max-w-3xl mx-auto"
-                    >
-                        <img
-                            src="/images/pilgrimage_map.jpg"
-                            alt="Le Sanctuaire Pilgrimage Map"
-                            className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-sanctuary-blue/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="bg-white/95 text-sanctuary-blue px-4 py-2 rounded-full text-xs font-serif font-bold uppercase tracking-wider">
-                                View Full Size Map
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-left">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 text-left">
                         {SPACES.map(sp => (
                             <div
                                 key={sp.id}
                                 onClick={() => selectSpace(sp.id)}
-                                className={`p-4 rounded-xl border cursor-pointer transition-all ${activeSpaceId === sp.id ? 'bg-sanctuary-blue text-white border-sanctuary-blue' : 'bg-sanctuary-sand/40 border-sanctuary-blue/10 text-sanctuary-blue hover:bg-sanctuary-sand'}`}
+                                className={`p-4 rounded-2xl border cursor-pointer transition-all duration-200 ${
+                                    viewMode === 'station' && activeSpaceId === sp.id
+                                        ? 'bg-sanctuary-blue text-white border-sanctuary-blue shadow-md scale-[1.02]'
+                                        : 'bg-sanctuary-sand/40 border-sanctuary-blue/10 text-sanctuary-blue hover:bg-sanctuary-sand hover:border-sanctuary-gold/40'
+                                }`}
                             >
-                                <span className={`text-[10px] uppercase tracking-wider font-bold block mb-1 ${activeSpaceId === sp.id ? 'text-sanctuary-gold' : 'text-sanctuary-gold'}`}>
+                                <span className={`text-[10px] uppercase tracking-wider font-bold block mb-0.5 ${
+                                    viewMode === 'station' && activeSpaceId === sp.id ? 'text-sanctuary-gold' : 'text-sanctuary-gold'
+                                }`}>
                                     Step {sp.id} of 15
                                 </span>
                                 <span className="text-xs md:text-sm font-serif font-semibold block truncate">
