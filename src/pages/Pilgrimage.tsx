@@ -2,1887 +2,607 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
-import { MapPin, Compass, ChevronRight, ChevronLeft, Printer, BookOpen, Smartphone, X, Sun, Clock, Footprints, AlertTriangle, Map, Play, Home, ArrowRight, Download } from 'lucide-react';
+import { MapPin, Compass, ChevronRight, ChevronLeft, Printer, BookOpen, Smartphone, X, Sun, Clock, Footprints, AlertTriangle, Map, Play, Home, ArrowRight, Download, Heart, Feather } from 'lucide-react';
 import SectionObserver from '../components/ui/SectionObserver';
 
-interface Section {
-    heading?: string;
-    text: string;
-    isScripture?: boolean;
-}
-
-interface FormattedSpace {
+interface StructuredSpace {
     id: number;
     title: string;
     subtitle: string;
-    sections: Section[];
+    description: string[];
+    reflection: string[];
+    scriptures: string[];
+    activity: string[];
+    whereToNext: string;
 }
 
-const SPACES: FormattedSpace[] = [
+const SPACES: StructuredSpace[] = [
     {
         id: 1,
         title: "The Sign",
         subtitle: "Le Sanctuaire: The Beginning of the Way",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way Le Sanctuaire: The Beginning of the Way Stand or sit on the stone bridge, facing the sign and the long ascending road ahead."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "This is where your pilgrimage begins."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Look up at the sign marked \u201cLe Sanctuaire.\u201d"
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "More than a marker, it signals a choice \u2014 a turning away from other roads and a decision to take this one. In life, the paths we choose at key moments shape the journey that follows. Today, you have chosen this path."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Le Sanctuaire translates from French as \u201cThe Sanctuary\u201d \u2014 a place set apart for rest, safety, and renewal; a meeting place of stillness and attention."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "This valley has long been a place of refuge. Centuries ago, French Huguenots fled persecution and found shelter here, shaping Franschhoek through their courage, resilience, and longing for sanctuary."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Ahead of you, the road rises gently toward the mountain."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "From the first step, the land invites both ascent and reflection: the vineyards, the stream, the quiet line of the road \u2014 all suggesting that a deeper journey has begun."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Every pilgrimage begins with a response \u2014 This sign marks a threshold: between the familiar and the sacred, between ordinary movement and a journey that reshapes the heart."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "A sanctuary is not an escape from life."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "It is a place of encounter \u2014 where burdens loosen, where the soul finds space to breathe, and where God meets us with renewal and clarity."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Today, this sign stands as an invitation: to step onto a path that leads inward,"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cA highway shall be there\u2026 the Way of Holiness.\u201d \u2014 Isaiah 35:8",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cStrait is the gate and narrow the way that leads to life.\u201d \u2014 Matthew 7:13\u201314",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Pilgrimage Activity Find a quiet place near the sign."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Face the road that rises toward the mountain."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Pause for a moment and ask yourself: What am I turning toward as I begin this walk?"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "If you wish, offer a simple prayer: \u201cHere am I, Lord. I am coming.\u201d"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "When you are ready, begin your pilgrimage."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Take a slow peaceful stroll up the paved driveway. Enjoy the shade as you walk between the stream on your right and the rolling vineyards on your right. It is about a 700m walk to the next station - The Gate. Scan the QR Code at the Pilgrimage Sign or click Next Station above."
-            }
-]
+        description: [
+            "Le Sanctuaire: The Beginning of the Way Stand or sit on the stone bridge, facing the sign and the long ascending road ahead.",
+            "This is where your pilgrimage begins.",
+            "Look up at the sign marked \u201cLe Sanctuaire.\u201d",
+            "More than a marker, it signals a choice \u2014 a turning away from other roads and a decision to take this one. In life, the paths we choose at key moments shape the journey that follows. Today, you have chosen this path.",
+            "Le Sanctuaire translates from French as \u201cThe Sanctuary\u201d \u2014 a place set apart for rest, safety, and renewal; a meeting place of stillness and attention.",
+            "This valley has long been a place of refuge. Centuries ago, French Huguenots fled persecution and found shelter here, shaping Franschhoek through their courage, resilience, and longing for sanctuary.",
+            "Ahead of you, the road rises gently toward the mountain.",
+            "From the first step, the land invites both ascent and reflection: the vineyards, the stream, the quiet line of the road \u2014 all suggesting that a deeper journey has begun."
+],
+        reflection: [
+            "Every pilgrimage begins with a response \u2014 This sign marks a threshold: between the familiar and the sacred, between ordinary movement and a journey that reshapes the heart.",
+            "A sanctuary is not an escape from life.",
+            "It is a place of encounter \u2014 where burdens loosen, where the soul finds space to breathe, and where God meets us with renewal and clarity.",
+            "Today, this sign stands as an invitation: to step onto a path that leads inward,"
+],
+        scriptures: [
+            "\u201cA highway shall be there\u2026 the Way of Holiness.\u201d \u2014 Isaiah 35:8 \u201cStrait is the gate and narrow the way that leads to life.\u201d \u2014 Matthew 7:13\u201314 \u201cHere am I, Lord. I am coming.\u201d"
+],
+        activity: [
+            "Find a quiet place near the sign.",
+            "Face the road that rises toward the mountain.",
+            "Pause for a moment and ask yourself: What am I turning toward as I begin this walk?",
+            "If you wish, offer a simple prayer: When you are ready, begin your pilgrimage."
+],
+        whereToNext: "Take a slow peaceful stroll up the paved driveway. Enjoy the shade as you walk between the stream on your right and the rolling vineyards on your right. It is about a 700m walk to the next station - The Gate. Scan the QR Code at the Pilgrimage Sign or click Next Station above."
     },
     {
         id: 2,
         title: "The Gate",
         subtitle: "Crossing Into the Sanctuary",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way Crossing Into the Sanctuary Take a seat beneath the young oaks and face the entrance."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "This is the moment you pass from the familiar world into the Sanctuary."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "This gate marks the true beginning of the pilgrimage."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "It is a threshold \u2014 a place of crossing \u2014 where direction, attention, and pace begin to change. What lies behind you matters less than what you are stepping toward."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Here, movement becomes intentional."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Distraction gives way to presence."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "The journey is no longer theoretical \u2014 it is entered."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "The gate is shaped to speak quietly to the one who pauses."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "The two gate leaves rise to form a third peak between the stone pillars, echoing the three mountain peaks above the farm. Together they suggest unity, balance, and a harmony that draws the eye upward."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Built from stones gathered from the stream, each pillar carries fragments of the land\u2019s long memory. Their triangular caps rest with quiet confidence, expressing strength, stability, and endurance."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Wrought-Iron Movement The deep blue ironwork, shaped like the protea, reflects the abundance of the surrounding fynbos. Its upward movement invites the gaze \u2014 and the heart \u2014 toward ascent."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "To walk through a gate is to choose \u2014 union over separation, presence over distraction, life over noise."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "This gate marks more than entry."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "It is a commitment to step toward communion rather than distance, toward attentiveness rather than haste."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "In Scripture, gates are places of encounter."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "They mark moments when God meets the pilgrim at the threshold \u2014 not after the journey, but at its beginning."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "To pass through this gate is to say, quietly and willingly: I am entering the place where heaven and earth meet."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cThis is\u2026 the gate of heaven.\u201d \u2014 Genesis 28:17",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cThis is the gate of the LORD, into which the righteous shall enter.\u201d \u2014 Psalm 118:20",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Pilgrimage Activity Stand before the gate."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Wait in silence as the gate opens \u2014 let the moment speak."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Then step forward and say aloud: \u201cI set my face toward the mountain of the Lord.\u201d"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Cross the threshold into the Sanctuary."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Walk a little further up the driveway past the succulents and just before you encounter the cypress trees on each side of the driveway you will see the next Station sign."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Start Pilgrimage"
-            }
-]
+        description: [
+            "Crossing Into the Sanctuary Take a seat beneath the young oaks and face the entrance.",
+            "This is the moment you pass from the familiar world into the Sanctuary.",
+            "This gate marks the true beginning of the pilgrimage.",
+            "It is a threshold \u2014 a place of crossing \u2014 where direction, attention, and pace begin to change. What lies behind you matters less than what you are stepping toward.",
+            "Here, movement becomes intentional.",
+            "Distraction gives way to presence.",
+            "The journey is no longer theoretical \u2014 it is entered.",
+            "The gate is shaped to speak quietly to the one who pauses.",
+            "The two gate leaves rise to form a third peak between the stone pillars, echoing the three mountain peaks above the farm. Together they suggest unity, balance, and a harmony that draws the eye upward.",
+            "Built from stones gathered from the stream, each pillar carries fragments of the land\u2019s long memory. Their triangular caps rest with quiet confidence, expressing strength, stability, and endurance.",
+            "Wrought-Iron Movement The deep blue ironwork, shaped like the protea, reflects the abundance of the surrounding fynbos. Its upward movement invites the gaze \u2014 and the heart \u2014 toward ascent."
+],
+        reflection: [
+            "To walk through a gate is to choose \u2014 union over separation, presence over distraction, life over noise.",
+            "This gate marks more than entry.",
+            "It is a commitment to step toward communion rather than distance, toward attentiveness rather than haste.",
+            "In Scripture, gates are places of encounter.",
+            "They mark moments when God meets the pilgrim at the threshold \u2014 not after the journey, but at its beginning.",
+            "To pass through this gate is to say, quietly and willingly: I am entering the place where heaven and earth meet."
+],
+        scriptures: [
+            "\u201cThis is\u2026 the gate of heaven.\u201d \u2014 Genesis 28:17 \u201cThis is the gate of the LORD, into which the righteous shall enter.\u201d \u2014 Psalm 118:20",
+            "\u201cI set my face toward the mountain of the Lord.\u201d"
+],
+        activity: [
+            "Stand before the gate.",
+            "Wait in silence as the gate opens \u2014 let the moment speak.",
+            "Then step forward and say aloud: Cross the threshold into the Sanctuary."
+],
+        whereToNext: "Walk a little further up the driveway past the succulents and just before you encounter the cypress trees on each side of the driveway you will see the next Station sign. Start Pilgrimage"
     },
     {
         id: 3,
         title: "The Twelve",
         subtitle: "Pilgrimage in Community \u2014 The Twelve Cypress Trees",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way Pilgrimage in Community Stand somewhere along the avenue of cypress trees."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Let their trunks form a quiet corridor around you."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "This is the place where the pilgrim remembers: we do not walk alone."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This avenue of twelve cypress trees has been intentionally planted as a living sign of community. Their straight alignment marks an entrance \u2014 not only to the land, but into a shared journey."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The number twelve has long carried the meaning of belonging and gathered life. Across generations and traditions, it has symbolised people drawn together \u2014 distinct, yet united."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Each cypress rises tall and slender, lifting the eye upward."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Evergreen and enduring, they speak of perseverance over time."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "No two are the same, yet they grow in harmony, rooted side by side, shaped by the same wind and weather."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This is a processional way."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "A reminder that meaningful journeys are rarely solitary \u2014 and that transformation often unfolds among others, not apart from them."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Faith is never lived alone."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Each pilgrim brings a different story, temperament, and strength \u2014 and each becomes part of something larger."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Some companions inspire us."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Some stretch us."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Some walk ahead, some beside, some behind."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "At times we carry another; at times we discover we are being quietly carried."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Here, among these twelve silent guardians, we glimpse the mystery of the Church: many members, one body; many journeys, one Way; many branches, one living Tree."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "You belong to a story far greater than yourself \u2014 a family of pilgrims spanning cultures, centuries, and generations."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cThose who are planted in the house of the LORD shall flourish.\u201d \u2014 Psalm 92:13",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cYou are\u2026 members of the household of God, built on the foundation of the apostles.\u201d \u2014 Ephesians 2:19\u201320",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cWe, being many, are one body in Christ.\u201d \u2014 Romans 12:5",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Pilgrimage Activity Walk slowly between the cypress trees."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Notice their differences and their alignment."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Choose one tree that draws your attention."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Stand beside it for a moment."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Ask yourself quietly: Who is walking this journey with me \u2014 often unseen, yet sustaining me?"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Let the tree remind you that no pilgrimage is walked alone \u2014 that you are held within a wider community, past and present, known and unknown."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "When you are ready, continue your walk."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "(If you are walking with someone, you may choose to offer a quiet word of encouragement.)"
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Just past the cypresses you will notice an emerging rose garden - look out for the sign marking your next station."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Start Pilgrimage"
-            }
-]
+        description: [
+            "Pilgrimage in Community Stand somewhere along the avenue of cypress trees.",
+            "Let their trunks form a quiet corridor around you.",
+            "This is the place where the pilgrim remembers: we do not walk alone.",
+            "This avenue of twelve cypress trees has been intentionally planted as a living sign of community. Their straight alignment marks an entrance \u2014 not only to the land, but into a shared journey.",
+            "The number twelve has long carried the meaning of belonging and gathered life. Across generations and traditions, it has symbolised people drawn together \u2014 distinct, yet united.",
+            "Each cypress rises tall and slender, lifting the eye upward.",
+            "Evergreen and enduring, they speak of perseverance over time.",
+            "No two are the same, yet they grow in harmony, rooted side by side, shaped by the same wind and weather.",
+            "This is a processional way.",
+            "A reminder that meaningful journeys are rarely solitary \u2014 and that transformation often unfolds among others, not apart from them."
+],
+        reflection: [
+            "Faith is never lived alone.",
+            "Each pilgrim brings a different story, temperament, and strength \u2014 and each becomes part of something larger.",
+            "Some companions inspire us.",
+            "Some stretch us.",
+            "Some walk ahead, some beside, some behind.",
+            "At times we carry another; at times we discover we are being quietly carried.",
+            "Here, among these twelve silent guardians, we glimpse the mystery of the Church: many members, one body; many journeys, one Way; many branches, one living Tree.",
+            "You belong to a story far greater than yourself \u2014 a family of pilgrims spanning cultures, centuries, and generations."
+],
+        scriptures: [
+            "\u201cThose who are planted in the house of the LORD shall flourish.\u201d \u2014 Psalm 92:13 \u201cYou are\u2026 members of the household of God, built on the foundation of the apostles.\u201d \u2014 Ephesians 2:19\u201320",
+            "\u201cWe, being many, are one body in Christ.\u201d \u2014 Romans 12:5"
+],
+        activity: [
+            "Walk slowly between the cypress trees.",
+            "Notice their differences and their alignment.",
+            "Choose one tree that draws your attention.",
+            "Stand beside it for a moment.",
+            "Ask yourself quietly: Who is walking this journey with me \u2014 often unseen, yet sustaining me?",
+            "Let the tree remind you that no pilgrimage is walked alone \u2014 that you are held within a wider community, past and present, known and unknown.",
+            "When you are ready, continue your walk.",
+            "(If you are walking with someone, you may choose to offer a quiet word of encouragement.)"
+],
+        whereToNext: "Just past the cypresses you will notice an emerging rose garden - look out for the sign marking your next station. Start Pilgrimage"
     },
     {
         id: 4,
         title: "The Gardens",
         subtitle: "The Cultivated & The Wild",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way The Cultivated & The Wild Find a place to sit \u2014 on the grass or on a bench facing the roses."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Here you stand between two gardens that speak in different voices, yet tell one shared story."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This part of the pilgrimage opens into two contrasting landscapes."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The Cultivated Garden \u2014 The Roses Carefully arranged beds and gentle paths."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Roses shaped by watering, pruning, and patient attention."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Many varieties, chosen and tended for fragrance and form."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Beauty that emerges through intention and care."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The Wild Garden \u2014 The Fynbos Beyond the roses lies a space returning to wildness \u2014 local fynbos, grasses, and seasonal blooms that appear and vanish in their time."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This is beauty without structure or design, growing freely because it is alive."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Together, these two gardens reveal how beauty takes shape \u2014 sometimes through careful tending, sometimes through untamed growth."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Within every pilgrim live two kinds of beauty."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "the part of life shaped slowly by care, discipline, and faithful attention."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "And there is the honest, vulnerable, and free, rising without control or certainty."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Scripture holds both together."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The rose speaks of love awakened and beauty prepared."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The wildflower reminds us that life is fragile, fleeting, and held by grace."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "These gardens are not in conflict."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "They belong together \u2014 in creation, in the Sanctuary, and in you."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Formation and freedom are companions on the way."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cI am the rose of Sharon\u2026\u201d"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Song of Songs 2:1 \u201cThe desert shall blossom like the rose.\u201d"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cThe grass withers, the flower fades\u2026\u201d"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cAs for man\u2026 he flourishes like a flower of the field.\u201d"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Pilgrimage Activity Walk slowly between the two gardens."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Then choose one place to pause \u2014 either among the roses or near the wild growth."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Ask yourself quietly: Where in my life is beauty being carefully formed \u2014 and where is beauty asking for freedom?"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Sit for a moment in stillness."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Let the gardens teach you harmony \u2014 the meeting of order and openness as you prepare to continue the way."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Continue on the driveway and just over the bridge, you will come to a dividing of the Way. A path heading up to your left, Oak Tree Way and a path to your right, River Walk. Take the path to the left."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Walk up the steps the far side of the perennial stream."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "At the top, turn right and follow the Oak Tree a quiet path flanked by more than eight century-old oaks \u2014 planted long ago by the French pilgrims who walked these very slopes. Continue until you come to a clear resting place under an Oak Tree and your next station - Le Chene."
-            }
-]
+        description: [
+            "The Cultivated & The Wild Find a place to sit \u2014 on the grass or on a bench facing the roses.",
+            "Here you stand between two gardens that speak in different voices, yet tell one shared story.",
+            "This part of the pilgrimage opens into two contrasting landscapes.",
+            "The Cultivated Garden \u2014 The Roses Carefully arranged beds and gentle paths.",
+            "Roses shaped by watering, pruning, and patient attention.",
+            "Many varieties, chosen and tended for fragrance and form.",
+            "Beauty that emerges through intention and care.",
+            "The Wild Garden \u2014 The Fynbos Beyond the roses lies a space returning to wildness \u2014 local fynbos, grasses, and seasonal blooms that appear and vanish in their time.",
+            "This is beauty without structure or design, growing freely because it is alive.",
+            "Together, these two gardens reveal how beauty takes shape \u2014 sometimes through careful tending, sometimes through untamed growth."
+],
+        reflection: [
+            "Within every pilgrim live two kinds of beauty.",
+            "the part of life shaped slowly by care, discipline, and faithful attention.",
+            "And there is the honest, vulnerable, and free, rising without control or certainty.",
+            "Scripture holds both together.",
+            "The rose speaks of love awakened and beauty prepared.",
+            "The wildflower reminds us that life is fragile, fleeting, and held by grace.",
+            "These gardens are not in conflict.",
+            "They belong together \u2014 in creation, in the Sanctuary, and in you.",
+            "Formation and freedom are companions on the way.",
+            "Song of Songs 2:1"
+],
+        scriptures: [
+            "\u201cI am the rose of Sharon\u2026\u201d",
+            "\u201cThe desert shall blossom like the rose.\u201d",
+            "\u201cThe grass withers, the flower fades\u2026\u201d",
+            "\u201cAs for man\u2026 he flourishes like a flower of the field.\u201d"
+],
+        activity: [
+            "Walk slowly between the two gardens.",
+            "Then choose one place to pause \u2014 either among the roses or near the wild growth.",
+            "Ask yourself quietly: Where in my life is beauty being carefully formed \u2014 and where is beauty asking for freedom?",
+            "Sit for a moment in stillness.",
+            "Let the gardens teach you harmony \u2014 the meeting of order and openness as you prepare to continue the way."
+],
+        whereToNext: "Continue on the driveway and just over the bridge, you will come to a dividing of the Way. A path heading up to your left, Oak Tree Way and a path to your right, River Walk. Take the path to the left. Walk up the steps the far side of the perennial stream. At the top, turn right and follow the Oak Tree a quiet path flanked by more than eight century-old oaks \u2014 planted long ago by the French pilgrims who walked these very slopes. Continue until you come to a clear resting place under an Oak Tree and your next station - Le Chene."
     },
     {
         id: 5,
         title: "Le Ch\u00eane",
         subtitle: "The Great Oak of Encounter",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way The Great Oak of Encounter Le Ch\u00eane \u2014 A Place of Shade, Stillness & Speaking Sit beneath the Great Oak."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Let its wide branches and deep shade slow your breathing."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "This is a place of rest \u2014 where the journey pauses, and stillness becomes the teacher."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This oak has stood through many seasons."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Its strength is not hurried, its growth unseen yet enduring."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Its roots run deep beneath the soil."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Its branches spread wide, offering shelter and shade."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Here, the land itself invites you to stop striving,"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "In Scripture, oaks are places of encounter and covenant."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Under the oak of Moreh, the Lord appeared to Abram."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Among the oaks of Mamre, Abram rested and built an altar."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Oaks became symbols of God\u2019s planting \u2014 strength formed over time, and presence rooted in faithfulness."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The oak is a thin place \u2014 where heaven leans close to earth, and weary pilgrims rediscover identity, calling, and courage."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Its lessons are quiet but profound: Deep roots \u2014 a life grounded beyond appearances Strength \u2014 standing firm when the wind rises Endurance \u2014 faithfulness through seasons and storms Shelter \u2014 becoming a place of rest for others Here, you are invited to stop striving, to let your inner tent rest, and to allow God\u2019s Presence to speak again."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "A line to carry with you: \u201cAs Abram rested among the oaks, heaven bent low.\u201d"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cAbram came to the oak of Moreh\u2026 and the LORD appeared to him.\u201d \u2014 Genesis 12:6\u20137",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cThey will be called oaks of righteousness, the planting of the LORD.\u201d \u2014 Isaiah 61:3",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Pilgrimage Activity Remain seated beneath the oak."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Be still for three minutes."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Let your breathing slow."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Ask yourself quietly: What do I need to lay down here in order to grow deeper roots?"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "When you are ready, continue the journey, carrying with you the quiet strength of this place."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Continue a little way further along the Oak Tree Way down the stream until the path heads back up the Driveway. Here you have a choice, as life so often presents us with. Either you can retrace your steps back along the Oak or walk back along the Driveway back to the Dividing Point."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Returning is part of the rhythm of pilgrimage."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "You come back to where you began\u2014 but with clearer eyes and a deeper heart."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "From the Dividing Point, begin the new way: follow the River Path to the next station within the Olive Grove."
-            }
-]
+        description: [
+            "The Great Oak of Encounter Le Ch\u00eane \u2014 A Place of Shade, Stillness & Speaking Sit beneath the Great Oak.",
+            "Let its wide branches and deep shade slow your breathing.",
+            "This is a place of rest \u2014 where the journey pauses, and stillness becomes the teacher.",
+            "This oak has stood through many seasons.",
+            "Its strength is not hurried, its growth unseen yet enduring.",
+            "Its roots run deep beneath the soil.",
+            "Its branches spread wide, offering shelter and shade.",
+            "Here, the land itself invites you to stop striving,"
+],
+        reflection: [
+            "In Scripture, oaks are places of encounter and covenant.",
+            "Under the oak of Moreh, the Lord appeared to Abram.",
+            "Among the oaks of Mamre, Abram rested and built an altar.",
+            "Oaks became symbols of God\u2019s planting \u2014 strength formed over time, and presence rooted in faithfulness.",
+            "The oak is a thin place \u2014 where heaven leans close to earth, and weary pilgrims rediscover identity, calling, and courage.",
+            "Its lessons are quiet but profound: Deep roots \u2014 a life grounded beyond appearances Strength \u2014 standing firm when the wind rises Endurance \u2014 faithfulness through seasons and storms Shelter \u2014 becoming a place of rest for others Here, you are invited to stop striving, to let your inner tent rest, and to allow God\u2019s Presence to speak again.",
+            "A line to carry with you:"
+],
+        scriptures: [
+            "\u201cAs Abram rested among the oaks, heaven bent low.\u201d",
+            "\u201cAbram came to the oak of Moreh\u2026 and the LORD appeared to him.\u201d \u2014 Genesis 12:6\u20137 \u201cThey will be called oaks of righteousness, the planting of the LORD.\u201d \u2014 Isaiah 61:3"
+],
+        activity: [
+            "Remain seated beneath the oak.",
+            "Be still for three minutes.",
+            "Let your breathing slow.",
+            "Ask yourself quietly: What do I need to lay down here in order to grow deeper roots?",
+            "When you are ready, continue the journey, carrying with you the quiet strength of this place."
+],
+        whereToNext: "Continue a little way further along the Oak Tree Way down the stream until the path heads back up the Driveway. Here you have a choice, as life so often presents us with. Either you can retrace your steps back along the Oak or walk back along the Driveway back to the Dividing Point. Returning is part of the rhythm of pilgrimage. You come back to where you began\u2014 but with clearer eyes and a deeper heart. From the Dividing Point, begin the new way: follow the River Path to the next station within the Olive Grove."
     },
     {
         id: 6,
         title: "The Olives",
         subtitle: "A Place of Pressing & Peace",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way Healing, Endurance & New Beginnings Walk slowly between the two rows of olive trees."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Take a seat on the bench at the end of the path."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Let the quiet rhythm of the small weir meet the stillness of the grove."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This part of the pilgrimage unfolds along a gentle lane lined with two generations of olive trees."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "One row is mature \u2014 rooted, weathered, shaped by time."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The other is young \u2014 tender, hopeful, still becoming."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Together they form a living picture of in-between time: what has endured standing beside what is only beginning."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Strength beside vulnerability."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Formation beside promise."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "One day this will grow into a full olive grove."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "For now, its beauty lies in its becoming."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "At the end of the path, the bench beneath the olives overlooks the flowing weir \u2014 a place for listening, breathing, and rest."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "In Scripture, the olive carries deep meaning."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Olive oil heals wounds."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "It anoints kings."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "It fuels light in the sanctuary."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Its branch announces peace after the flood."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "And the tree itself endures for centuries."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The olive teaches that what blesses others is often born through pressure and patience."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The press does not destroy the fruit \u2014 it releases what is within."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Here the pilgrim is reminded: Growth unfolds slowly Healing comes in stages Deep roots are formed through waiting New beginnings are fragile yet full of promise The older trees speak of faith that has endured storms."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The younger trees speak of hope just beginning to take root."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Together they tell one story \u2014 a life shaped by God in both what is established and what is still emerging."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cI am like an olive tree flourishing in the house of God.\u201d \u2014 Psalm 52:8",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cYou anoint my head with oil.\u201d \u2014 Psalm 23:5",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cThe dove returned\u2026 with a freshly plucked olive leaf.\u201d \u2014 Genesis 8:11",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Sit quietly on the bench beneath the olive trees."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Listen to the sound of the water."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Where in my life is God gently turning pressure into healing, endurance, or new beginnings?"
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Remain still for a few moments."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Let this place become a small Gethsemane \u2014 not of striving, but of renewal."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "When you are ready, continue the way."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "The bridge invites you across the river for another short detour \u2014 a steep climb up the far bank of the stream, out of the sheltering trees and into open sky toward the next station - Simonsberg Vista. Up"
-            }
-]
+        description: [
+            "Healing, Endurance & New Beginnings Walk slowly between the two rows of olive trees.",
+            "Take a seat on the bench at the end of the path.",
+            "Let the quiet rhythm of the small weir meet the stillness of the grove.",
+            "This part of the pilgrimage unfolds along a gentle lane lined with two generations of olive trees.",
+            "One row is mature \u2014 rooted, weathered, shaped by time.",
+            "The other is young \u2014 tender, hopeful, still becoming.",
+            "Together they form a living picture of in-between time: what has endured standing beside what is only beginning.",
+            "Strength beside vulnerability.",
+            "Formation beside promise.",
+            "One day this will grow into a full olive grove.",
+            "For now, its beauty lies in its becoming.",
+            "At the end of the path, the bench beneath the olives overlooks the flowing weir \u2014 a place for listening, breathing, and rest."
+],
+        reflection: [
+            "In Scripture, the olive carries deep meaning.",
+            "Olive oil heals wounds.",
+            "It anoints kings.",
+            "It fuels light in the sanctuary.",
+            "Its branch announces peace after the flood.",
+            "And the tree itself endures for centuries.",
+            "The olive teaches that what blesses others is often born through pressure and patience.",
+            "The press does not destroy the fruit \u2014 it releases what is within.",
+            "Here the pilgrim is reminded: Growth unfolds slowly Healing comes in stages Deep roots are formed through waiting New beginnings are fragile yet full of promise The older trees speak of faith that has endured storms.",
+            "The younger trees speak of hope just beginning to take root.",
+            "Together they tell one story \u2014 a life shaped by God in both what is established and what is still emerging."
+],
+        scriptures: [
+            "\u201cI am like an olive tree flourishing in the house of God.\u201d \u2014 Psalm 52:8 \u201cYou anoint my head with oil.\u201d \u2014 Psalm 23:5 \u201cThe dove returned\u2026 with a freshly plucked olive leaf.\u201d \u2014 Genesis 8:11"
+],
+        activity: [
+            "Sit quietly on the bench beneath the olive trees.",
+            "Listen to the sound of the water.",
+            "Where in my life is God gently turning pressure into healing, endurance, or new beginnings?",
+            "Remain still for a few moments.",
+            "Let this place become a small Gethsemane \u2014 not of striving, but of renewal.",
+            "When you are ready, continue the way."
+],
+        whereToNext: "The bridge invites you across the river for another short detour \u2014 a steep climb up the far bank of the stream, out of the sheltering trees and into open sky toward the next station - Simonsberg Vista. Up"
     },
     {
         id: 7,
         title: "Simonsberg Vista",
         subtitle: "The Bridge & Beyond",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way Discipline of Direction Stand anywhere along the open ridge and look toward the west."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Before you rises Simonsberg \u2014 one of the great mountains of the Cape, commanding the valley with rare prominence."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Let the view take your breath for a moment."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Simonsberg is iconic: steep, sculpted, enduring."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "It has watched over this valley for centuries, a landmark of beauty, strength, and scale."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "From here you see earth rising toward sky \u2014 space opening wide in every direction."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This station is a deliberate pause, a detour from the main path given for vision, perspective, and wonder."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Yet this is not the mountain you are called to climb today."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Throughout Scripture, pilgrims encounter mountains they admire but do not ascend."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Some mountains are noble and beautiful \u2014 yet not appointed."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "This station teaches discernment."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Not everything that inspires you is meant to be pursued."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Not every opportunity is your calling."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Even good things can become distractions when they draw you away from the path given to you."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Simonsberg reminds the pilgrim that: Beauty is abundant Wonder is not the same as purpose Direction requires restraint as well as desire It is right to behold this mountain, to honour its grandeur, and to let gratitude rise \u2014 and then to turn back, steady and clear, to the way set before you."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cLet your eyes look straight ahead; fix your gaze directly before you.\u201d \u2014 Proverbs 4:25",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cSet your minds on things above.\u201d \u2014 Colossians 3:2",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cI press on toward the goal.\u201d \u2014 Philippians 3:14",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Face the mountain in silence."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "What am I being invited to admire with gratitude \u2014 but release with trust \u2014 so that I may walk the path given to me?"
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Take one last long look at Simonsberg."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Then turn and rejoin the pilgrimage way, carrying renewed intention and quiet resolve."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Return down the path the way you came and cross the bridge again."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Continue Left along the path on the other side of the stream along the main pilgrim route as the journey turns once more toward your mountain."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "You will pass a hot tub, sauna, and even a sparkling swimming pool - keep walking, don't lose focus, they will be enjoyed at another time! A little further you will enter an area with young fruit trees and next to the shaded ridge an bench next to an old protea tree - here you will find your next station."
-            }
-]
+        description: [
+            "Discipline of Direction Stand anywhere along the open ridge and look toward the west.",
+            "Before you rises Simonsberg \u2014 one of the great mountains of the Cape, commanding the valley with rare prominence.",
+            "Let the view take your breath for a moment.",
+            "Simonsberg is iconic: steep, sculpted, enduring.",
+            "It has watched over this valley for centuries, a landmark of beauty, strength, and scale.",
+            "From here you see earth rising toward sky \u2014 space opening wide in every direction.",
+            "This station is a deliberate pause, a detour from the main path given for vision, perspective, and wonder.",
+            "Yet this is not the mountain you are called to climb today."
+],
+        reflection: [
+            "Throughout Scripture, pilgrims encounter mountains they admire but do not ascend.",
+            "Some mountains are noble and beautiful \u2014 yet not appointed.",
+            "This station teaches discernment.",
+            "Not everything that inspires you is meant to be pursued.",
+            "Not every opportunity is your calling.",
+            "Even good things can become distractions when they draw you away from the path given to you.",
+            "Simonsberg reminds the pilgrim that: Beauty is abundant Wonder is not the same as purpose Direction requires restraint as well as desire It is right to behold this mountain, to honour its grandeur, and to let gratitude rise \u2014 and then to turn back, steady and clear, to the way set before you."
+],
+        scriptures: [
+            "\u201cLet your eyes look straight ahead; fix your gaze directly before you.\u201d \u2014 Proverbs 4:25",
+            "\u201cSet your minds on things above.\u201d \u2014 Colossians 3:2 \u201cI press on toward the goal.\u201d \u2014 Philippians 3:14"
+],
+        activity: [
+            "Face the mountain in silence.",
+            "What am I being invited to admire with gratitude \u2014 but release with trust \u2014 so that I may walk the path given to me?",
+            "Take one last long look at Simonsberg.",
+            "Then turn and rejoin the pilgrimage way, carrying renewed intention and quiet resolve."
+],
+        whereToNext: "Return down the path the way you came and cross the bridge again. Continue Left along the path on the other side of the stream along the main pilgrim route as the journey turns once more toward your mountain. You will pass a hot tub, sauna, and even a sparkling swimming pool - keep walking, don't lose focus, they will be enjoyed at another time! A little further you will enter an area with young fruit trees and next to the shaded ridge an bench next to an old protea tree - here you will find your next station."
     },
     {
         id: 8,
         title: "The Orchard and The Old Waboom",
         subtitle: "Fruitfulness & Indigenous Resilience",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way Station 8 - The Orchard and the Old Waboom Fruitfulness, Design & Resilient Growth Take a seat on the grass overlooking the stream, or rest on the bench beside the old waboom tree."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "You are standing in the heart of our young orchard: a place still becoming what it is meant to be."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "You are surrounded by trees at every stage of life: Young orchard trees \u2014 oranges, lemons, limes, grapefruits, peaches, pears, plums \u2014 carefully planted, tender, full of promise."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Their fruit is still hidden, waiting for the right season."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Old resident trees, including the striking waboom (Protea nitida), stand among the new growth \u2014 witnesses of storms, summers, and survival."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This mixture of youth and age, newness and endurance, creates a living parable about growth, purpose, and resilience."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Fruitfulness According to Design The orchard reminds us that everything God plants has purpose: Each tree produces its own fruit."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Only diverse expressions of God-given design."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "So it is with us."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The Spirit grows different fruit in each life \u2014 love, joy, peace, patience, kindness, goodness, faithfulness, gentleness, self-control \u2014 and what God is forming in you is not meant to look like anyone else."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cBy their fruit you will know them.\u201d \u2014 Matthew 7:20",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cThe fruit of the Spirit is\u2026\u201d \u2014 Galatians 5:22\u201323",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Fruitfulness is slow, often invisible at first \u2014 but always intentional."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The Old Waboom \u2014 A Story of Resilience The waboom, one of the few proteas that becomes a tree, once supplied wood tough enough for wagon wheels."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Look closely and you\u2019ll see scars of old fires \u2014 marks of survival, not defeat."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "It teaches the pilgrim: Not all fruit is edible \u2014 some is beauty for others."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Not all growth is seen \u2014 some happens deep within."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Not all gifts look the same \u2014 yet all matter."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Fire does not end calling \u2014 it strengthens roots."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Placed beside the orchard, the waboom becomes a teacher of resilient, time-tested growth."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Fruitfulness & Resilience Together Side by side, these two landscapes speak: The orchard calls you toward intentional fruitfulness."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The waboom calls you toward resilient endurance."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Together they reveal a whole life \u2014 one shaped by both cultivation and perseverance."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Pilgrimage Activity Sit quietly on the bench beside the waboom."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Am I more like a young orchard tree growing slowly, or an older tree marked by struggle yet still flourishing?"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "What fruit is God growing in me right now \u2014 even if unseen?"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Which scars in my life have become part of my strength?"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Where is He calling me to cultivate with patience?"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Where is He calling me to endure with courage?"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Let the orchard and the ancient waboom interpret your journey back to you."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Throughout Scripture, pilgrims encounter mountains they admire but do not ascend."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Some mountains are noble and beautiful \u2014 yet not appointed."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "This station teaches discernment."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Not everything that inspires you is meant to be pursued."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Not every opportunity is your calling."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Even good things can become distractions when they draw you away from the path given to you."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Simonsberg reminds the pilgrim that: Beauty is abundant Wonder is not the same as purpose Direction requires restraint as well as desire It is right to behold this mountain, to honour its grandeur, and to let gratitude rise \u2014 and then to turn back, steady and clear, to the way set before you."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cLet your eyes look straight ahead; fix your gaze directly before you.\u201d \u2014 Proverbs 4:25",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cSet your minds on things above.\u201d \u2014 Colossians 3:2",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cI press on toward the goal.\u201d \u2014 Philippians 3:14",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Face the mountain in silence."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "What am I being invited to admire with gratitude \u2014 but release with trust \u2014 so that I may walk the path given to me?"
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Take one last long look at Simonsberg."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Then turn and rejoin the pilgrimage way, carrying renewed intention and quiet resolve."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Continue up the path beyond the orchard, past the Chicken Coop to the path signposted Lower Waterfall Loop."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "This beautiful shade path will take you next to the stream to your next station at a rock overlooking the stream beneath."
-            }
-]
+        description: [
+            "Fruitfulness, Design & Resilient Growth Take a seat on the grass overlooking the stream, or rest on the bench beside the old waboom tree.",
+            "You are standing in the heart of our young orchard: a place still becoming what it is meant to be.",
+            "You are surrounded by trees at every stage of life: Young orchard trees \u2014 oranges, lemons, limes, grapefruits, peaches, pears, plums \u2014",
+            "carefully planted, tender, full of promise.",
+            "Their fruit is still hidden, waiting for the right season.",
+            "Old resident trees, including the striking waboom (Protea nitida), stand among the new growth \u2014 witnesses of storms, summers, and survival.",
+            "This mixture of youth and age, newness and endurance, creates a living parable about growth, purpose, and resilience."
+],
+        reflection: [
+            "Fruitfulness According to Design The orchard reminds us that everything God plants has purpose: Each tree produces its own fruit.",
+            "Only diverse expressions of God-given design.",
+            "So it is with us.",
+            "The Spirit grows different fruit in each life \u2014 love, joy, peace, patience, kindness, goodness, faithfulness, gentleness, self-control \u2014",
+            "and what God is forming in you is not meant to look like anyone else.",
+            "Fruitfulness is slow, often invisible at first \u2014 but always intentional.",
+            "The Old Waboom \u2014 A Story of Resilience The waboom, one of the few proteas that becomes a tree, once supplied wood tough enough for wagon wheels.",
+            "Look closely and you\u2019ll see scars of old fires \u2014 marks of survival, not defeat.",
+            "It teaches the pilgrim: Not all fruit is edible \u2014 some is beauty for others.",
+            "Not all growth is seen \u2014 some happens deep within.",
+            "Not all gifts look the same \u2014 yet all matter.",
+            "Fire does not end calling \u2014 it strengthens roots.",
+            "Placed beside the orchard, the waboom becomes a teacher of resilient, time-tested growth.",
+            "Fruitfulness & Resilience Together Side by side, these two landscapes speak: The orchard calls you toward intentional fruitfulness.",
+            "The waboom calls you toward resilient endurance.",
+            "Together they reveal a whole life \u2014 one shaped by both cultivation and perseverance."
+],
+        scriptures: [
+            "\u201cBy their fruit you will know them.\u201d \u2014 Matthew 7:20 \u201cThe fruit of the Spirit is\u2026\u201d \u2014 Galatians 5:22\u201323 \u201cLet your eyes look straight ahead; fix your gaze directly before you.\u201d \u2014 Proverbs 4:25",
+            "\u201cSet your minds on things above.\u201d \u2014 Colossians 3:2 \u201cI press on toward the goal.\u201d \u2014 Philippians 3:14"
+],
+        activity: [
+            "Sit quietly on the bench beside the waboom.",
+            "Am I more like a young orchard tree growing slowly, or an older tree marked by struggle yet still flourishing?",
+            "What fruit is God growing in me right now \u2014 even if unseen?",
+            "Which scars in my life have become part of my strength?",
+            "Where is He calling me to cultivate with patience?",
+            "Where is He calling me to endure with courage?",
+            "Let the orchard and the ancient waboom interpret your journey back to you.",
+            "Throughout Scripture, pilgrims encounter mountains they admire but do not ascend.",
+            "Some mountains are noble and beautiful \u2014 yet not appointed.",
+            "This station teaches discernment.",
+            "Not everything that inspires you is meant to be pursued.",
+            "Not every opportunity is your calling.",
+            "Even good things can become distractions when they draw you away from the path given to you.",
+            "Simonsberg reminds the pilgrim that: Beauty is abundant Wonder is not the same as purpose Direction requires restraint as well as desire It is right to behold this mountain, to honour its grandeur, and to let gratitude rise \u2014 and then to turn back, steady and clear, to the way set before you.",
+            "Face the mountain in silence.",
+            "What am I being invited to admire with gratitude \u2014 but release with trust \u2014 so that I may walk the path given to me?",
+            "Take one last long look at Simonsberg.",
+            "Then turn and rejoin the pilgrimage way, carrying renewed intention and quiet resolve."
+],
+        whereToNext: "Continue up the path beyond the orchard, past the Chicken Coop to the path signposted Lower Waterfall Loop. This beautiful shade path will take you next to the stream to your next station at a rock overlooking the stream beneath."
     },
     {
         id: 9,
         title: "The Gulley",
         subtitle: "Passing Through",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way Where Water Finds Its Way Sit on the natural stones and look down into the narrow stone passage where the stream threads its way through the rock."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Feel the quiet persistence of the water."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This gully is a natural channel carved over centuries."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Here the stream presses through hard rock in small cascades and clear pools."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The rock resists."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The water persists."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Slowly and patiently, the soft shapes the hard \u2014 not by force, but by faithfulness."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Every curve in the stone has been formed by years of movement."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Every cascade is water\u2019s quiet victory over resistance."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This place holds a meeting of two ancient forces: the firmness of rock and the persistence of water."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "God\u2019s work in the human heart is often like this stream."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "His Spirit moves without rushing, finding a way where none seemed possible, shaping what once felt unchangeable."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Scripture speaks of this gentle power \u2014 a grace that does not break through, but flows through, patiently forming new channels of life."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The gully teaches the pilgrim: Hardness is not hopeless Resistance can be softened Transformation comes through grace, not force God rarely overwhelms the heart."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "He waits, moves, and forms \u2014 until life finds a way."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cThe water I give will become a spring of life.\u201d \u2014 John 4:14",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cMy word\u2026 will accomplish what I desire.\u201d \u2014 Isaiah 55:10\u201311",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cHe leads me beside still waters; He restores my soul.\u201d \u2014 Psalm 23",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Watch the movement of the water."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Ask yourself quietly: Where in my life is gentle, persistent grace carving a new way forward?"
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Remain still for a moment."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Let the sound of the stream remind you: Grace always finds its way."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "When you are ready, continue the journey."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "on the River path and then descend into the river bed to your next station. As ou cross over a pebble bridge you will find the next station."
-            }
-]
+        description: [
+            "Where Water Finds Its Way Sit on the natural stones and look down into the narrow stone passage where the stream threads its way through the rock.",
+            "Feel the quiet persistence of the water.",
+            "This gully is a natural channel carved over centuries.",
+            "Here the stream presses through hard rock in small cascades and clear pools.",
+            "The rock resists.",
+            "The water persists.",
+            "Slowly and patiently, the soft shapes the hard \u2014 not by force, but by faithfulness.",
+            "Every curve in the stone has been formed by years of movement.",
+            "Every cascade is water\u2019s quiet victory over resistance.",
+            "This place holds a meeting of two ancient forces: the firmness of rock and the persistence of water."
+],
+        reflection: [
+            "God\u2019s work in the human heart is often like this stream.",
+            "His Spirit moves without rushing, finding a way where none seemed possible, shaping what once felt unchangeable.",
+            "Scripture speaks of this gentle power \u2014 a grace that does not break through, but flows through, patiently forming new channels of life.",
+            "The gully teaches the pilgrim: Hardness is not hopeless Resistance can be softened Transformation comes through grace, not force God rarely overwhelms the heart.",
+            "He waits, moves, and forms \u2014 until life finds a way."
+],
+        scriptures: [
+            "\u201cThe water I give will become a spring of life.\u201d \u2014 John 4:14 \u201cMy word\u2026 will accomplish what I desire.\u201d \u2014 Isaiah 55:10\u201311 \u201cHe leads me beside still waters; He restores my soul.\u201d \u2014 Psalm 23"
+],
+        activity: [
+            "Watch the movement of the water.",
+            "Ask yourself quietly: Where in my life is gentle, persistent grace carving a new way forward?",
+            "Remain still for a moment.",
+            "Let the sound of the stream remind you: Grace always finds its way.",
+            "When you are ready, continue the journey."
+],
+        whereToNext: "on the River path and then descend into the river bed to your next station. As ou cross over a pebble bridge you will find the next station."
     },
     {
         id: 10,
         title: "Get Your Feet Wet",
         subtitle: "Sensory Presence",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way Presence, Touch & the Water of Life Take a seat on one of the flat stones surrounding the pool."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Remove your shoes and gently place your feet in the water."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "You are standing in the bed of the Varkblaardrif \u2014 named for the varkblaar (arum lily) that grows along this perennial stream."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "This water begins high in the Wemmershoek Mountains and brings coolness and life as it moves down the valley."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "At your feet is a small, living pool \u2014 home to tadpoles, toads, and a quiet hidden world."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "This is an invitation to stop, to feel, and to let living water touch body and spirit."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This is one of the simplest stations on the pilgrimage: stone, water, movement."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Here the journey becomes physical again \u2014 temperature, touch, sensation, breath."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The flowing water draws you out of thought and into the present moment."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "It slows you down, grounding you in what is real and given."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "In Scripture, water is never only water."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "It cleanses and renews."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "It heals and restores."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "It signals mercy and new beginnings."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Jesus offers living water to the thirsty."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "He kneels to wash the feet of His disciples."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The river of life flows from God\u2019s presence, bringing healing wherever it goes."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Here, this cool stream becomes a quiet sign of grace \u2014 a reminder that God refreshes weary pilgrims not through force, but through gentle, faithful presence."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Let the water become a prayer \u2014 simple, embodied, and honest."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cWhoever drinks the water I give will never thirst.\u201d \u2014 John 4:14",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cHe poured water into a basin and began to wash the disciples\u2019 feet.\u201d \u2014 John 13:5",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cThe river of the water of life\u2026 flowing from the throne of God.\u201d \u2014 Revelation 22:1",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Pligrimage Action Keep your feet in the water for a moment."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Notice its coolness and movement."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Ask yourself quietly: What do I need to release here so that I may continue the journey refreshed?"
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "When you are ready, dry your feet, put on your shoes, and continue the way \u2014 carrying with you the gift of renewal."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Continue upstream up the steps out of the riverbed and keep left following the signs towards the Waterfall Pool where you will encounter the next station."
-            }
-]
+        description: [
+            "Presence, Touch & the Water of Life Take a seat on one of the flat stones surrounding the pool.",
+            "Remove your shoes and gently place your feet in the water.",
+            "You are standing in the bed of the Varkblaardrif \u2014 named for the varkblaar (arum lily) that grows along this perennial stream.",
+            "This water begins high in the Wemmershoek Mountains and brings coolness and life as it moves down the valley.",
+            "At your feet is a small, living pool \u2014 home to tadpoles, toads, and a quiet hidden world.",
+            "This is an invitation to stop, to feel, and to let living water touch body and spirit.",
+            "This is one of the simplest stations on the pilgrimage: stone, water, movement.",
+            "Here the journey becomes physical again \u2014 temperature, touch, sensation, breath.",
+            "The flowing water draws you out of thought and into the present moment.",
+            "It slows you down, grounding you in what is real and given."
+],
+        reflection: [
+            "In Scripture, water is never only water.",
+            "It cleanses and renews.",
+            "It heals and restores.",
+            "It signals mercy and new beginnings.",
+            "Jesus offers living water to the thirsty.",
+            "He kneels to wash the feet of His disciples.",
+            "The river of life flows from God\u2019s presence, bringing healing wherever it goes.",
+            "Here, this cool stream becomes a quiet sign of grace \u2014 a reminder that God refreshes weary pilgrims not through force, but through gentle, faithful presence.",
+            "Let the water become a prayer \u2014 simple, embodied, and honest.",
+            "Pligrimage Action Keep your feet in the water for a moment.",
+            "Notice its coolness and movement.",
+            "Ask yourself quietly: What do I need to release here so that I may continue the journey refreshed?",
+            "When you are ready, dry your feet, put on your shoes, and continue the way \u2014 carrying with you the gift of renewal."
+],
+        scriptures: [
+            "\u201cWhoever drinks the water I give will never thirst.\u201d \u2014 John 4:14 \u201cHe poured water into a basin and began to wash the disciples\u2019 feet.\u201d \u2014 John 13:5",
+            "\u201cThe river of the water of life\u2026 flowing from the throne of God.\u201d \u2014 Revelation 22:1"
+],
+        activity: [],
+        whereToNext: "Continue upstream up the steps out of the riverbed and keep left following the signs towards the Waterfall Pool where you will encounter the next station."
     },
     {
         id: 11,
         title: "The Waterfall Pool",
         subtitle: "Living Waters & Refreshment",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way Immersion, Renewal & the Courage to Plunge Find a safe place to stand or sit beside the pool."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "You are now in one of the most hidden and sacred corners of the valley \u2014 where a stairway of waterfalls descends into a clear mountain pool, held by ancient rock, moss, and quiet trees."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "In winter the water runs deep and strong."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "In summer it softens and settles."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "In every season, this place remains a sanctuary of coolness and invitation."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Here the pilgrim is invited to move beyond touching the water \u2014 and, if ready, to enter fully."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This is a natural baptismal place: falling water, smooth stone, crisp mountain air."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "A pool just deep enough to stand, breathe, and be immersed."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Here the pilgrimage becomes unmistakably physical."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The body joins the journey."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The water itself becomes teacher and companion."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Scripture is filled with sacred pools."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Waters where the wounded were healed."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Pools where sight was restored."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Rivers where callings were sealed and journeys began."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Again and again, water becomes the place where God prepares people for what comes next."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "To enter this pool is an act of trust."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "To stand beneath the falling water is a physical prayer \u2014 a releasing of dust, fear, hesitation, and fatigue."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "It is a small dying and a small rising."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Here renewal is not imagined \u2014 it is felt."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cRise, take up your mat and walk.\u201d \u2014 John 5:8",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cGo, wash\u2026 and come back seeing.\u201d \u2014 John 9:7",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cJesus was baptised\u2026 and immediately went up from the water.\u201d \u2014 Matthew 3:16",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "If it feels safe and right, enter the water."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Move toward the falling stream."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Stand quietly beneath it."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "What am I being invited to release here so that I may rise renewed for the journey ahead?"
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Remain for a moment."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Then step out slowly, grounded and refreshed, ready to continue the ascent."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Dry off in the sun-warm rocks, then continue back to the junction where a sign points to the Fynbos Trail and Upper Waterfall Loop."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "the landscape shifts \u2014 the air is drier, the colours sharper, the scents richer."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Be sure to take the left fork toward Sunset Deck and The Ascent."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "A little further up, a small path to the left reveals the next station: Fynbos Rock."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "as the final ascent begins."
-            }
-]
+        description: [
+            "Immersion, Renewal & the Courage to Plunge Find a safe place to stand or sit beside the pool.",
+            "You are now in one of the most hidden and sacred corners of the valley \u2014 where a stairway of waterfalls descends into a clear mountain pool, held by ancient rock, moss, and quiet trees.",
+            "In winter the water runs deep and strong.",
+            "In summer it softens and settles.",
+            "In every season, this place remains a sanctuary of coolness and invitation.",
+            "Here the pilgrim is invited to move beyond touching the water \u2014 and, if ready, to enter fully.",
+            "This is a natural baptismal place: falling water, smooth stone, crisp mountain air.",
+            "A pool just deep enough to stand, breathe, and be immersed.",
+            "Here the pilgrimage becomes unmistakably physical.",
+            "The body joins the journey.",
+            "The water itself becomes teacher and companion."
+],
+        reflection: [
+            "Scripture is filled with sacred pools.",
+            "Waters where the wounded were healed.",
+            "Pools where sight was restored.",
+            "Rivers where callings were sealed and journeys began.",
+            "Again and again, water becomes the place where God prepares people for what comes next.",
+            "To enter this pool is an act of trust.",
+            "To stand beneath the falling water is a physical prayer \u2014 a releasing of dust, fear, hesitation, and fatigue.",
+            "It is a small dying and a small rising.",
+            "Here renewal is not imagined \u2014 it is felt."
+],
+        scriptures: [
+            "\u201cRise, take up your mat and walk.\u201d \u2014 John 5:8 \u201cGo, wash\u2026 and come back seeing.\u201d \u2014 John 9:7 \u201cJesus was baptised\u2026 and immediately went up from the water.\u201d \u2014 Matthew 3:16"
+],
+        activity: [
+            "If it feels safe and right, enter the water.",
+            "Move toward the falling stream.",
+            "Stand quietly beneath it.",
+            "What am I being invited to release here so that I may rise renewed for the journey ahead?",
+            "Remain for a moment.",
+            "Then step out slowly, grounded and refreshed, ready to continue the ascent."
+],
+        whereToNext: "Dry off in the sun-warm rocks, then continue back to the junction where a sign points to the Fynbos Trail and Upper Waterfall Loop. the landscape shifts \u2014 the air is drier, the colours sharper, the scents richer. Be sure to take the left fork toward Sunset Deck and The Ascent. A little further up, a small path to the left reveals the next station: Fynbos Rock. as the final ascent begins."
     },
     {
         id: 12,
         title: "Fynbos Rock",
         subtitle: "God's Garden",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way Seeing With the Eternal Eye Take a seat on the rock."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "You are surrounded by one of the most remarkable floral regions on earth \u2014 a landscape where beauty often hides in plain sight, waiting for those who slow down enough to see."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This is true fynbos country \u2014 a living tapestry of intricate diversity."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "At first glance the shrubs can seem dry or similar, but look closer and you begin to notice: proteas with hidden nectar tiny ericas the size of pinheads restios moving like fine threads in the wind buchu releasing citrus and spice daisies, bulbs, grasses, succulents insects, sunbirds, lizards \u2014 each playing a part Fynbos is famously species-rich. In a surprisingly small patch of ground, dozens of different plants may be growing side by side."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This landscape is wild, yet ordered; small, yet overflowing \u2014 a world of detail that rewards attention."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Fynbos trains the pilgrim to see differently."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Here, spirituality becomes attention."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Holiness becomes awareness."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Revelation begins in the small."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Shift your gaze from the wide valley to the world at your feet."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Notice a single detail: a flower\u2019s shape, the movement of an insect, a bird searching for nectar, wind passing through restios, a lizard warming itself on stone."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "What seems ordinary becomes intricate."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "What seems dry becomes alive."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "What seems small becomes an opening into wonder."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "This is one of the Spirit\u2019s quiet disciplines: teaching us to notice what we usually miss, and to see with a deeper, eternal eye."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Stay seated and choose one small detail to observe closely."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "What is God inviting me to notice today that I have been overlooking?"
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Remain for a moment longer than feels necessary."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Let attention deepen into gratitude \u2014 and let gratitude become sight."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Continue up the path toward Sunset Deck - its not very far and you will find a welcome a\"mazing\" surprise."
-            }
-]
+        description: [
+            "Seeing With the Eternal Eye Take a seat on the rock.",
+            "You are surrounded by one of the most remarkable floral regions on earth \u2014 a landscape where beauty often hides in plain sight, waiting for those who slow down enough to see.",
+            "This is true fynbos country \u2014 a living tapestry of intricate diversity.",
+            "At first glance the shrubs can seem dry or similar, but look closer and you begin to notice: proteas with hidden nectar tiny ericas the size of pinheads restios moving like fine threads in the wind buchu releasing citrus and spice daisies, bulbs, grasses, succulents insects, sunbirds, lizards \u2014 each playing a part Fynbos is famously species-rich. In a surprisingly small patch of ground, dozens of different plants may be growing side by side.",
+            "This landscape is wild, yet ordered; small, yet overflowing \u2014 a world of detail that rewards attention."
+],
+        reflection: [
+            "Fynbos trains the pilgrim to see differently.",
+            "Here, spirituality becomes attention.",
+            "Holiness becomes awareness.",
+            "Revelation begins in the small.",
+            "Shift your gaze from the wide valley to the world at your feet.",
+            "Notice a single detail: a flower\u2019s shape, the movement of an insect, a bird searching for nectar, wind passing through restios, a lizard warming itself on stone.",
+            "What seems ordinary becomes intricate.",
+            "What seems dry becomes alive.",
+            "What seems small becomes an opening into wonder.",
+            "This is one of the Spirit\u2019s quiet disciplines: teaching us to notice what we usually miss, and to see with a deeper, eternal eye."
+],
+        scriptures: [],
+        activity: [
+            "Stay seated and choose one small detail to observe closely.",
+            "What is God inviting me to notice today that I have been overlooking?",
+            "Remain for a moment longer than feels necessary.",
+            "Let attention deepen into gratitude \u2014 and let gratitude become sight."
+],
+        whereToNext: "Continue up the path toward Sunset Deck - its not very far and you will find a welcome a\"mazing\" surprise."
     },
     {
         id: 13,
         title: "The Labyrinth",
         subtitle: "Seeking Inner Wholeness",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way The Journey to Wholeness Stand at the entrance of the labyrinth."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "This simple, early form is only the beginning of what it may one day become \u2014 yet even now, its ancient gift remains the same: a path toward the centre, a path toward wholeness."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The labyrinth reflects the heart of Le Sanctuaire \u2014 the joining of what has been divided, the meeting of heaven and earth."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "From the first steps of this pilgrimage, you have walked through signs of union: light with darkness, water with land, wildness with order, many becoming one."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The labyrinth is the pilgrim\u2019s mirror \u2014 a visible expression of the inner life longing to be gathered into harmony."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "There are no dead ends here."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Only one winding path \u2014 and then outward again, transformed."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Walking a labyrinth teaches trust."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "You move forward, sometimes feeling far from the centre, even though the centre has never moved."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "This is the shape of the spiritual life: not a straight line, but a faithful following."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Wholeness does not come through shortcuts."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "It comes through presence, patience, and a willingness to be guided step by step."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Here, the scattered pieces of life are gently drawn back toward their true centre."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Enter the labyrinth slowly."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Let your steps become quiet and deliberate."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "As you walk, hold this question: What in me is being gathered toward wholeness and deeper union?"
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "When you reach the centre, stop."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Let the quiet hold you."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "When you are ready, follow the path back out \u2014 carrying with you what has been gently restored."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "Your shortest connection. Walk a few steps to the deck to enjoy a beautiful view of the magnificant Franschhoek valley... we are bias but we think it is one of the best in the valley!"
-            }
-]
+        description: [
+            "The Journey to Wholeness Stand at the entrance of the labyrinth.",
+            "This simple, early form is only the beginning of what it may one day become \u2014 yet even now, its ancient gift remains the same: a path toward the centre, a path toward wholeness.",
+            "The labyrinth reflects the heart of Le Sanctuaire \u2014 the joining of what has been divided, the meeting of heaven and earth.",
+            "From the first steps of this pilgrimage, you have walked through signs of union: light with darkness, water with land, wildness with order, many becoming one.",
+            "The labyrinth is the pilgrim\u2019s mirror \u2014 a visible expression of the inner life longing to be gathered into harmony.",
+            "There are no dead ends here.",
+            "Only one winding path \u2014 and then outward again, transformed."
+],
+        reflection: [
+            "Walking a labyrinth teaches trust.",
+            "You move forward, sometimes feeling far from the centre, even though the centre has never moved.",
+            "This is the shape of the spiritual life: not a straight line, but a faithful following.",
+            "Wholeness does not come through shortcuts.",
+            "It comes through presence, patience, and a willingness to be guided step by step.",
+            "Here, the scattered pieces of life are gently drawn back toward their true centre."
+],
+        scriptures: [],
+        activity: [
+            "Enter the labyrinth slowly.",
+            "Let your steps become quiet and deliberate.",
+            "As you walk, hold this question: What in me is being gathered toward wholeness and deeper union?",
+            "When you reach the centre, stop.",
+            "Let the quiet hold you.",
+            "When you are ready, follow the path back out \u2014 carrying with you what has been gently restored."
+],
+        whereToNext: "Your shortest connection. Walk a few steps to the deck to enjoy a beautiful view of the magnificant Franschhoek valley... we are bias but we think it is one of the best in the valley!"
     },
     {
         id: 14,
         title: "The Deck",
         subtitle: "The Promised Valley & Call of the Pilgrim",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Le Sanctuaire Way The Promised Valley & the Call of the Pilgrim Take a seat along the benches and let your eyes move slowly across the view."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "From here, the full breadth of the Franschhoek Valley opens before you \u2014 vineyards, orchards, riverbeds, and the mountains that have guided your way."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "This is one of the great viewpoints of the pilgrimage."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Let the view widen your breathing."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Let your heart expand with the land."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This valley has long been a place of pilgrimage."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Long before farms and vineyards, the Khoi walked these slopes, following water, seasons, and the rhythms of the land."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Centuries later, French Huguenots arrived here as refugees \u2014 seeking sanctuary, faith, and a new beginning."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "What they found became, for them, a promised valley \u2014 a place to plant, to build, and to begin again."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Their story carries a simple truth: promised lands are reached only by those willing to leave what is familiar."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Look now to the mountains that surround you \u2014 Franschhoek Peak, the Hottentots-Holland range, Groot Drakenstein, and behind you, the heights of Wemmershoek and Du Toitskloof."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This valley is held on every side by strength \u2014 a natural sanctuary shaped by time, endurance, and care."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "This place invites remembrance."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "You, too, have crossed valleys and climbed ridges."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "You, too, have left comfort to discover deeper life."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "You, too, have been held \u2014 even when the way felt uncertain or steep."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Pilgrimage is never an escape."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "It is a response to promise."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "From this height, the journey comes into focus: not a retreat from the world, but a sending back into it \u2014 changed, steadied, and called."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cAs the mountains surround Jerusalem, so the LORD surrounds His people.\u201d \u2014 Psalm 125:2 \u201cI lift up my eyes to the hills\u2026 my help comes from the LORD.\u201d \u2014 Psalm 121:1\u20132 \u201cA land with valleys and springs\u2026 a land flowing with milk and honey.\u201d \u2014 Deuteronomy 11:9\u201312"
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Remain seated and take in the view."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "What is the next faithful step I am being called to take as I return to the valley of my life?"
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Let the mountains steady you."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Let the valley humble you."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Let the journey shape the way you walk from here."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "When you are ready, descend \u2014 carrying the call of the pilgrim with you."
-            },
-            {
-                        "heading": "Where to Next?",
-                        "text": "From the deck look to the right top courner of the clearing and you will see the sign marked The Ascent and The Cross\u2014 take this beautiful winding trail -the final, rising movement of the pilgrimage. Keep going until you find your final station - The Cross."
-            }
-]
+        description: [
+            "The Promised Valley & the Call of the Pilgrim Take a seat along the benches and let your eyes move slowly across the view.",
+            "From here, the full breadth of the Franschhoek Valley opens before you \u2014 vineyards, orchards, riverbeds, and the mountains that have guided your way.",
+            "This is one of the great viewpoints of the pilgrimage.",
+            "Let the view widen your breathing.",
+            "Let your heart expand with the land.",
+            "This valley has long been a place of pilgrimage.",
+            "Long before farms and vineyards, the Khoi walked these slopes, following water, seasons, and the rhythms of the land.",
+            "Centuries later, French Huguenots arrived here as refugees \u2014 seeking sanctuary, faith, and a new beginning.",
+            "What they found became, for them, a promised valley \u2014 a place to plant, to build, and to begin again.",
+            "Their story carries a simple truth: promised lands are reached only by those willing to leave what is familiar.",
+            "Look now to the mountains that surround you \u2014 Franschhoek Peak, the Hottentots-Holland range, Groot Drakenstein, and behind you, the heights of Wemmershoek and Du Toitskloof.",
+            "This valley is held on every side by strength \u2014 a natural sanctuary shaped by time, endurance, and care."
+],
+        reflection: [
+            "This place invites remembrance.",
+            "You, too, have crossed valleys and climbed ridges.",
+            "You, too, have left comfort to discover deeper life.",
+            "You, too, have been held \u2014 even when the way felt uncertain or steep.",
+            "Pilgrimage is never an escape.",
+            "It is a response to promise.",
+            "From this height, the journey comes into focus: not a retreat from the world, but a sending back into it \u2014 changed, steadied, and called."
+],
+        scriptures: [
+            "\u201cAs the mountains surround Jerusalem, so the LORD surrounds His people.\u201d \u2014 Psalm 125:2 \u201cI lift up my eyes to the hills\u2026 my help comes from the LORD.\u201d \u2014 Psalm 121:1\u20132 \u201cA land with valleys and springs\u2026 a land flowing with milk and honey.\u201d \u2014 Deuteronomy 11:9\u201312"
+],
+        activity: [
+            "Remain seated and take in the view.",
+            "What is the next faithful step I am being called to take as I return to the valley of my life?",
+            "Let the mountains steady you.",
+            "Let the valley humble you.",
+            "Let the journey shape the way you walk from here.",
+            "When you are ready, descend \u2014 carrying the call of the pilgrim with you."
+],
+        whereToNext: "From the deck look to the right top courner of the clearing and you will see the sign marked The Ascent and The Cross\u2014 take this beautiful winding trail -the final, rising movement of the pilgrimage. Keep going until you find your final station - The Cross."
     },
     {
         id: 15,
         title: "The Cross",
         subtitle: "The Centre, Summit, Meeting of Heaven & Earth",
-        sections: [
-            {
-                        "heading": "Introduction",
-                        "text": "was already read. Make sure to only set it from your base module. It is currently set to The Centre, the Summit, the Meeting of Heaven and Earth Take a seat beside the cross on this rocky ridge."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "You stand on the upper slopes of Le Sanctuaire, looking back across the valley you have travelled through and outward toward the wild, hidden basin of Wemmershoek \u2014 a protected wilderness of ravines, cliffs, and silence."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "Few ever stand where you now stand."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "And here, at the summit of the pilgrimage, is a simple cross."
-            },
-            {
-                        "heading": "Introduction",
-                        "text": "This is the place every step has been leading toward."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "When this path was first imagined, the intention was to raise a grand cross \u2014 stone or steel, something striking."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "But the mountain offered something else: fallen trunks, burnt and weathered, lying as if waiting."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Like the moment on Mount Moriah, the whisper was clear: \u201cI will provide.\u201d"
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "The mountain provided its own cross \u2014 humble, scarred, unpolished."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "Not crafted, but given."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "This is the cross that stands here now."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "A provided cross."
-            },
-            {
-                        "heading": "What You Are Seeing",
-                        "text": "A surrendered cross."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "This is the centre of the pilgrimage \u2014 and the centre of all things."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "At the cross, what is divided is gathered into one."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The horizontal beam reaches outward \u2014 embracing all people, all difference, all distance."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "The vertical beam rises and descends \u2014 joining earth and heaven, the visible and the unseen, the human and the divine."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Here is the great meeting."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Here is the place of reconciliation."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Here the ascent finds its meaning \u2014 and life begins anew."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "Across the valley, almost perfectly aligned with this ridge, stands the Franschhoek Cross \u2014 two crosses facing one another across the land, a line of grace drawn from mountain to mountain."
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cWhen I am lifted up\u2026 I will draw all people to Myself.\u201d \u2014 John 12:32",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cThrough Him, God reconciled all things\u2026 by the blood of His cross.\u201d \u2014 Colossians 1:19\u201320",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Spiritual Reflection",
-                        "text": "\u201cHe Himself is our peace\u2026 making the two one.\u201d \u2014 Ephesians 2:14\u201316",
-                        "isScripture": true
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Remain seated beside the cross."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Ask yourself quietly: What in my life is being gathered, healed, or reconciled here?"
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Lay down what you have been carrying."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Receive what is being offered."
-            },
-            {
-                        "heading": "Pilgrimage Action",
-                        "text": "Rest for a moment."
-            },
-            {
-                        "heading": "The End \u2014 and the Beginning",
-                        "text": "You have reached the summit of the ascent \u2014 but not the end of the pilgrimage."
-            },
-            {
-                        "heading": "The End \u2014 and the Beginning",
-                        "text": "Every step down the mountain is an invitation to live what has been awakened here."
-            },
-            {
-                        "heading": "The End \u2014 and the Beginning",
-                        "text": "Let the cross send you back with clearer vision, steadier courage, and a heart drawn into wholeness."
-            },
-            {
-                        "heading": "Returning to the Vineyard Deck",
-                        "text": "Your ascent is complete."
-            },
-            {
-                        "heading": "Returning to the Vineyard Deck",
-                        "text": "Now it is time to return to the Vineyard Deck where we will gather for reflection, conversation, and then enjoy a late lunch and fellowship together."
-            },
-            {
-                        "heading": "Returning to the Vineyard Deck",
-                        "text": "Please make your way back down the same path you climbed."
-            },
-            {
-                        "heading": "Returning to the Vineyard Deck",
-                        "text": "Do not rush your descent."
-            },
-            {
-                        "heading": "Returning to the Vineyard Deck",
-                        "text": "Be mindful of other pilgrims who may still be making their way upward."
-            },
-            {
-                        "heading": "Returning to the Vineyard Deck",
-                        "text": "do not return via the Fynbos Trail."
-            },
-            {
-                        "heading": "Returning to the Vineyard Deck",
-                        "text": "Instead, take the gravel road to your left and look for the sign marked Buchu Bend."
-            },
-            {
-                        "heading": "Returning to the Vineyard Deck",
-                        "text": "Follow this winding path\u2014 it curves gently back toward the Vineyard Deck and offers one final surprise at the end: a living gate of buchu bushes, their leaves rich with healing fragrance."
-            },
-            {
-                        "heading": "Returning to the Vineyard Deck",
-                        "text": "Rub a few leaves between your fingers."
-            },
-            {
-                        "heading": "Returning to the Vineyard Deck",
-                        "text": "Breathe in their scent\u2014 a last reminder of the wonder, renewal, and beauty of the pilgrimage."
-            },
-            {
-                        "heading": "Returning to the Vineyard Deck",
-                        "text": "You are almost home."
-            }
-]
+        description: [
+            "The Centre, the Summit, the Meeting of Heaven and Earth Take a seat beside the cross on this rocky ridge.",
+            "You stand on the upper slopes of Le Sanctuaire, looking back across the valley you have travelled through and outward toward the wild, hidden basin of Wemmershoek \u2014 a protected wilderness of ravines, cliffs, and silence.",
+            "Few ever stand where you now stand.",
+            "And here, at the summit of the pilgrimage, is a simple cross.",
+            "This is the place every step has been leading toward.",
+            "When this path was first imagined, the intention was to raise a grand cross \u2014 stone or steel, something striking.",
+            "But the mountain offered something else: fallen trunks, burnt and weathered, lying as if waiting.",
+            "Like the moment on Mount Moriah, the whisper was clear: \u201cI will provide.\u201d",
+            "The mountain provided its own cross \u2014 humble, scarred, unpolished.",
+            "Not crafted, but given.",
+            "This is the cross that stands here now.",
+            "A provided cross.",
+            "A surrendered cross."
+],
+        reflection: [
+            "This is the centre of the pilgrimage \u2014 and the centre of all things.",
+            "At the cross, what is divided is gathered into one.",
+            "The horizontal beam reaches outward \u2014 embracing all people, all difference, all distance.",
+            "The vertical beam rises and descends \u2014 joining earth and heaven, the visible and the unseen, the human and the divine.",
+            "Here is the great meeting.",
+            "Here is the place of reconciliation.",
+            "Here the ascent finds its meaning \u2014 and life begins anew.",
+            "Across the valley, almost perfectly aligned with this ridge, stands the Franschhoek Cross \u2014 two crosses facing one another across the land, a line of grace drawn from mountain to mountain."
+],
+        scriptures: [
+            "\u201cWhen I am lifted up\u2026 I will draw all people to Myself.\u201d \u2014 John 12:32 \u201cThrough Him, God reconciled all things\u2026 by the blood of His cross.\u201d \u2014 Colossians 1:19\u201320",
+            "\u201cHe Himself is our peace\u2026 making the two one.\u201d \u2014 Ephesians 2:14\u201316"
+],
+        activity: [
+            "Remain seated beside the cross.",
+            "Ask yourself quietly: What in my life is being gathered, healed, or reconciled here?",
+            "Lay down what you have been carrying.",
+            "Receive what is being offered.",
+            "Rest for a moment.",
+            "The End \u2014 and the Beginning You have reached the summit of the ascent \u2014 but not the end of the pilgrimage.",
+            "Every step down the mountain is an invitation to live what has been awakened here.",
+            "Let the cross send you back with clearer vision, steadier courage, and a heart drawn into wholeness."
+],
+        whereToNext: "Returning to the Vineyard Deck Your ascent is complete. Now it is time to return to the Vineyard Deck where we will gather for reflection, conversation, and then enjoy a late lunch and fellowship together. Please make your way back down the same path you climbed. Do not rush your descent. Be mindful of other pilgrims who may still be making their way upward. do not return via the Fynbos Trail. Instead, take the gravel road to your left and look for the sign marked Buchu Bend. Follow this winding path\u2014 it curves gently back toward the Vineyard Deck and offers one final surprise at the end: a living gate of buchu bushes, their leaves rich with healing fragrance. Rub a few leaves between your fingers. Breathe in their scent\u2014 a last reminder of the wonder, renewal, and beauty of the pilgrimage. You are almost home."
     }
 ];
 
@@ -2171,7 +891,7 @@ const Pilgrimage: React.FC = () => {
                     </SectionObserver>
                 )}
 
-                {/* VIEW 2: STATION DISPLAY SCREEN WITH BOLD HEADINGS & NO HANGING SENTENCES */}
+                {/* VIEW 2: STATION DISPLAY SCREEN WITH CLEAN UNIFIED STRUCTURE: Description -> Spiritual Reflection -> Scripture -> Activity -> Where to Next */}
                 {viewMode === 'station' && (
                     <>
                         {/* 15 Steps Horizontal Navigation Selector */}
@@ -2227,59 +947,108 @@ const Pilgrimage: React.FC = () => {
                                 </p>
                             </div>
 
-                            {/* Main Text Content Rendered with Bold Headings & Flowing Paragraphs */}
-                            <div className="p-8 md:p-12 space-y-6">
-                                {activeSpace.sections.map((section, secIdx) => {
-                                    const isWhereToNext = section.heading && section.heading.toLowerCase().includes('where to next');
-                                    
-                                    return (
-                                        <div key={secIdx} className="space-y-4">
-                                            {/* BOLD HEADINGS */}
-                                            {section.heading && section.heading !== 'Introduction' && (
-                                                <h3 className="text-xl md:text-3xl font-serif font-bold text-sanctuary-blue mt-8 mb-3 flex items-center space-x-2 border-b border-sanctuary-gold/30 pb-2">
-                                                    <span className="text-sanctuary-gold font-sans text-sm md:text-base font-bold uppercase tracking-wider block">
-                                                        {section.heading}
-                                                    </span>
-                                                </h3>
-                                            )}
-
-                                            {/* SCRIPTURE BOX */}
-                                            {section.isScripture ? (
-                                                <div className="p-6 md:p-8 rounded-2xl bg-sanctuary-sand/50 border border-sanctuary-blue/10 relative my-4">
-                                                    <BookOpen className="w-6 h-6 text-sanctuary-gold absolute top-6 left-6" />
-                                                    <div className="pl-8">
-                                                        <p className="text-lg md:text-2xl text-sanctuary-blue font-serif italic leading-relaxed">
-                                                            {section.text}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                /* FLOWING NARRATIVE PARAGRAPH (NO HANGING SENTENCES) */
-                                                <p className="text-lg md:text-2xl text-sanctuary-blue/90 leading-relaxed font-light">
-                                                    {section.text}
+                            {/* Main Text Content Rendered in Exact Requested Structure: Description -> Reflection -> Scripture -> Activity -> Where to Next */}
+                            <div className="p-8 md:p-12 space-y-8">
+                                
+                                {/* 1. DESCRIPTION / WHAT YOU ARE SEEING */}
+                                {activeSpace.description && activeSpace.description.length > 0 && (
+                                    <div className="space-y-4">
+                                        <h3 className="text-lg md:text-2xl font-serif font-bold text-sanctuary-blue flex items-center space-x-2 border-b border-sanctuary-gold/30 pb-2">
+                                            <span className="text-sanctuary-gold font-sans text-xs md:text-sm font-bold uppercase tracking-wider">
+                                                Station Description
+                                            </span>
+                                        </h3>
+                                        <div className="space-y-4">
+                                            {activeSpace.description.map((para, pIdx) => (
+                                                <p key={pIdx} className="text-lg md:text-2xl text-sanctuary-blue/90 leading-relaxed font-light">
+                                                    {para}
                                                 </p>
-                                            )}
-
-                                            {/* NEXT STATION BUTTON DIRECTLY UNDER WHERE TO NEXT */}
-                                            {isWhereToNext && (
-                                                <div className="my-6 p-6 rounded-2xl bg-sanctuary-gold/10 border border-sanctuary-gold/30 text-center space-y-3">
-                                                    <span className="text-xs md:text-sm font-serif uppercase tracking-widest text-sanctuary-gold font-bold block">
-                                                        Ready for the next station?
-                                                    </span>
-                                                    <button
-                                                        onClick={goToNext}
-                                                        className="inline-flex items-center space-x-3 bg-sanctuary-blue hover:bg-sanctuary-blue/90 text-white font-serif font-bold text-base md:text-xl px-8 py-4 rounded-full shadow-xl transition-all duration-300 transform hover:scale-105"
-                                                    >
-                                                        <span>
-                                                            {nextSpace ? `Next Station — Step ${nextSpace.id}: ${nextSpace.title}` : 'Complete Pilgrimage — Return to Start'}
-                                                        </span>
-                                                        <ArrowRight className="w-5 h-5 text-sanctuary-gold" />
-                                                    </button>
-                                                </div>
-                                            )}
+                                            ))}
                                         </div>
-                                    );
-                                })}
+                                    </div>
+                                )}
+
+                                {/* 2. SPIRITUAL REFLECTION */}
+                                {activeSpace.reflection && activeSpace.reflection.length > 0 && (
+                                    <div className="space-y-4 pt-4 border-t border-sanctuary-blue/10">
+                                        <h3 className="text-lg md:text-2xl font-serif font-bold text-sanctuary-blue flex items-center space-x-2 border-b border-sanctuary-gold/30 pb-2">
+                                            <Feather className="w-5 h-5 text-sanctuary-gold" />
+                                            <span>Spiritual Reflection</span>
+                                        </h3>
+                                        <div className="space-y-4">
+                                            {activeSpace.reflection.map((para, pIdx) => (
+                                                <p key={pIdx} className="text-lg md:text-2xl text-sanctuary-blue/90 leading-relaxed font-light">
+                                                    {para}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* 3. SCRIPTURE */}
+                                {activeSpace.scriptures && activeSpace.scriptures.length > 0 && (
+                                    <div className="space-y-4 pt-4 border-t border-sanctuary-blue/10">
+                                        <h3 className="text-lg md:text-2xl font-serif font-bold text-sanctuary-blue flex items-center space-x-2 border-b border-sanctuary-gold/30 pb-2">
+                                            <BookOpen className="w-5 h-5 text-sanctuary-gold" />
+                                            <span>Scripture</span>
+                                        </h3>
+                                        <div className="space-y-4">
+                                            {activeSpace.scriptures.map((scrip, scIdx) => (
+                                                <div key={scIdx} className="p-6 md:p-8 rounded-2xl bg-sanctuary-sand/50 border border-sanctuary-blue/10 relative">
+                                                    <p className="text-lg md:text-2xl text-sanctuary-blue font-serif italic leading-relaxed">
+                                                        {scrip}
+                                                    </p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* 4. ACTIVITY / PILGRIM'S PROMPT */}
+                                {activeSpace.activity && activeSpace.activity.length > 0 && (
+                                    <div className="space-y-4 pt-4 border-t border-sanctuary-blue/10">
+                                        <div className="p-6 md:p-8 rounded-2xl bg-sanctuary-blue/5 border border-sanctuary-blue/15 space-y-3">
+                                            <h3 className="text-xs md:text-sm uppercase tracking-widest text-sanctuary-blue font-serif font-bold mb-2 flex items-center space-x-2">
+                                                <Heart className="w-5 h-5 text-sanctuary-gold" />
+                                                <span>Activity — Pilgrim's Prompt</span>
+                                            </h3>
+                                            <div className="space-y-3">
+                                                {activeSpace.activity.map((act, actIdx) => (
+                                                    <p key={actIdx} className="text-base md:text-xl text-sanctuary-blue font-serif italic leading-relaxed">
+                                                        {act}
+                                                    </p>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* 5. WHERE TO NEXT & NEXT STATION BUTTON */}
+                                {activeSpace.whereToNext && (
+                                    <div className="space-y-4 pt-4 border-t border-sanctuary-blue/10">
+                                        <h3 className="text-xs md:text-sm uppercase tracking-widest text-sanctuary-gold font-serif font-bold mb-1">
+                                            Where to Next?
+                                        </h3>
+                                        <p className="text-lg md:text-2xl text-sanctuary-blue/90 leading-relaxed font-light">
+                                            {activeSpace.whereToNext}
+                                        </p>
+
+                                        <div className="my-6 p-6 rounded-2xl bg-sanctuary-gold/10 border border-sanctuary-gold/30 text-center space-y-3">
+                                            <span className="text-xs md:text-sm font-serif uppercase tracking-widest text-sanctuary-gold font-bold block">
+                                                Ready for the next station?
+                                            </span>
+                                            <button
+                                                onClick={goToNext}
+                                                className="inline-flex items-center space-x-3 bg-sanctuary-blue hover:bg-sanctuary-blue/90 text-white font-serif font-bold text-base md:text-xl px-8 py-4 rounded-full shadow-xl transition-all duration-300 transform hover:scale-105"
+                                            >
+                                                <span>
+                                                    {nextSpace ? `Next Station — Step ${nextSpace.id}: ${nextSpace.title}` : 'Complete Pilgrimage — Return to Start'}
+                                                </span>
+                                                <ArrowRight className="w-5 h-5 text-sanctuary-gold" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* Meditation Timer Button */}
                                 <div className="p-5 rounded-2xl border border-emerald-200 bg-emerald-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-8">
