@@ -36,6 +36,11 @@ async function sendServerSideWhatsAppNotification(booking) {
         const callMeBotApiKey = process.env.CALLMEBOT_API_KEY; // Free CallMeBot API key
         const webhookUrl = process.env.WHATSAPP_WEBHOOK_URL; // Custom Webhook / Zapier / Make
 
+        // Twilio Credentials
+        const twilioSid = process.env.TWILIO_ACCOUNT_SID;
+        const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+        const twilioFrom = process.env.TWILIO_WHATSAPP_FROM || 'whatsapp:+14155238886'; // Twilio default WhatsApp Sandbox
+
         const facilityName = booking.facility === 'combo'
             ? 'Sauna & Hot Tub Combo (1 Hr)'
             : booking.facility === 'sauna' ? 'Riverside Sauna' : 'Mountain Hot Tub';
@@ -48,7 +53,39 @@ async function sendServerSideWhatsAppNotification(booking) {
             `• *Guest:* ${booking.guestName}` +
             (booking.phone ? ` (${booking.phone})` : '');
 
-        // Option A: CallMeBot Free API
+        // Option A: Official Twilio WhatsApp API
+        if (twilioSid && twilioAuthToken && targetPhone) {
+            const cleanPhone = targetPhone.replace(/[^0-9+]/g, '');
+            const toFormatted = cleanPhone.startsWith('whatsapp:') ? cleanPhone : `whatsapp:${cleanPhone}`;
+            const fromFormatted = twilioFrom.startsWith('whatsapp:') ? twilioFrom : `whatsapp:${twilioFrom}`;
+
+            const params = new URLSearchParams();
+            params.append('From', fromFormatted);
+            params.append('To', toFormatted);
+            params.append('Body', msgText);
+
+            const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${twilioSid}/Messages.json`;
+            const authHeader = 'Basic ' + Buffer.from(`${twilioSid}:${twilioAuthToken}`).toString('base64');
+
+            const twilioRes = await fetch(twilioUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': authHeader,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: params.toString()
+            });
+
+            if (twilioRes.ok) {
+                console.log('Automated Twilio WhatsApp message dispatched to:', toFormatted);
+                return;
+            } else {
+                const twData = await twilioRes.text();
+                console.error('Twilio WhatsApp error response:', twData);
+            }
+        }
+
+        // Option B: CallMeBot Free API
         if (targetPhone && callMeBotApiKey) {
             const cleanPhone = targetPhone.replace(/[^0-9+]/g, '');
             const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(cleanPhone)}&text=${encodeURIComponent(msgText)}&apikey=${encodeURIComponent(callMeBotApiKey)}`;
@@ -57,7 +94,7 @@ async function sendServerSideWhatsAppNotification(booking) {
             return;
         }
 
-        // Option B: Custom Webhook (Zapier / Make / Evolution API)
+        // Option C: Custom Webhook (Zapier / Make / Evolution API)
         if (webhookUrl) {
             await fetch(webhookUrl, {
                 method: 'POST',
