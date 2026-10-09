@@ -40,6 +40,12 @@ const pageMeta: Record<string, { title: string; description: string; h1: string;
     h1: 'Sauna & Hot Tub Reservations',
     body: 'Reserve your private 45-minute session at Mont Bleu Guesthouse Riverside Sauna and Mountain Hot Tub. Select your date and available time slot online.',
   },
+  '/pilgrimage': {
+    title: 'Le Sanctuaire Way | Pilgrimage Walk & Reflection Trail',
+    description: 'Experience Le Sanctuaire Way — a 16-station spiritual walking trail across Mont Bleu estate in Franschhoek.',
+    h1: 'Le Sanctuaire Way',
+    body: 'A curated 16-station spiritual pilgrimage walking trail across Mont Bleu estate in Franschhoek. Features reflection stations, guided scripture, meditations, and QR codes.',
+  },
   '/connect-experience': {
     title: 'The Connect Experience | Retreats & Immersive Stays | Mont Bleu',
     description: 'Curated retreats blending nature, silence, and guided discovery on Le Sanctuaire Farm in Franschhoek.',
