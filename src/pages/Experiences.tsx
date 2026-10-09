@@ -11,6 +11,12 @@ const Experiences: React.FC = () => {
             category: "Active"
         },
         {
+            title: "Outdoor Gym",
+            desc: "Please enjoy our Outdoor Gym near the Fruit Orchard — a great place to work off some of the calories gained from our delicious Franschhoek restaurants.",
+            image: "/assets/newimages/Outdoor Gym.jpg",
+            category: "Fitness & Wellness"
+        },
+        {
             title: "The Hot Tub",
             desc: "A wood-fired hot tub situated for privacy and views. Best enjoyed at sunset with a glass of local MCC.",
             image: "/assets/gallery/4b7a33db-63e2-4ade-8bc8-a1275608887f.jpg",

@@ -12,6 +12,12 @@ const ConnectExperience: React.FC = () => {
             category: "Active"
         },
         {
+            title: "Outdoor Gym",
+            desc: "Please enjoy our Outdoor Gym near the Fruit Orchard — a great place to work off some of the calories gained from our delicious Franschhoek restaurants.",
+            image: "/assets/newimages/Outdoor Gym.jpg",
+            category: "Fitness & Wellness"
+        },
+        {
             title: "Sunset Deck",
             desc: "Various platforms positioned for the best vantage points. Ideal for yoga, meditation, or simply watching the eagles.",
             image: "/assets/newimages/Deck.jpg",
