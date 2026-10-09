@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
-import { MapPin, Compass, ChevronRight, ChevronLeft, Printer, Sparkles, BookOpen, Smartphone, X, Heart, Sun, Clock } from 'lucide-react';
+import { MapPin, Compass, ChevronRight, ChevronLeft, Printer, Sparkles, BookOpen, Smartphone, X, Heart, Sun, Clock, Footprints, AlertTriangle } from 'lucide-react';
 import SectionObserver from '../components/ui/SectionObserver';
 
 interface Space {
@@ -15,12 +15,6 @@ interface Space {
     meditationText: string[];
     actionPrompt?: string;
 }
-
-const INTRODUCTION_TEXT = [
-    "The vision is to create a property that symbolizes the adventure that we are called to by our Creator. For me this is the great quest to participate in the ultimate union of heaven and earth. To move to the sanctuary where the infinite divine resides with finite humanity. This is the story of all creation and the calling of each personal adventurer. It is in this journey that one finds quest, repose and rest for the soul.",
-    "Welcome to Le Sanctuaire – the Journey to the Mountain.",
-    "Key patterns of the journey manifest in the patterns of the property: The mountains, symbolized in their triangular heaven and earth shape; The Paths, moving the pilgrim closer to the sanctuary; The Stations, places to stop, reflect, and connect; Water, flowing down from heaven to meet the earth; Trees & Flora, celebrating movement towards heaven and abundance in fruit, blossoms, and fynbos."
-];
 
 const SPACES: Space[] = [
     {
@@ -261,8 +255,8 @@ const Pilgrimage: React.FC = () => {
     return (
         <div className="pt-24 pb-20 min-h-screen bg-sanctuary-sand">
             <Helmet>
-                <title>Le Sanctuaire Way | A Pilgrim’s Journey – 15 Steps of Ascent</title>
-                <meta name="description" content="Le Sanctuaire Way — A 15-step spiritual walking pilgrimage across Mont Bleu estate in Franschhoek." />
+                <title>The Le Sanctuaire Way | Introduction & 15-Station Pilgrimage</title>
+                <meta name="description" content="Welcome to Le Sanctuaire Way — a 15-station guided spiritual walking trail through the landscapes of Le Sanctuaire in Franschhoek." />
             </Helmet>
 
             <div className="container mx-auto px-4 max-w-5xl">
@@ -271,21 +265,98 @@ const Pilgrimage: React.FC = () => {
                     <span className="text-sm md:text-base font-serif uppercase tracking-[0.3em] text-sanctuary-gold mb-3 block font-semibold">
                         Mont Bleu • Le Sanctuaire Farm
                     </span>
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif text-sanctuary-blue mb-4">
-                        Le Sanctuaire Way
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif text-sanctuary-blue mb-3">
+                        The Le Sanctuaire Way
                     </h1>
-                    <h2 className="text-xl md:text-3xl font-serif text-sanctuary-gold mb-6 font-medium">
-                        A Pilgrim’s Journey – 15 Steps of Ascent
+                    <h2 className="text-xl md:text-3xl font-serif text-sanctuary-gold mb-8 font-medium">
+                        Introduction & Guided Pilgrimage
                     </h2>
 
-                    {/* Introduction Block */}
-                    <div className="bg-white/90 backdrop-blur-md p-6 md:p-10 rounded-3xl border border-sanctuary-stone/50 shadow-xl text-left space-y-4 text-base md:text-xl text-sanctuary-blue/90 font-light leading-relaxed mb-8">
-                        <h3 className="text-xs uppercase tracking-widest text-sanctuary-gold font-serif font-bold">Introduction</h3>
-                        {INTRODUCTION_TEXT.map((para, idx) => (
-                            <p key={idx} className="text-base md:text-xl text-sanctuary-blue leading-relaxed font-light">
-                                {para}
-                            </p>
-                        ))}
+                    {/* Exact Google Sites Introduction Section */}
+                    <div className="bg-white p-8 md:p-12 rounded-3xl border border-sanctuary-stone/50 shadow-2xl text-left space-y-6 text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light mb-10">
+                        <div className="pb-4 border-b border-sanctuary-blue/10 flex items-center justify-between">
+                            <span className="text-sm md:text-base uppercase tracking-widest text-sanctuary-gold font-serif font-bold">
+                                Introduction
+                            </span>
+                            <span className="text-xs md:text-sm text-sanctuary-blue/60 font-serif">
+                                Where Heaven Meets Earth
+                            </span>
+                        </div>
+
+                        <p className="text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light">
+                            Welcome to <strong>Le Sanctuaire Way</strong>, a guided pilgrimage through the landscapes of Le Sanctuaire. Each stop invites you to pause, breathe, and become aware of the sacred rhythm where heaven and earth meet. As you walk, may the land speak, the patterns reveal, and the stillness open you to deeper presence. Scan the QR codes at each station to explore reflections, scriptures, and insights for that station.
+                        </p>
+
+                        <p className="text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light">
+                            Each station will give you some information about the station, some thoughts for personal reflection and a few relevant scriptures and an activity called <em>Pilgrim's Prompt</em> with questions to reflect on or even something to do. Take at least 5 minutes at each station to participate in these prompts - this is not a passive experience - it is intended to be active and experiential and you will get the most out of it if you follow the prompts! Why not even take a notebook along to jot down personal insights or even an inspirational picture. Take your time.
+                        </p>
+
+                        <p className="text-lg md:text-2xl text-sanctuary-blue leading-relaxed font-light">
+                            Once you have completed a station simply click on the <strong>Where to Next</strong> button and follow the journey to the Next Station. You can start anywhere but for the full Pilgrimage experience take a leisurely walk to <strong>The Sign</strong> at the very bottom of the Access Road. When you are at the sign - click the Start Pilgrimage Button. Before starting, please read the helpful guidelines below.
+                        </p>
+
+                        {/* Guided Notes Box */}
+                        <div className="my-8 p-6 md:p-8 bg-sanctuary-sand/50 rounded-2xl border border-sanctuary-blue/15 space-y-6">
+                            <h4 className="text-base md:text-xl font-serif text-sanctuary-blue font-bold uppercase tracking-wider flex items-center space-x-2">
+                                <Footprints className="w-5 h-5 text-sanctuary-gold" />
+                                <span>Please read these important notes first</span>
+                            </h4>
+
+                            <div className="space-y-4 text-base md:text-xl text-sanctuary-blue">
+                                <div>
+                                    <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">What is a Pilgrimage?</strong>
+                                    <p className="font-light">
+                                        A pilgrimage is a journey taken with intention. It blends physical movement with spiritual awareness, inviting you to slow down, pay attention, and encounter God in the ordinary beauty of creation. At Le Sanctuaire we call this "where heaven meets earth". This happens when we experience the natural earth with all our senses whilst at the same time joining these material elements with their deeper heavenly meaning. As you walk, each step becomes a prayer, and each pause becomes an opportunity to listen.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">How to Walk Slowly</strong>
+                                    <p className="font-light">
+                                        This path is not about speed. Walk with unhurried steps, breathe deeply, and allow the landscape to shape your pace. Notice the patterns, sounds, textures, and surprises along the way. The slower you go, the more you will receive from the journey.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">Why These 15 Stops?</strong>
+                                    <p className="font-light">
+                                        The fifteen stations of Le Sanctuaire Way reflect the <strong>15 Steps of Ascent</strong> leading up to the Temple in Jerusalem. Worshippers climbed these steps singing the 15 Songs of Ascent (Psalms 120–134), moving physically and spiritually toward God’s presence. This pattern echoes the miracle in the days of Hezekiah, when God caused the shadow on the steps to move backward—symbolising renewal, mercy, and a fresh beginning. Our fifteen stops follow this ancient rhythm: a step-by-step ascent of heart, mind, and spirit.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <strong className="font-serif text-sanctuary-blue block text-lg md:text-2xl mb-1">A Pilgrimage in Progress</strong>
+                                    <p className="font-light">
+                                        We have just started. Many of our stations are not yet what they are intended to be. Please be patient with our progress and allow your imagination to fill in the missing pieces. That said, a pilgrimage is never complete and we will probably always be adding, removing, transforming as we learn and grow. To this end we welcome any constructive feedback.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Safety Callout */}
+                            <div className="mt-6 p-5 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 space-y-2">
+                                <span className="font-serif font-bold text-sm md:text-lg flex items-center space-x-2 text-amber-950">
+                                    <AlertTriangle className="w-5 h-5 text-amber-700" />
+                                    <span>Safety & Notes on the Trail</span>
+                                </span>
+                                <ul className="list-disc pl-5 space-y-1 text-sm md:text-lg font-light text-amber-900">
+                                    <li>Be aware that snakes may be present, especially during warmer months.</li>
+                                    <li>Stay hydrated, and consider carrying water along the route.</li>
+                                    <li>Protect yourself from the sun with a hat, sunscreen, and appropriate clothing.</li>
+                                    <li>Watch your footing on natural paths and take care on steeper or uneven sections.</li>
+                                </ul>
+                                <p className="text-sm md:text-base font-serif italic pt-1 text-amber-800">
+                                    Walk gently, stay mindful, and enjoy the beauty of the journey.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Scriptural Anchors */}
+                        <div className="pt-4 border-t border-sanctuary-blue/10 space-y-3 text-base md:text-xl font-serif text-sanctuary-blue italic">
+                            <p className="text-sanctuary-gold font-bold uppercase tracking-wider text-xs md:text-sm">Where Heaven Meets Earth</p>
+                            <p>"In the Beginning God created the HEAVEN and the EARTH" — Genesis 1:1</p>
+                            <p>"...In the fullness of the times He might gather together in one all things in Christ, both which are in heaven and which are on earth—in Him." — Ephesians 1:10</p>
+                            <p>"Now I saw a new heaven and a new earth, for the first heaven and the first earth had passed away." — Revelation 21:1</p>
+                        </div>
                     </div>
 
                     {/* Print & QR Action Bar */}
@@ -364,7 +435,7 @@ const Pilgrimage: React.FC = () => {
                             <div className="p-6 md:p-8 rounded-2xl bg-sanctuary-sand/50 border border-sanctuary-blue/10 relative">
                                 <BookOpen className="w-6 h-6 text-sanctuary-gold absolute top-6 left-6" />
                                 <div className="pl-8">
-                                    <p className="text-base md:text-2xl text-sanctuary-blue font-serif italic leading-relaxed mb-3">
+                                    <p className="text-lg md:text-2xl text-sanctuary-blue font-serif italic leading-relaxed mb-3">
                                         "{activeSpace.scripture}"
                                     </p>
                                     {activeSpace.scriptureRef && (
@@ -400,7 +471,7 @@ const Pilgrimage: React.FC = () => {
                             <div className="p-6 rounded-2xl bg-sanctuary-blue/5 border border-sanctuary-blue/10">
                                 <h3 className="text-xs md:text-sm uppercase tracking-widest text-sanctuary-blue font-serif font-bold mb-2 flex items-center space-x-2">
                                     <Heart className="w-5 h-5 text-sanctuary-gold" />
-                                    <span>Reflection & Action</span>
+                                    <span>Pilgrim's Prompt</span>
                                 </h3>
                                 <p className="text-base md:text-xl text-sanctuary-blue font-serif italic leading-relaxed">
                                     {activeSpace.actionPrompt}
@@ -414,16 +485,16 @@ const Pilgrimage: React.FC = () => {
                                 <Sun className="w-6 h-6 text-emerald-600 flex-shrink-0" />
                                 <div>
                                     <span className="block text-xs md:text-sm font-semibold uppercase tracking-wider text-emerald-900">Pause & Reflect</span>
-                                    <p className="text-xs md:text-sm text-emerald-800">Take a moment of quiet stillness at this space.</p>
+                                    <p className="text-xs md:text-sm text-emerald-800">Take 5 minutes of quiet stillness at this space.</p>
                                 </div>
                             </div>
 
                             <button
-                                onClick={() => setMeditationTimer(meditationTimer ? null : 60)}
+                                onClick={() => setMeditationTimer(meditationTimer ? null : 300)}
                                 className="px-5 py-3 bg-emerald-700 text-white rounded-xl text-xs md:text-sm uppercase tracking-wider font-semibold hover:bg-emerald-800 transition-colors flex items-center justify-center space-x-2 flex-shrink-0 shadow-sm"
                             >
                                 <Clock className="w-4 h-4" />
-                                <span>{meditationTimer ? `Pause Timer (${meditationTimer}s)` : '1-Min Pause Timer'}</span>
+                                <span>{meditationTimer ? `Pause Timer (${Math.floor(meditationTimer / 60)}m ${meditationTimer % 60}s)` : '5-Min Pause Timer'}</span>
                             </button>
                         </div>
 
