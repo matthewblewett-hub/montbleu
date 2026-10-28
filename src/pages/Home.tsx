@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import SectionObserver from '../components/ui/SectionObserver';
@@ -6,15 +6,42 @@ import Button from '../components/ui/Button';
 import ScrollSection from '../components/ui/ScrollSection';
 import ReviewsCarousel from '../components/ui/ReviewsCarousel';
 
+const HERO_VIDEOS = [
+    {
+        src: '/assets/videos/guesthouse-views.mp4',
+        poster: '/assets/videos/guesthouse-views-poster.jpg',
+        label: 'The Sanctuary'
+    },
+    {
+        src: '/assets/videos/diving-pool.mp4',
+        poster: '/assets/videos/diving-pool-poster.jpg',
+        label: 'Mountain Pool'
+    },
+    {
+        src: '/assets/videos/sunset-views.mp4',
+        poster: '/assets/videos/sunset-views-poster.jpg',
+        label: 'Franschhoek Sunset'
+    }
+];
+
 const Home: React.FC = () => {
     const heroRef = useRef<HTMLDivElement>(null);
+    const [activeMobileVideo, setActiveMobileVideo] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveMobileVideo((prev) => (prev + 1) % HERO_VIDEOS.length);
+        }, 6000);
+        return () => clearInterval(interval);
+    }, []);
+
     const { scrollYProgress } = useScroll({
         target: heroRef,
         offset: ["start start", "end start"]
     });
 
     const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-    const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+    const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
     const textOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
     return (
@@ -28,31 +55,68 @@ const Home: React.FC = () => {
                 <meta property="og:description" content="Boutique guesthouse on Le Sanctuaire Farm in Franschhoek. Five unique suites with mountain views, pool, sauna and daily farm breakfasts." />
                 <meta property="og:image" content="https://www.montbleu.co.za/assets/home-hero.jpg" />
             </Helmet>
-            {/* Parallax Hero */}
-            <section ref={heroRef} className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden">
+            {/* Parallax Triptych Video Hero */}
+            <section ref={heroRef} className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden bg-sanctuary-blue">
                 <motion.div
                     style={{ y: heroY, scale: heroScale }}
                     className="absolute inset-0 z-0"
                 >
-                    <img
-                        src="/assets/newimages/GH 1.jpg"
-                        alt="Mont Bleu Landscape"
-                        className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
+                    {/* Desktop 3-Panel Triptych */}
+                    <div className="hidden md:grid md:grid-cols-3 w-full h-full">
+                        {HERO_VIDEOS.map((video, index) => (
+                            <div
+                                key={video.src}
+                                className={`relative w-full h-full overflow-hidden ${
+                                    index < HERO_VIDEOS.length - 1 ? 'border-r border-white/15' : ''
+                                }`}
+                            >
+                                <video
+                                    src={video.src}
+                                    poster={video.poster}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    preload="auto"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Mobile Full-Screen Portrait Video Switcher */}
+                    <div className="block md:hidden relative w-full h-full">
+                        {HERO_VIDEOS.map((video, index) => (
+                            <video
+                                key={video.src}
+                                src={video.src}
+                                poster={video.poster}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                preload="auto"
+                                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                                    activeMobileVideo === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                                }`}
+                            />
+                        ))}
+                    </div>
+
+                    {/* Cinematic Contrast Overlay */}
+                    <div className="absolute inset-0 bg-black/35 mix-blend-multiply pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/15 to-black/60 pointer-events-none" />
                 </motion.div>
 
                 <motion.div
                     style={{ opacity: textOpacity }}
                     className="container mx-auto px-6 relative z-10 text-center text-white flex flex-col items-center"
                 >
-
-
                     <motion.h1
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, ease: "easeOut" }}
-                        className="text-6xl md:text-8xl lg:text-9xl font-serif mb-6 tracking-wide"
+                        className="text-6xl md:text-8xl lg:text-9xl font-serif mb-6 tracking-wide drop-shadow-lg"
                     >
                         Mont Bleu
                     </motion.h1>
@@ -60,21 +124,35 @@ const Home: React.FC = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-                        className="text-lg md:text-2xl font-light tracking-[0.3em] uppercase opacity-80"
+                        className="text-lg md:text-2xl font-light tracking-[0.3em] uppercase opacity-90 drop-shadow-md"
                     >
                         Le Sanctuaire Farm - Franschhoek, South Africa
                     </motion.p>
                 </motion.div>
+
+                {/* Mobile Video Selector Pills */}
+                <div className="flex md:hidden absolute bottom-28 left-1/2 -translate-x-1/2 z-20 gap-2">
+                    {HERO_VIDEOS.map((video, idx) => (
+                        <button
+                            key={video.label}
+                            onClick={() => setActiveMobileVideo(idx)}
+                            aria-label={`View ${video.label}`}
+                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                                activeMobileVideo === idx ? 'w-8 bg-white' : 'w-2 bg-white/40'
+                            }`}
+                        />
+                    ))}
+                </div>
 
                 {/* Scroll Indicator */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 1 }}
-                    className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/50 flex flex-col items-center gap-4"
+                    className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/60 flex flex-col items-center gap-4 z-10"
                 >
                     <span className="text-[10px] uppercase tracking-widest">Scroll</span>
-                    <div className="w-[1px] h-12 bg-white/30" />
+                    <div className="w-[1px] h-12 bg-white/40" />
                 </motion.div>
             </section>
 
