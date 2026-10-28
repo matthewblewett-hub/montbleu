@@ -15,6 +15,7 @@ const ConnectExperience: React.FC = () => {
             title: "Outdoor Gym",
             desc: "Please enjoy our Outdoor Gym near the Fruit Orchard — a great place to work off some of the calories gained from our delicious Franschhoek restaurants.",
             image: "/assets/influencer/Outdoor gym and views.jpg",
+            imagePosition: "object-bottom",
             category: "Fitness & Wellness"
         },
         {
@@ -115,7 +116,7 @@ const ConnectExperience: React.FC = () => {
                                         <img
                                             src={exp.image}
                                             alt={exp.title}
-                                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                            className={`w-full h-full object-cover ${(exp as any).imagePosition || 'object-center'} transition-transform duration-1000 group-hover:scale-110`}
                                         />
                                     </div>
                                 </motion.div>

@@ -32,6 +32,7 @@ const Relax: React.FC = () => {
             title: "Outdoor Gym",
             description: "Our new outdoor gym facility includes free weights, a pull-up bar, and a stepper perched with stunning views to inspire you to keep up your training routines even while enjoying the valley.",
             image: "/assets/influencer/Full outdoor gym.jpg",
+            imagePosition: "object-bottom",
             icon: Dumbbell
         }
     ];
@@ -79,12 +80,12 @@ const Relax: React.FC = () => {
                                     className="group cursor-pointer"
                                     onClick={() => setSelectedFeature(feature)}
                                 >
-                                    <div className="aspect-[16/9] overflow-hidden rounded-sm mb-6 relative">
+                                    <div className="aspect-[4/3] overflow-hidden rounded-sm mb-6 relative">
                                         <div className="absolute inset-0 bg-sanctuary-blue/0 group-hover:bg-sanctuary-blue/10 transition-colors duration-500 z-10" />
                                         <img
                                             src={feature.image}
                                             alt={feature.title}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            className={`w-full h-full object-cover ${feature.imagePosition || 'object-center'} transition-transform duration-700 group-hover:scale-105`}
                                         />
                                     </div>
                                     <div className="flex items-center gap-4 mb-4">
@@ -105,11 +106,11 @@ const Relax: React.FC = () => {
                 {selectedFeature && (
                     <div className="text-sanctuary-blue">
                         <h2 className="text-4xl font-serif mb-6">{selectedFeature.title}</h2>
-                        <div className="aspect-[16/9] overflow-hidden rounded-sm mb-8">
+                        <div className="aspect-[4/3] overflow-hidden rounded-sm mb-8">
                             <img
                                 src={selectedFeature.image}
                                 alt={selectedFeature.title}
-                                className="w-full h-full object-cover"
+                                className={`w-full h-full object-cover ${selectedFeature.imagePosition || 'object-center'}`}
                             />
                         </div>
                         <p className="text-lg font-light leading-relaxed opacity-80">

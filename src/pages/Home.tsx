@@ -248,10 +248,10 @@ const Home: React.FC = () => {
 
             {/* Editorial Intro */}
             <section className="py-24 md:py-32 bg-sanctuary-sand overflow-hidden">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                <div className="container mx-auto px-6 max-w-[1480px]">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                         {/* Left Image: Mont Bleu Guesthouse Facade */}
-                        <div className="lg:col-span-3 order-2 lg:order-1">
+                        <div className="lg:col-span-4 order-2 lg:order-1">
                             <SectionObserver delay={0.1}>
                                 <div className="aspect-[4/5] overflow-hidden rounded-sm shadow-xl border-4 border-white/80 group">
                                     <img
@@ -264,7 +264,7 @@ const Home: React.FC = () => {
                         </div>
 
                         {/* Center Philosophy Text */}
-                        <div className="lg:col-span-6 text-center order-1 lg:order-2 px-2">
+                        <div className="lg:col-span-4 text-center order-1 lg:order-2 px-2">
                             <SectionObserver>
                                 <p className="text-3xl font-serif uppercase tracking-widest text-sanctuary-gold mb-6">The Philosophy</p>
 
@@ -274,14 +274,14 @@ const Home: React.FC = () => {
                                     Mont Bleu is a farm retreat in Franschhoek — a place where heaven and earth meet.
                                 </p>
 
-                                <h2 className="text-3xl md:text-5xl font-serif text-sanctuary-blue leading-tight mb-4 lg:mb-0 italic">
+                                <h2 className="text-3xl md:text-4xl xl:text-5xl font-serif text-sanctuary-blue leading-tight mb-4 lg:mb-0 italic">
                                     "Here, time slows. Nature speaks.<br className="hidden md:block" /> And the soul finds room to breathe."
                                 </h2>
                             </SectionObserver>
                         </div>
 
                         {/* Right Image: Guesthouse Lawn & Pool */}
-                        <div className="lg:col-span-3 order-3">
+                        <div className="lg:col-span-4 order-3">
                             <SectionObserver delay={0.2}>
                                 <div className="aspect-[4/5] overflow-hidden rounded-sm shadow-xl border-4 border-white/80 group">
                                     <img
@@ -295,8 +295,6 @@ const Home: React.FC = () => {
                     </div>
                 </div>
             </section>
-
-
 
             {/* Horizontal Scroll Pillars */}
             <ScrollSection>
@@ -350,6 +348,31 @@ const Home: React.FC = () => {
                     </div>
                 </div>
 
+                {/* Views Pillar */}
+                <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-end justify-center p-6 md:px-20 md:pb-16 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
+                    <div className="absolute inset-0">
+                        <img
+                            src="/assets/influencer/Lily Pond  montain view from main deck.jpg"
+                            className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+                            alt="Views from Mont Bleu"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+                    </div>
+
+                    <div className="relative z-10 w-full max-w-6xl flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-12">
+                        <div>
+                            <span className="text-sanctuary-gold font-serif text-xl md:text-2xl tracking-widest block mb-1">03</span>
+                            <h3 className="text-5xl md:text-7xl font-serif text-white drop-shadow-lg leading-none">Views</h3>
+                        </div>
+                        <div className="max-w-xl space-y-5">
+                            <p className="text-lg md:text-xl font-light leading-relaxed text-white/95 drop-shadow">
+                                Franschhoek is a valley renowned for its beautiful views, and Mont Bleu — being one of the highest properties in the valley — has some of the most amazing views, especially of sunset.
+                            </p>
+                            <Button to="/views" variant="secondary" className="border-white text-sanctuary-blue bg-white hover:bg-sanctuary-blue hover:text-white hover:border-sanctuary-blue">Explore Views</Button>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Explore Pillar */}
                 <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-end justify-center p-6 md:px-20 md:pb-16 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
                     <div className="absolute inset-0">
@@ -363,7 +386,7 @@ const Home: React.FC = () => {
 
                     <div className="relative z-10 w-full max-w-6xl flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-12">
                         <div>
-                            <span className="text-sanctuary-gold font-serif text-xl md:text-2xl tracking-widest block mb-1">03</span>
+                            <span className="text-sanctuary-gold font-serif text-xl md:text-2xl tracking-widest block mb-1">04</span>
                             <h3 className="text-5xl md:text-7xl font-serif text-white drop-shadow-lg leading-none">Explore</h3>
                         </div>
                         <div className="max-w-xl space-y-5">
@@ -388,7 +411,7 @@ const Home: React.FC = () => {
 
                     <div className="relative z-10 w-full max-w-6xl flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-12">
                         <div>
-                            <span className="text-sanctuary-gold font-serif text-xl md:text-2xl tracking-widest block mb-1">04</span>
+                            <span className="text-sanctuary-gold font-serif text-xl md:text-2xl tracking-widest block mb-1">05</span>
                             <h3 className="text-5xl md:text-7xl font-serif text-white drop-shadow-lg leading-none">Connect &amp; Experience</h3>
                         </div>
                         <div className="max-w-xl space-y-5">

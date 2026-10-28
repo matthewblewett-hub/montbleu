@@ -21,10 +21,12 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ children, className = '' 
         target: targetRef,
     });
 
-    const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+    const count = React.Children.count(children) || 5;
+    const endPercent = `-${((count - 1) / count) * 100}%`;
+    const x = useTransform(scrollYProgress, [0, 1], ["0%", endPercent]);
 
     return (
-        <section ref={targetRef} className={`relative md:h-[400vh] bg-sanctuary-blue ${className}`}>
+        <section ref={targetRef} className={`relative md:h-[500vh] bg-sanctuary-blue ${className}`}>
             <div className="md:sticky md:top-0 md:flex md:h-screen md:items-center md:overflow-hidden">
                 <motion.div style={!isMobile ? { x } : {}} className="flex flex-col md:flex-row w-full md:w-auto">
                     {children}
