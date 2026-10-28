@@ -61,27 +61,57 @@ const Home: React.FC = () => {
                     style={{ y: heroY, scale: heroScale }}
                     className="absolute inset-0 z-0"
                 >
-                    {/* Desktop 3-Panel Triptych */}
-                    <div className="hidden md:grid md:grid-cols-3 w-full h-full">
-                        {HERO_VIDEOS.map((video, index) => (
-                            <div
-                                key={video.src}
-                                className={`relative w-full h-full overflow-hidden ${
-                                    index < HERO_VIDEOS.length - 1 ? 'border-r border-white/15' : ''
-                                }`}
-                            >
-                                <video
-                                    src={video.src}
-                                    poster={video.poster}
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                    preload="auto"
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                        ))}
+                    {/* Desktop 3-Panel Feathered Triptych */}
+                    <div className="hidden md:block relative w-full h-full">
+                        {/* Left Panel (0% to 36%) */}
+                        <div className="absolute inset-y-0 left-0 w-[36%] overflow-hidden z-0">
+                            <video
+                                src={HERO_VIDEOS[0].src}
+                                poster={HERO_VIDEOS[0].poster}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                preload="auto"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+
+                        {/* Right Panel (64% to 100%) */}
+                        <div className="absolute inset-y-0 right-0 w-[36%] overflow-hidden z-0">
+                            <video
+                                src={HERO_VIDEOS[2].src}
+                                poster={HERO_VIDEOS[2].poster}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                preload="auto"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+
+                        {/* Center Panel (28% to 72%) with soft feathered cross-dissolve edges */}
+                        <div
+                            className="absolute inset-y-0 left-[28%] w-[44%] overflow-hidden z-10"
+                            style={{
+                                WebkitMaskImage:
+                                    'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 9%, black 18%, black 82%, rgba(0,0,0,0.5) 91%, transparent 100%)',
+                                maskImage:
+                                    'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 9%, black 18%, black 82%, rgba(0,0,0,0.5) 91%, transparent 100%)',
+                            }}
+                        >
+                            <video
+                                src={HERO_VIDEOS[1].src}
+                                poster={HERO_VIDEOS[1].poster}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                preload="auto"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
                     </div>
 
                     {/* Mobile Full-Screen Portrait Video Switcher */}
