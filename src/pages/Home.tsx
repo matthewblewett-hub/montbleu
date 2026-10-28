@@ -8,8 +8,8 @@ import ReviewsCarousel from '../components/ui/ReviewsCarousel';
 
 const HERO_VIDEOS = [
     {
-        src: '/assets/videos/guesthouse-views.mp4',
-        poster: '/assets/videos/guesthouse-views-poster.jpg',
+        src: '/assets/videos/drone-shots.mp4',
+        poster: '/assets/videos/drone-shots-poster.jpg',
         label: 'The Sanctuary'
     },
     {
@@ -189,21 +189,52 @@ const Home: React.FC = () => {
 
 
             {/* Editorial Intro */}
-            <section className="py-24 md:py-32 bg-sanctuary-sand">
-                <div className="container mx-auto px-6 max-w-4xl text-center">
-                    <SectionObserver>
-                        <p className="text-3xl font-serif uppercase tracking-widest text-sanctuary-gold mb-6">The Philosophy</p>
+            <section className="py-24 md:py-32 bg-sanctuary-sand overflow-hidden">
+                <div className="container mx-auto px-6 max-w-7xl">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                        {/* Left Image: Mont Bleu Guesthouse Facade */}
+                        <div className="lg:col-span-3 order-2 lg:order-1">
+                            <SectionObserver delay={0.1}>
+                                <div className="aspect-[4/5] overflow-hidden rounded-sm shadow-xl border-4 border-white/80 group">
+                                    <img
+                                        src="/assets/newimages/GH 1.jpg"
+                                        alt="Mont Bleu Guesthouse Exterior"
+                                        className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                                    />
+                                </div>
+                            </SectionObserver>
+                        </div>
 
-                        <div className="w-px h-12 bg-sanctuary-blue/20 mx-auto mb-8"></div>
+                        {/* Center Philosophy Text */}
+                        <div className="lg:col-span-6 text-center order-1 lg:order-2 px-2">
+                            <SectionObserver>
+                                <p className="text-3xl font-serif uppercase tracking-widest text-sanctuary-gold mb-6">The Philosophy</p>
 
-                        <p className="text-xl md:text-2xl font-light text-sanctuary-blue/80 mb-10 leading-relaxed max-w-2xl mx-auto">
-                            Mont Bleu is a farm retreat in Franschhoek — a place where heaven and earth meet.
-                        </p>
+                                <div className="w-px h-12 bg-sanctuary-blue/20 mx-auto mb-8"></div>
 
-                        <h2 className="text-3xl md:text-5xl font-serif text-sanctuary-blue leading-tight mb-10 italic">
-                            "Here, time slows. Nature speaks.<br className="hidden md:block" /> And the soul finds room to breathe."
-                        </h2>
-                    </SectionObserver>
+                                <p className="text-xl md:text-2xl font-light text-sanctuary-blue/80 mb-10 leading-relaxed max-w-2xl mx-auto">
+                                    Mont Bleu is a farm retreat in Franschhoek — a place where heaven and earth meet.
+                                </p>
+
+                                <h2 className="text-3xl md:text-5xl font-serif text-sanctuary-blue leading-tight mb-4 lg:mb-0 italic">
+                                    "Here, time slows. Nature speaks.<br className="hidden md:block" /> And the soul finds room to breathe."
+                                </h2>
+                            </SectionObserver>
+                        </div>
+
+                        {/* Right Image: Guesthouse Lawn & Pool */}
+                        <div className="lg:col-span-3 order-3">
+                            <SectionObserver delay={0.2}>
+                                <div className="aspect-[4/5] overflow-hidden rounded-sm shadow-xl border-4 border-white/80 group">
+                                    <img
+                                        src="/assets/newimages/Outside 1.jpg"
+                                        alt="Mont Bleu Gardens and Pool"
+                                        className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                                    />
+                                </div>
+                            </SectionObserver>
+                        </div>
+                    </div>
                 </div>
             </section>
 
