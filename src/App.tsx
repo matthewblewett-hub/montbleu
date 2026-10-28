@@ -6,6 +6,7 @@ import ChatBot from './components/ui/ChatBot';
 import Home from './pages/Home';
 import Stay from './pages/Stay';
 import Explore from './pages/Explore';
+import Views from './pages/Views';
 import ConnectExperience from './pages/ConnectExperience';
 import Gallery from './pages/Gallery';
 import Contact from './pages/Contact';
@@ -76,6 +77,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/stay" element={<Stay />} />
             <Route path="/explore" element={<Explore />} />
+            <Route path="/views" element={<Views />} />
             <Route path="/connect-experience" element={<ConnectExperience />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/contact" element={<Contact />} />

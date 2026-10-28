@@ -13,7 +13,7 @@ const Experiences: React.FC = () => {
         {
             title: "Outdoor Gym",
             desc: "Please enjoy our Outdoor Gym near the Fruit Orchard — a great place to work off some of the calories gained from our delicious Franschhoek restaurants.",
-            image: "/assets/newimages/Outdoor Gym.jpg",
+            image: "/assets/influencer/Outdoor gym and views.jpg",
             category: "Fitness & Wellness"
         },
         {

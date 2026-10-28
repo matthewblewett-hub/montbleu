@@ -10,11 +10,26 @@ const Explore: React.FC = () => {
     const locations = [
         {
             title: "The Farm",
-            image: "/assets/newimages/GH 1.jpg",
+            image: "/assets/influencer/Back of Guesthouse.jpg",
             desc: (
                 <div className="space-y-4">
                     <p>Mont Bleu is set within the living landscape of Le Sanctuaire Farm, a mountain estate slowly and thoughtfully being restored as an exclusive eco retreat. Le Sanctuaire Farm is perched high on the Wemmershoek mountains offering some of the finest interaction with pristine Fynbos, the pride of the Cape Floral Kingdom.</p>
                     <p>The lifestyle farm is dedicated to restoring the natural ecosystem of this precious part of creation. Small-scale fruit, olive, honey and wild buchu is farmed on the property. The highlight is the ever-changing array of blossoms that are on display throughout the year.</p>
+                </div>
+            )
+        },
+        {
+            title: "Views",
+            image: "/assets/influencer/Lily Pond  montain view from main deck.jpg",
+            desc: (
+                <div className="space-y-4">
+                    <p>Franschhoek is a valley renowned for its beautiful views, and Mont Bleu — being one of the highest properties in the valley — boasts some of the most amazing panoramic vistas, especially at sunset.</p>
+                    <p>From the main deck overlooking the lily pond to the high fynbos ridges and sunset decks, every vantage point looks out across the valley floor toward the towering Simonsberg and Franschhoek mountain ranges.</p>
+                    <div className="pt-2">
+                        <a href="/views" className="inline-block text-xs uppercase tracking-widest text-sanctuary-gold border-b border-sanctuary-gold pb-1 hover:text-sanctuary-blue hover:border-sanctuary-blue transition-colors">
+                            Explore All Views &rarr;
+                        </a>
+                    </div>
                 </div>
             )
         },

@@ -26,7 +26,18 @@ const HERO_VIDEOS = [
 
 const Home: React.FC = () => {
     const heroRef = useRef<HTMLDivElement>(null);
+    const mobileVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
     const [activeMobileVideo, setActiveMobileVideo] = useState(0);
+    const [isDesktop, setIsDesktop] = useState(true);
+
+    useEffect(() => {
+        const checkViewport = () => {
+            setIsDesktop(window.innerWidth >= 768);
+        };
+        checkViewport();
+        window.addEventListener('resize', checkViewport);
+        return () => window.removeEventListener('resize', checkViewport);
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -34,6 +45,36 @@ const Home: React.FC = () => {
         }, 6000);
         return () => clearInterval(interval);
     }, []);
+
+    // Ensure active mobile video plays continuously on iOS Safari
+    useEffect(() => {
+        if (isDesktop) return;
+        const activeVid = mobileVideoRefs.current[activeMobileVideo];
+        if (activeVid) {
+            activeVid.muted = true;
+            activeVid.defaultMuted = true;
+            activeVid.playsInline = true;
+            const playPromise = activeVid.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    // Retry play on first touch/scroll if iOS Low Power Mode blocked initial autoplay
+                });
+            }
+        }
+        const handleInteraction = () => {
+            const vid = mobileVideoRefs.current[activeMobileVideo];
+            if (vid && vid.paused) {
+                vid.muted = true;
+                vid.play().catch(() => {});
+            }
+        };
+        window.addEventListener('touchstart', handleInteraction, { passive: true });
+        window.addEventListener('scroll', handleInteraction, { passive: true });
+        return () => {
+            window.removeEventListener('touchstart', handleInteraction);
+            window.removeEventListener('scroll', handleInteraction);
+        };
+    }, [activeMobileVideo, isDesktop]);
 
     const { scrollYProgress } = useScroll({
         target: heroRef,
@@ -62,76 +103,93 @@ const Home: React.FC = () => {
                     className="absolute inset-0 z-0"
                 >
                     {/* Desktop 3-Panel Feathered Triptych */}
-                    <div className="hidden md:block relative w-full h-full">
-                        {/* Left Panel (0% to 36%) */}
-                        <div className="absolute inset-y-0 left-0 w-[36%] overflow-hidden z-0">
-                            <video
-                                src={HERO_VIDEOS[0].src}
-                                poster={HERO_VIDEOS[0].poster}
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                                preload="auto"
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
+                    {isDesktop && (
+                        <div className="hidden md:block relative w-full h-full">
+                            {/* Left Panel (0% to 36%) */}
+                            <div className="absolute inset-y-0 left-0 w-[36%] overflow-hidden z-0">
+                                <video
+                                    src={HERO_VIDEOS[0].src}
+                                    poster={HERO_VIDEOS[0].poster}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    preload="auto"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
 
-                        {/* Right Panel (64% to 100%) */}
-                        <div className="absolute inset-y-0 right-0 w-[36%] overflow-hidden z-0">
-                            <video
-                                src={HERO_VIDEOS[2].src}
-                                poster={HERO_VIDEOS[2].poster}
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                                preload="auto"
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
+                            {/* Right Panel (64% to 100%) */}
+                            <div className="absolute inset-y-0 right-0 w-[36%] overflow-hidden z-0">
+                                <video
+                                    src={HERO_VIDEOS[2].src}
+                                    poster={HERO_VIDEOS[2].poster}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    preload="auto"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
 
-                        {/* Center Panel (28% to 72%) with soft feathered cross-dissolve edges */}
-                        <div
-                            className="absolute inset-y-0 left-[28%] w-[44%] overflow-hidden z-10"
-                            style={{
-                                WebkitMaskImage:
-                                    'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 9%, black 18%, black 82%, rgba(0,0,0,0.5) 91%, transparent 100%)',
-                                maskImage:
-                                    'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 9%, black 18%, black 82%, rgba(0,0,0,0.5) 91%, transparent 100%)',
-                            }}
-                        >
-                            <video
-                                src={HERO_VIDEOS[1].src}
-                                poster={HERO_VIDEOS[1].poster}
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                                preload="auto"
-                                className="w-full h-full object-cover"
-                            />
+                            {/* Center Panel (28% to 72%) with soft feathered cross-dissolve edges */}
+                            <div
+                                className="absolute inset-y-0 left-[28%] w-[44%] overflow-hidden z-10"
+                                style={{
+                                    WebkitMaskImage:
+                                        'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 9%, black 18%, black 82%, rgba(0,0,0,0.5) 91%, transparent 100%)',
+                                    maskImage:
+                                        'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 9%, black 18%, black 82%, rgba(0,0,0,0.5) 91%, transparent 100%)',
+                                }}
+                            >
+                                <video
+                                    src={HERO_VIDEOS[1].src}
+                                    poster={HERO_VIDEOS[1].poster}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    preload="auto"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     {/* Mobile Full-Screen Portrait Video Switcher */}
-                    <div className="block md:hidden relative w-full h-full">
-                        {HERO_VIDEOS.map((video, index) => (
-                            <video
-                                key={video.src}
-                                src={video.src}
-                                poster={video.poster}
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                                preload="auto"
-                                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-                                    activeMobileVideo === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                                }`}
-                            />
-                        ))}
-                    </div>
+                    {!isDesktop && (
+                        <div className="block md:hidden relative w-full h-full">
+                            {HERO_VIDEOS.map((video, index) => (
+                                <video
+                                    key={video.src}
+                                    ref={(el) => {
+                                        mobileVideoRefs.current[index] = el;
+                                    }}
+                                    src={video.src}
+                                    poster={video.poster}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    preload="auto"
+                                    onLoadedData={(e) => {
+                                        if (activeMobileVideo === index) {
+                                            e.currentTarget.muted = true;
+                                            e.currentTarget.play().catch(() => {});
+                                        }
+                                    }}
+                                    onEnded={(e) => {
+                                        e.currentTarget.currentTime = 0;
+                                        e.currentTarget.play().catch(() => {});
+                                    }}
+                                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                                        activeMobileVideo === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                                    }`}
+                                />
+                            ))}
+                        </div>
+                    )}
 
                     {/* Cinematic Contrast Overlay */}
                     <div className="absolute inset-0 bg-black/35 mix-blend-multiply pointer-events-none" />
@@ -243,26 +301,23 @@ const Home: React.FC = () => {
             {/* Horizontal Scroll Pillars */}
             <ScrollSection>
                 {/* Stay Pillar */}
-                <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-center justify-center p-6 md:p-24 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
+                <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-end justify-center p-6 md:px-20 md:pb-16 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
                     <div className="absolute inset-0">
                         <img
                             src="/assets/newimages/Oak 2.jpg"
                             className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
-                            alt=""
+                            alt="Suites at Mont Bleu"
                         />
-                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
                     </div>
 
-                    <div className="relative z-10 max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div className="relative z-10 w-full max-w-6xl flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-12">
                         <div>
-                            <div className="overflow-hidden">
-                                <h2 className="text-6xl md:text-8xl font-serif mb-4 text-white drop-shadow-lg leading-none select-none">01</h2>
-                            </div>
-                            <h3 className="text-6xl md:text-8xl font-serif mb-8 text-white drop-shadow-lg">Stay</h3>
+                            <span className="text-sanctuary-gold font-serif text-xl md:text-2xl tracking-widest block mb-1">01</span>
+                            <h3 className="text-5xl md:text-7xl font-serif text-white drop-shadow-lg leading-none">Stay</h3>
                         </div>
-                        <div className="space-y-8 backdrop-blur-sm bg-white/5 p-8 rounded-lg border border-white/10">
-                            <p className="text-xl md:text-2xl font-light leading-relaxed text-white/90">
+                        <div className="max-w-xl space-y-5">
+                            <p className="text-lg md:text-xl font-light leading-relaxed text-white/95 drop-shadow">
                                 Mont Bleu is our Guest Home - not a formal guesthouse, but a place designed to feel lived-in, warm, and unhurried. Choose from 1 of 5 unique suites.
                             </p>
                             <Button to="/stay" variant="secondary" className="border-white text-sanctuary-blue bg-white hover:bg-sanctuary-blue hover:text-white hover:border-sanctuary-blue">View Suites</Button>
@@ -271,26 +326,23 @@ const Home: React.FC = () => {
                 </div>
 
                 {/* Relax Pillar */}
-                <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-center justify-center p-6 md:p-24 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
+                <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-end justify-center p-6 md:px-20 md:pb-16 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
                     <div className="absolute inset-0">
                         <img
                             src="/assets/newimages/Pool 1.jpg"
                             className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                             alt="Swimming Pool"
                         />
-                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
                     </div>
 
-                    <div className="relative z-10 max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div className="relative z-10 w-full max-w-6xl flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-12">
                         <div>
-                            <div className="overflow-hidden">
-                                <h2 className="text-6xl md:text-8xl font-serif mb-4 text-white drop-shadow-lg leading-none select-none">02</h2>
-                            </div>
-                            <h3 className="text-6xl md:text-8xl font-serif mb-8 text-white drop-shadow-lg">Relax</h3>
+                            <span className="text-sanctuary-gold font-serif text-xl md:text-2xl tracking-widest block mb-1">02</span>
+                            <h3 className="text-5xl md:text-7xl font-serif text-white drop-shadow-lg leading-none">Relax</h3>
                         </div>
-                        <div className="space-y-8 backdrop-blur-sm bg-white/5 p-8 rounded-lg border border-white/10">
-                            <p className="text-xl md:text-2xl font-light leading-relaxed text-white/90">
+                        <div className="max-w-xl space-y-5">
+                            <p className="text-lg md:text-xl font-light leading-relaxed text-white/95 drop-shadow">
                                 Relax in a quiet mountain sanctuary surrounded by mountains and epic Fynbos flora. Enjoy a swim in our sparkling pool, a sauna in our mountain sauna, a gas-fired hot-tub or a workout in our outdoor gym.
                             </p>
                             <Button to="/relax" variant="secondary" className="border-white text-sanctuary-blue bg-white hover:bg-sanctuary-blue hover:text-white hover:border-sanctuary-blue">Explore Relaxation</Button>
@@ -299,26 +351,23 @@ const Home: React.FC = () => {
                 </div>
 
                 {/* Explore Pillar */}
-                <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-center justify-center p-6 md:p-24 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
+                <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-end justify-center p-6 md:px-20 md:pb-16 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
                     <div className="absolute inset-0">
                         <img
                             src="/assets/newimages/Deck.jpg"
                             className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                             alt="Explore"
                         />
-                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
                     </div>
 
-                    <div className="relative z-10 max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                        <div className="md:order-2">
-                            <div className="overflow-hidden">
-                                <h2 className="text-6xl md:text-8xl font-serif mb-4 text-white drop-shadow-lg leading-none select-none">03</h2>
-                            </div>
-                            <h3 className="text-6xl md:text-8xl font-serif mb-8 text-white drop-shadow-lg">Explore</h3>
+                    <div className="relative z-10 w-full max-w-6xl flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-12">
+                        <div>
+                            <span className="text-sanctuary-gold font-serif text-xl md:text-2xl tracking-widest block mb-1">03</span>
+                            <h3 className="text-5xl md:text-7xl font-serif text-white drop-shadow-lg leading-none">Explore</h3>
                         </div>
-                        <div className="space-y-8 md:order-1 text-right backdrop-blur-sm bg-white/5 p-8 rounded-lg border border-white/10">
-                            <p className="text-xl md:text-2xl font-light leading-relaxed text-white/90">
+                        <div className="max-w-xl space-y-5">
+                            <p className="text-lg md:text-xl font-light leading-relaxed text-white/95 drop-shadow">
                                 Discover our walking trails, river paths, and reflective pilgrimage journey across the estate. Just 2km from Franschhoek village and beautiful winelands region.
                             </p>
                             <Button to="/explore" variant="secondary" className="border-white text-sanctuary-blue bg-white hover:bg-sanctuary-blue hover:text-white hover:border-sanctuary-blue">Start the Journey</Button>
@@ -327,26 +376,23 @@ const Home: React.FC = () => {
                 </div>
 
                 {/* Connect & Experience Pillar */}
-                <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-center justify-center p-6 md:p-24 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
+                <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-end justify-center p-6 md:px-20 md:pb-16 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
                     <div className="absolute inset-0">
                         <img
                             src="/assets/newimages/Experience 2.jpg"
                             className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                             alt="Connect & Experience"
                         />
-                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
                     </div>
 
-                    <div className="relative z-10 max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div className="relative z-10 w-full max-w-6xl flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-12">
                         <div>
-                            <div className="overflow-hidden">
-                                <h2 className="text-6xl md:text-8xl font-serif mb-4 text-white drop-shadow-lg leading-none select-none">04</h2>
-                            </div>
-                            <h3 className="text-6xl md:text-8xl font-serif mb-8 text-white drop-shadow-lg">Connect & Experience</h3>
+                            <span className="text-sanctuary-gold font-serif text-xl md:text-2xl tracking-widest block mb-1">04</span>
+                            <h3 className="text-5xl md:text-7xl font-serif text-white drop-shadow-lg leading-none">Connect &amp; Experience</h3>
                         </div>
-                        <div className="space-y-8 backdrop-blur-sm bg-white/5 p-8 rounded-lg border border-white/10">
-                            <p className="text-xl md:text-2xl font-light leading-relaxed text-white/90">
+                        <div className="max-w-xl space-y-5">
+                            <p className="text-lg md:text-xl font-light leading-relaxed text-white/95 drop-shadow">
                                 A sanctuary is not an escape from the world, but a place where the world is seen more clearly. Engage your body, senses, and attention on the estate.
                             </p>
                             <Button to="/connect-experience" variant="secondary" className="border-white text-sanctuary-blue bg-white hover:bg-sanctuary-blue hover:text-white hover:border-sanctuary-blue">Read Philosophy</Button>

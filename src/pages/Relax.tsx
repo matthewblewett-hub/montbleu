@@ -25,13 +25,13 @@ const Relax: React.FC = () => {
         {
             title: "Hot Tub",
             description: "Enjoy our gas-fired hot tub with views of the mountain hidden in our Orchard area. The perfect place for a couple to relax after a busy day in the valley.",
-            image: "/assets/newimages/Hot Tub.jpg",
+            image: "/assets/influencer/Hot Tub smoking with mountian backdrop.jpg",
             icon: Flame
         },
         {
             title: "Outdoor Gym",
             description: "Our new outdoor gym facility includes free weights, a pull-up bar, and a stepper perched with stunning views to inspire you to keep up your training routines even while enjoying the valley.",
-            image: "/assets/newimages/Outdoor Gym.jpg",
+            image: "/assets/influencer/Full outdoor gym.jpg",
             icon: Dumbbell
         }
     ];
