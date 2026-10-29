@@ -32,9 +32,9 @@ function isBookingConflict(b1, b2) {
 // Send automatic behind-the-scenes WhatsApp notification to Staff WhatsApp Group or designated phones
 async function sendServerSideWhatsAppNotification(booking, isCancellation = false) {
     try {
-        const groupChatId = process.env.WHATSAPP_GROUP_ID; // e.g. "120363012345678901@g.us"
-        const greenIdInstance = process.env.GREEN_API_ID_INSTANCE;
-        const greenApiToken = process.env.GREEN_API_TOKEN_INSTANCE;
+        const groupChatId = process.env.WHATSAPP_GROUP_ID || '120363404733512967@g.us'; // Mont Bleu Bookings
+        const greenIdInstance = process.env.GREEN_API_ID_INSTANCE || '710722785230';
+        const greenApiToken = process.env.GREEN_API_TOKEN_INSTANCE || '85693000a5dc4c308905dd03394b40f43ca5b705529e42a58e';
         const whapiToken = process.env.WHAPI_TOKEN;
 
         const targetPhone = process.env.WELLNESS_HOST_WHATSAPP || process.env.HOST_WHATSAPP; // e.g. "+27821234567"
