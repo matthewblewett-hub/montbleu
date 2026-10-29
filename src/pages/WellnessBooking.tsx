@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, CheckCircle2, ShieldAlert, Sparkles, User, Phone, X, Smartphone, Plus, Lock, Unlock, Download, Send } from 'lucide-react';
+import { Calendar, Clock, CheckCircle2, ShieldAlert, Sparkles, User, Phone, X, Smartphone, Plus, Lock, Unlock, Download } from 'lucide-react';
 import SectionObserver from '../components/ui/SectionObserver';
 import Button from '../components/ui/Button';
 
@@ -98,7 +98,6 @@ const WellnessBooking: React.FC = () => {
 
     // Confirmation State
     const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null);
-    const [customWaRecipient, setCustomWaRecipient] = useState('');
 
     // Staff Mode State
     const [isStaffMode, setIsStaffMode] = useState(false);
@@ -266,7 +265,7 @@ const WellnessBooking: React.FC = () => {
         existingLocal.push(newBooking);
         localStorage.setItem(localKey, JSON.stringify(existingLocal));
 
-        // Update state
+        // Update state (Staff WhatsApp Group is notified automatically by /api/wellness-booking)
         setBookings(prev => [...prev.filter(b => b.id !== newBooking.id), newBooking]);
         setConfirmedBooking(newBooking);
         setActiveSlotObj(null);
@@ -274,9 +273,6 @@ const WellnessBooking: React.FC = () => {
         setPhone('');
         setNotes('');
         setLoading(false);
-
-        // Auto trigger WhatsApp message helper
-        triggerWhatsAppNotification(newBooking);
     };
 
     // Cancel Booking (Staff Mode)
@@ -312,34 +308,6 @@ const WellnessBooking: React.FC = () => {
         } else {
             setPinError(true);
         }
-    };
-
-    // Build WhatsApp Notification Link
-    const getWhatsAppUrl = (booking: Booking, customNumber?: string) => {
-        const facilityLabel = booking.facility === 'combo'
-            ? 'Sauna & Hot Tub Combined Experience (1 Hour)'
-            : booking.facility === 'sauna' ? 'Riverside Sauna' : 'Mountain Hot Tub';
-
-        const text = `Hi Mont Bleu Team, reservation confirmed:\n\n` +
-            `• Facility: ${facilityLabel}\n` +
-            `• Date: ${booking.date}\n` +
-            `• Time: ${booking.slot}\n` +
-            `• Suite: ${booking.suite}\n` +
-            `• Guest: ${booking.guestName}` +
-            (booking.phone ? ` (${booking.phone})` : '');
-
-        if (customNumber && customNumber.trim()) {
-            const cleanNum = customNumber.replace(/[^0-9]/g, '');
-            return `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
-        }
-
-        return `https://wa.me/?text=${encodeURIComponent(text)}`;
-    };
-
-    const triggerWhatsAppNotification = (booking: Booking) => {
-        const url = getWhatsAppUrl(booking);
-        // Open WhatsApp automatically in a new tab if supported
-        window.open(url, '_blank');
     };
 
     // Download iCal (.ics) Calendar File
@@ -750,47 +718,15 @@ const WellnessBooking: React.FC = () => {
                                 <div><strong>Reserved For:</strong> {confirmedBooking.suite} ({confirmedBooking.guestName})</div>
                             </div>
 
+                            <p className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 mb-4 font-medium">
+                                Our Mont Bleu team has been automatically notified to prepare the facility for your session.
+                            </p>
+
                             <div className="space-y-3 pt-1">
-                                {/* Send WhatsApp to Mont Bleu Team */}
-                                <a
-                                    href={getWhatsAppUrl(confirmedBooking)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="w-full inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-full bg-emerald-600 text-white text-xs uppercase tracking-widest font-medium hover:bg-emerald-700 transition-colors shadow-md"
-                                >
-                                    <Send className="w-4 h-4" />
-                                    <span>Send WhatsApp to Mont Bleu Team</span>
-                                </a>
-
-                                {/* Send to Custom Number Input */}
-                                <div className="pt-2 border-t border-sanctuary-blue/10">
-                                    <label className="block text-[11px] text-sanctuary-blue/70 mb-1 font-medium">
-                                        Or send confirmation via WhatsApp to a specific phone number:
-                                    </label>
-                                    <div className="flex space-x-2">
-                                        <input
-                                            type="tel"
-                                            placeholder="+27 82 000 0000"
-                                            value={customWaRecipient}
-                                            onChange={(e) => setCustomWaRecipient(e.target.value)}
-                                            className="flex-1 bg-sanctuary-sand/30 border border-sanctuary-blue/20 rounded-xl px-3 py-2 text-xs text-sanctuary-blue focus:outline-none focus:border-sanctuary-blue"
-                                        />
-                                        <a
-                                            href={getWhatsAppUrl(confirmedBooking, customWaRecipient)}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="px-4 py-2 bg-sanctuary-blue text-white rounded-xl text-xs font-medium hover:bg-sanctuary-blue/90 flex items-center space-x-1"
-                                        >
-                                            <Send className="w-3.5 h-3.5" />
-                                            <span>Send</span>
-                                        </a>
-                                    </div>
-                                </div>
-
                                 {/* Add to iCal / Calendar */}
                                 <button
                                     onClick={() => downloadICS(confirmedBooking)}
-                                    className="w-full inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-full border border-sanctuary-blue/30 text-sanctuary-blue text-xs uppercase tracking-widest font-medium hover:bg-sanctuary-sand transition-colors mt-2"
+                                    className="w-full inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-full border border-sanctuary-blue/30 text-sanctuary-blue text-xs uppercase tracking-widest font-medium hover:bg-sanctuary-sand transition-colors"
                                 >
                                     <Download className="w-4 h-4 text-sanctuary-gold" />
                                     <span>Add to My Calendar (.ics)</span>
@@ -798,9 +734,9 @@ const WellnessBooking: React.FC = () => {
 
                                 <button
                                     onClick={() => setConfirmedBooking(null)}
-                                    className="block w-full text-xs text-sanctuary-blue/60 hover:text-sanctuary-blue pt-2 transition-colors"
+                                    className="block w-full px-6 py-3 rounded-full bg-sanctuary-blue text-white text-xs uppercase tracking-widest font-medium hover:bg-sanctuary-blue/90 transition-colors"
                                 >
-                                    Close Window
+                                    Done
                                 </button>
                             </div>
                         </motion.div>

@@ -29,23 +29,32 @@ function isBookingConflict(b1, b2) {
     return (b1Start < b2End && b1End > b2Start);
 }
 
-// Send automatic behind-the-scenes WhatsApp notification to designated host/housekeeper phone
-async function sendServerSideWhatsAppNotification(booking) {
+// Send automatic behind-the-scenes WhatsApp notification to Staff WhatsApp Group or designated phones
+async function sendServerSideWhatsAppNotification(booking, isCancellation = false) {
     try {
+        const groupChatId = process.env.WHATSAPP_GROUP_ID; // e.g. "120363012345678901@g.us"
+        const greenIdInstance = process.env.GREEN_API_ID_INSTANCE;
+        const greenApiToken = process.env.GREEN_API_TOKEN_INSTANCE;
+        const whapiToken = process.env.WHAPI_TOKEN;
+
         const targetPhone = process.env.WELLNESS_HOST_WHATSAPP || process.env.HOST_WHATSAPP; // e.g. "+27821234567"
-        const callMeBotApiKey = process.env.CALLMEBOT_API_KEY; // Free CallMeBot API key
-        const webhookUrl = process.env.WHATSAPP_WEBHOOK_URL; // Custom Webhook / Zapier / Make
+        const callMeBotApiKey = process.env.CALLMEBOT_API_KEY;
+        const webhookUrl = process.env.WHATSAPP_WEBHOOK_URL;
 
         // Twilio Credentials
         const twilioSid = process.env.TWILIO_ACCOUNT_SID;
         const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
-        const twilioFrom = process.env.TWILIO_WHATSAPP_FROM || 'whatsapp:+14155238886'; // Twilio default WhatsApp Sandbox
+        const twilioFrom = process.env.TWILIO_WHATSAPP_FROM || 'whatsapp:+14155238886';
 
         const facilityName = booking.facility === 'combo'
             ? 'Sauna & Hot Tub Combo (1 Hr)'
             : booking.facility === 'sauna' ? 'Riverside Sauna' : 'Mountain Hot Tub';
 
-        const msgText = `🔔 *New Wellness Booking!*\n\n` +
+        const header = isCancellation
+            ? `❌ *Wellness Booking Cancelled*`
+            : `🔔 *New Mont Bleu Wellness Booking!*`;
+
+        const msgText = `${header}\n\n` +
             `• *Facility:* ${facilityName}\n` +
             `• *Date:* ${booking.date}\n` +
             `• *Time:* ${booking.slot}\n` +
@@ -53,7 +62,47 @@ async function sendServerSideWhatsAppNotification(booking) {
             `• *Guest:* ${booking.guestName}` +
             (booking.phone ? ` (${booking.phone})` : '');
 
-        // Option A: Official Twilio WhatsApp API
+        // Option 1: Green-API (Free Developer Tier — Posts directly into Staff WhatsApp Group!)
+        if (greenIdInstance && greenApiToken && groupChatId) {
+            const formattedGroup = groupChatId.includes('@') ? groupChatId : `${groupChatId}@g.us`;
+            const greenUrl = `https://api.green-api.com/waInstance${greenIdInstance}/sendMessage/${greenApiToken}`;
+            const greenRes = await fetch(greenUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chatId: formattedGroup,
+                    message: msgText
+                })
+            });
+            if (greenRes.ok) {
+                console.log('Automated Green-API message posted to Staff WhatsApp Group:', formattedGroup);
+                return;
+            } else {
+                console.error('Green-API error:', await greenRes.text());
+            }
+        }
+
+        // Option 2: Whapi.cloud (Posts directly into Staff WhatsApp Group)
+        if (whapiToken && groupChatId) {
+            const formattedGroup = groupChatId.includes('@') ? groupChatId : `${groupChatId}@g.us`;
+            const whapiRes = await fetch('https://gate.whapi.cloud/messages/text', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${whapiToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    to: formattedGroup,
+                    body: msgText
+                })
+            });
+            if (whapiRes.ok) {
+                console.log('Automated Whapi message posted to Staff WhatsApp Group:', formattedGroup);
+                return;
+            }
+        }
+
+        // Option 3: Official Twilio WhatsApp API
         if (twilioSid && twilioAuthToken && targetPhone) {
             const cleanPhone = targetPhone.replace(/[^0-9+]/g, '');
             const toFormatted = cleanPhone.startsWith('whatsapp:') ? cleanPhone : `whatsapp:${cleanPhone}`;
@@ -121,7 +170,18 @@ export default async function handler(req, res) {
 
     try {
         if (req.method === 'GET') {
-            const { date } = req.query;
+            const { date, action } = req.query;
+            if (action === 'list-groups') {
+                const greenIdInstance = process.env.GREEN_API_ID_INSTANCE;
+                const greenApiToken = process.env.GREEN_API_TOKEN_INSTANCE;
+                if (!greenIdInstance || !greenApiToken) {
+                    return res.status(400).json({ error: 'GREEN_API_ID_INSTANCE and GREEN_API_TOKEN_INSTANCE not configured yet.' });
+                }
+                const contactsRes = await fetch(`https://api.green-api.com/waInstance${greenIdInstance}/getContacts/${greenApiToken}`);
+                const contacts = await contactsRes.json();
+                const groups = Array.isArray(contacts) ? contacts.filter(c => c.id && c.id.endsWith('@g.us')) : contacts;
+                return res.status(200).json({ groups });
+            }
             if (date) {
                 return res.status(200).json({
                     date,
@@ -173,8 +233,8 @@ export default async function handler(req, res) {
 
             globalBookingsStore[date].push(newBooking);
 
-            // Fire background WhatsApp dispatch (non-blocking)
-            sendServerSideWhatsAppNotification(newBooking);
+            // Await server-side WhatsApp Group dispatch so Vercel Serverless completes the HTTP call
+            await sendServerSideWhatsAppNotification(newBooking, false);
 
             return res.status(200).json({
                 success: true,
@@ -188,8 +248,14 @@ export default async function handler(req, res) {
             const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
             const { date, bookingId } = body;
 
+            let cancelledBooking = null;
             if (date && globalBookingsStore[date]) {
+                cancelledBooking = globalBookingsStore[date].find(b => b.id === bookingId);
                 globalBookingsStore[date] = globalBookingsStore[date].filter(b => b.id !== bookingId);
+            }
+
+            if (cancelledBooking) {
+                await sendServerSideWhatsAppNotification(cancelledBooking, true);
             }
 
             return res.status(200).json({
