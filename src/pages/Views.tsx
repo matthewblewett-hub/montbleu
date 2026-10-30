@@ -6,6 +6,36 @@ import SectionObserver from '../components/ui/SectionObserver';
 
 const VIEW_PHOTOS = [
     {
+        src: "/assets/newimages/View 1.jpg",
+        title: "Franschhoek Valley from the High Slopes",
+        caption: "Sweeping daytime views from the indigenous fynbos and pine ridges down across the green valley floor toward the Simonsberg and Franschhoek mountain peaks."
+    },
+    {
+        src: "/assets/newimages/View 2.jpg",
+        title: "Pink & Gold Above the Pines",
+        caption: "Dramatic twilight skies glowing in rose and amber behind the silhouettes of towering mountain pines."
+    },
+    {
+        src: "/assets/newimages/View 3.jpg",
+        title: "Crimson Sunset Over Mont Bleu",
+        caption: "Fiery evening skies illuminating the estate nestled among wild fynbos and pine trees high on the Wemmershoek slopes."
+    },
+    {
+        src: "/assets/newimages/View 4.jpg",
+        title: "The Living Fynbos Amphitheatre",
+        caption: "Panoramic vistas over lush mountain fynbos and forest canopy out to the craggy peaks under cloud-dappled skies."
+    },
+    {
+        src: "/assets/newimages/View 5.jpg",
+        title: "Golden Pincushion Proteas in Bloom",
+        caption: "Indigenous Leucospermum blossoms catching the warm mountain sunlight against the forest backdrop of the Cape Floral Kingdom."
+    },
+    {
+        src: "/assets/newimages/View 6.jpg",
+        title: "Proteas Framing the Valley",
+        caption: "Vibrant pink proteas in the foreground with the entire Franschhoek Valley and distant mountain range unfolding beyond."
+    },
+    {
         src: "/assets/newimages/Deck 2.jpg",
         title: "Golden Hour on the Sunset Deck",
         caption: "Perched high on the Wemmershoek slopes, watching the sun set across the entire Franschhoek Valley."

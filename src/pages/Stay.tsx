@@ -77,9 +77,12 @@ const Stay: React.FC = () => {
             name: "Oak Room",
             description: "Perched upstairs with panoramic views on both sides, the Oak Room is Mont Bleu’s most elevated space - filled with light from sunrise to sunset. A private balcony captures the full sweep of the Franschhoek valley, making it perfect for those who love space, stillness, and endless sky.",
             images: [
-                "/assets/newimages/Oak 1.jpg",
-                "/assets/newimages/Oak 2.jpg",
-                "/assets/newimages/Oak 3.jpg"
+                "/assets/newimages/Oak Room 1.jpg",
+                "/assets/newimages/Oak Room 2.jpg",
+                "/assets/newimages/Oak Room 3.jpg",
+                "/assets/newimages/Oak Room 4.jpg",
+                "/assets/newimages/Oak Room 5.jpg",
+                "/assets/newimages/Oak Room 6.jpg"
             ],
             features: ["Panoramic Views", "Elevated Space", "Private Balcony", "Light & Airy"],
             bookingLink: "https://www.airbnb.co.za/h/montbleu-oakroom",

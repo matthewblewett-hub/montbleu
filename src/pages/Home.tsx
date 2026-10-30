@@ -352,7 +352,7 @@ const Home: React.FC = () => {
                 <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-end justify-center p-6 md:px-20 md:pb-16 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
                     <div className="absolute inset-0">
                         <img
-                            src="/assets/influencer/Lily Pond  montain view from main deck.jpg"
+                            src="/assets/newimages/Deck.jpg"
                             className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                             alt="Views from Mont Bleu"
                         />
@@ -377,7 +377,7 @@ const Home: React.FC = () => {
                 <div className="w-full md:w-screen h-screen flex-shrink-0 flex items-end justify-center p-6 md:px-20 md:pb-16 relative overflow-hidden group border-b md:border-b-0 border-white/10 last:border-0">
                     <div className="absolute inset-0">
                         <img
-                            src="/assets/newimages/Deck.jpg"
+                            src="/assets/newimages/Trails.jpg"
                             className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                             alt="Explore"
                         />
